@@ -1,2 +1,4 @@
 # OpenAds
-Library to deliver ads in a web environment
+
+Library to deliver ads in a web environment.
+
