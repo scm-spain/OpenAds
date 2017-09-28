@@ -5,8 +5,8 @@
     "main": "dist/",
     "scripts": {
         "cleanDistFolder": "rm -Rf ./dist",
-        "prepublishOnly": "echo \"prepublishOnly\" &&  npm run cleanDistFolder && npm run build",
-        "build": "babel src --ignore test,legacy --out-dir dist ",
+        "prepublishOnly": "npm run cleanDistFolder && npm run build",
+        "build": "babel src --ignore test --out-dir dist ",
         "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\" || true",
         "watch:js": "onchange 'src/**/*.js' -- npm run build",
         "lint": "npm run lint:js && npm run lint:sass",
