@@ -1,6 +1,6 @@
 {
     "name": "@schibstedspain/adit-webads",
-    "version": "0.1.6",
+    "version": "0.1.7",
     "description": "OpenAds: Advertising library",
     "main": "dist/",
     "scripts": {
