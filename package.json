@@ -1,11 +1,11 @@
 {
-    "name": "@schibstedspain/OpenAds",
-    "version": "0.0.1",
+    "name": "@schibstedspain/adit-webads",
+    "version": "0.1.4",
     "description": "OpenAds: Advertising library",
     "main": "dist/",
     "scripts": {
-        "prepare": "rm -Rf ./dist && npm run build",
-        "prepublishOnly": "rm -Rf ./dist && npm run build",
+        "cleanDistFolder": "rm -Rf ./dist",
+        "prepublishOnly": "echo \"prepublishOnly\" &&  npm run cleanDistFolder",
         "build": "babel src --ignore test,legacy --out-dir dist ",
         "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\" || true",
         "watch:js": "onchange src/*.js -- npm run build",
