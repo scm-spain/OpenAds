@@ -8,6 +8,10 @@ export default class AppNexusAdRenderer extends AdRenderer {
 
   render ({ads}) {
     // Do some stuff like render ads using appnexus implementation (apntag.showTag)
-    this._appNexusClient.showTag()
+    console.log(this._appNexusClient.defineTag({
+      invCode: 'ABC1234',
+      sizes: [728,90],
+      targetId: 'apn_ad_slot_1'
+    }));
   }
 }

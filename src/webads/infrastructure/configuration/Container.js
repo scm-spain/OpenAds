@@ -2,7 +2,7 @@ import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/DisplayAdsUseCase'
 import AppNexusAdRepository from '../repository/AppNexusAdRepository'
 import AppNexusAdRenderer from '../service/AppNexusAdRenderer'
-import ast from '../../../../vendors/ast.js'
+require('@schibstedspain/ast')
 
 export default class Container {
   constructor ({config}) {
@@ -14,7 +14,10 @@ export default class Container {
   }
 
   buildDisplayAdsUseCase () {
-    return new DisplayAdsUseCase({repository: this.buildAdRepository()})
+    return new DisplayAdsUseCase({
+      repository: this.buildAdRepository(),
+      adRenderer: this.buildAdRenderer()
+    })
   }
 
   buildAdRepository () {
@@ -26,6 +29,6 @@ export default class Container {
   }
 
   buildAppNexusClient () {
-    return ast
+    return apntag
   }
 }
