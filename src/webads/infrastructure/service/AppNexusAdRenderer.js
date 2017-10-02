@@ -8,10 +8,35 @@ export default class AppNexusAdRenderer extends AdRenderer {
 
   render ({ads}) {
     // Do some stuff like render ads using appnexus implementation (apntag.showTag)
-    console.log(this._appNexusClient.defineTag({
-      invCode: 'ABC1234',
-      sizes: [728,90],
-      targetId: 'apn_ad_slot_1'
-    }));
+
+    // console.log('ADS=' + JSON.stringify(ads))
+
+    const tag = this.sampleTag()
+
+    this._appNexusClient.setPageOpts({
+      member: 3296,
+      keywords: []
+    })
+
+    let adRetrieveFunc = (adRetrieved) => this.processAdRetrieved({adRetrieved})
+
+    this._appNexusClient.onEvent('adAvailable', tag.targetId, adRetrieveFunc)
+
+    console.log('DEFINE TAGS: ', this._appNexusClient.defineTag(tag))
+
+    this._appNexusClient.loadTags()
+  }
+
+  sampleTag () {
+    return {
+      invCode: 'es-ma-wde-marketplace-list-top_1',
+      sizes: [[970, 90], [980, 90], [728, 90]],
+      targetId: 'top1div'
+    }
+  }
+
+  processAdRetrieved ({adRetrieved}) {
+    console.log('Ad Retrieved: ' + JSON.stringify(adRetrieved))
+    this._appNexusClient.showTag('top1div')
   }
 }
