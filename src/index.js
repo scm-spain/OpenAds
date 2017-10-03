@@ -1,3 +1,3 @@
-import application from './webads/infrastructure/bootstrap/index'
+import application from './openads/infrastructure/bootstrap/index'
 
 export default application

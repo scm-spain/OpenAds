@@ -1,8 +1,8 @@
 import Container from '../configuration/Container'
-import WebAds from '../../application/WebAds'
+import OpenAds from '../../application/OpenAds'
 
 export default class Bootstrap {
   static init ({config}) {
-    return new WebAds({container: new Container({config})})
+    return new OpenAds({container: new Container({config})})
   }
 }
