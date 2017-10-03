@@ -1,4 +1,4 @@
-export default class WebAds {
+export default class OpenAds {
   constructor ({container}) {
     this._container = container
   }
