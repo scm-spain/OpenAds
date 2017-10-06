@@ -1,5 +1,5 @@
 import {assert} from 'chai'
-import AdRepositoryResolverImpl from '../../../../openads/infrastructure/configuration/AdRepositoryResolverImpl'
+import AdRepositoryResolverImpl from '../../../../openads/infrastructure/repository/AdRepositoryResolverImpl'
 
 describe('Connector Resolver implementation', function () {
   describe('given an array containing AppNexus', function () {

@@ -16,12 +16,13 @@ export default class AppNexusAdRepository extends AdRepository {
   findAd ({target, ad, segmentation}) {
     console.log('AppNexusAdRepository - findAd', target, ad, segmentation)
 
+    this._appNexusClient.debug = true
     this._appNexusClient.setPageOpts({
       member: this._member,
       keywords: segmentation
     })
 
-    this._appNexusClient.onEvent('adAvailable', target, (adRetrieved) => this.processAdRetrieved({adRetrieved}))
+    this._appNexusClient.onEvent('adAvailable', target, (adRetrieved) => this.processAdRetrieved({target, adRetrieved}))
 
     this._appNexusClient.defineTag({
       invCode: ad.code,
@@ -33,8 +34,8 @@ export default class AppNexusAdRepository extends AdRepository {
   }
 
   // TODO this function out of the repository should be nice?
-  processAdRetrieved ({adRetrieved}) {
+  processAdRetrieved ({target, adRetrieved}) {
     console.log('Ad Retrieved: ' + JSON.stringify(adRetrieved))
-    this._appNexusClient.showTag('top1div')
+    this._appNexusClient.showTag(target)
   }
 }

@@ -1,5 +1,5 @@
-import AppNexusAdRepository from '../repository/AppNexusAdRepository'
-import MissingImplementationAdRepository from '../repository/MissingImplementationAdRepository'
+import AppNexusAdRepository from './AppNexusAdRepository'
+import MissingImplementationAdRepository from './MissingImplementationAdRepository'
 import AdRepositoryResolver from '../../domain/service/AdRepositoryResolver'
 
 const APP_NEXUS = 'AppNexus'
