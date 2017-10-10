@@ -1,7 +1,7 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/DisplayAdsUseCase'
-import AdRepositoryResolverImpl from '../repository/AdRepositoryResolverImpl'
-import AdCatalogRepositoryImpl from '../repository/AdCatalogRepositoryImpl'
+import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
+import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
 
 export default class Container {
   constructor ({config}) {
@@ -14,20 +14,20 @@ export default class Container {
 
   buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
-      adRepositoryResolver: this.buildAdRepositoryResolver(),
-      adDefinitionsCatalog: this.buildAdCatalog()
+      connectorService: this.buildConnectorService(),
+      adDefinitionService: this.buildAdDefinitionService()
     })
   }
 
-  buildAdRepositoryResolver () {
-    return new AdRepositoryResolverImpl({
+  buildConnectorService () {
+    return new ConnectorServiceImpl({
       connectors: this._config.connectors
     })
   }
 
-  buildAdCatalog () {
-    return new AdCatalogRepositoryImpl({
-      ads: this._config.ads
+  buildAdDefinitionService () {
+    return new AdDefinitionServiceImpl({
+      adDefinitions: this._config.adDefinitions
     })
   }
 }

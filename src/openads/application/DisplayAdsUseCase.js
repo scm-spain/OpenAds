@@ -1,20 +1,26 @@
+import ConnectorService from '../domain/service/ConnectorService'
+import AdDefinitionService from '../domain/service/AdDefinitionService'
+
 export default class DisplayAdsUseCase {
   /**
    *
-   * @param {AdRepositoryResolver} adRepositoryResolver
+   * @param {ConnectorService} connectorService
+   * @param {AdDefinitionService} adDefinitionService
    */
-  constructor ({adRepositoryResolver, adDefinitionsCatalog}) {
-    this._adRepositoryResolver = adRepositoryResolver
-    this._adDefinitionsCatalog = adDefinitionsCatalog
+  constructor ({connectorService, adDefinitionService}) {
+    this._connectorService = connectorService
+    this._adDefinitionService = adDefinitionService
   }
 
-  displayAds ({target, ad, segmentation}) {
-    const adDefinition = this._adDefinitionsCatalog.ad({code: ad})
-    const adRepository = this._adRepositoryResolver.adRepository({source: adDefinition.source})
-    adRepository.findAd({
-      target,
-      ad: adDefinition,
-      segmentation
-    })
+    /**
+     *
+     * @param {string} targetId
+     * @param {string} position
+     */
+  display ({targetId, adKey}) {
+    const adDefinition = this._adDefinitionService.adDefinition({key: adKey})
+    const connector = this._connectorService.connector({source: adDefinition.source})
+
+    connector.findAd({targetId, adDefinition})
   }
 }
