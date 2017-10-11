@@ -4,15 +4,12 @@ export default class AdDefinition {
     this._source = source
     this._configuration = configuration
   }
-
   get key () {
     return this._key
   }
-
   get source () {
     return this._source
   }
-
   get configuration () {
     return this._configuration
   }
