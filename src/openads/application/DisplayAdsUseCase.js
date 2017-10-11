@@ -12,11 +12,11 @@ export default class DisplayAdsUseCase {
     this._adDefinitionService = adDefinitionService
   }
 
-    /**
-     *
-     * @param {string} targetId
-     * @param {string} position
-     */
+  /**
+   *
+   * @param {string} targetId
+   * @param {string} position
+   */
   display ({targetId, adKey}) {
     const adDefinition = this._adDefinitionService.adDefinition({key: adKey})
     const connector = this._connectorService.connector({source: adDefinition.source})

@@ -3,9 +3,11 @@ export default class Adapter {
     this._requestAdapter = requestAdapter
     this._responseAdapter = responseAdapter
   }
+
   get requestAdapter () {
     return this._requestAdapter
   }
+
   get responseAdapter () {
     return this._responseAdapter
   }

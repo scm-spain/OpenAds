@@ -16,11 +16,11 @@ export default class AdDefinitionServiceImpl extends AdDefinitionService {
     }
   }
 
-    /**
-     *
-     * @param {string} key
-     * @return {AdDefinition}
-     */
+  /**
+   *
+   * @param {string} key
+   * @return {AdDefinition}
+   */
   adDefinition ({key}) {
     let adDefinition = this._adDefinitionsCatalog[key]
     if (adDefinition === null) {

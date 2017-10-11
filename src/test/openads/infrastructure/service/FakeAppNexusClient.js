@@ -1,6 +1,5 @@
 export default class FakeAppNexusClient {
-    constructor()
-    {
-        console.log('FakeAppNexusClient constructed.')
-    }
+  constructor () {
+    console.log('FakeAppNexusClient constructed.')
+  }
 }
