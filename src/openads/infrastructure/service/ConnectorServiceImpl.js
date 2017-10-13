@@ -2,8 +2,9 @@ import AppNexusConnector from '../appnexus/AppNexusConnector'
 import ConnectorService from '../../domain/service/ConnectorService'
 
 export default class ConnectorServiceImpl extends ConnectorService {
-  constructor ({connectors}) {
+  constructor ({connectors, appNexusClient}) {
     super()
+    this._appNexusClient = appNexusClient
     this._connectorsCatalog = {}
     if (connectors !== null) {
       Object.keys(connectors).map((key) => {
@@ -14,6 +15,7 @@ export default class ConnectorServiceImpl extends ConnectorService {
       })
     }
   }
+
   connector ({source}) {
     let connector = this._connectorsCatalog[source]
     if (connector === null) {
@@ -21,10 +23,11 @@ export default class ConnectorServiceImpl extends ConnectorService {
     }
     return connector
   }
+
   _createConnectorImpl ({source, connectorData}) {
     switch (source) {
       case 'AppNexus': {
-        return new AppNexusConnector({source, connectorData})
+        return new AppNexusConnector({source, connectorData, appNexusClient: this._appNexusClient})
       }
       default: {
         throw new Error('No Connector found for source: ' + source)
