@@ -2,7 +2,7 @@ import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/DisplayAdsUseCase'
 import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
 import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
-import AppNexusClient from '../appnexus/AppNexusClient'
+import ApnTagAppNexusClient from '../appnexus/ApnTagAppNexusClient'
 
 export default class Container {
   constructor ({config}) {
@@ -33,6 +33,6 @@ export default class Container {
   }
 
   buildAppNexusClient () {
-    return new AppNexusClient()
+    return new ApnTagAppNexusClient()
   }
 }

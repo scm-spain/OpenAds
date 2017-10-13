@@ -1,36 +1,55 @@
-require('@schibstedspain/ast')
-
+/**
+ * @abstract
+ */
 export default class AppNexusClient {
-  constructor () {
-    this._apnTag = apntag
-  }
-
+  /**
+   * Activates the Debug mode.
+   */
   activateDebugMode () {
-    this._apnTag.debug = true
+    throw new Error('AppNexusClient#activateDebugMode must be implemented')
   }
 
+  /**
+   * Sets page options.
+   * @param member
+   * @param keywords
+   */
   setPageOpts ({member, keywords}) {
-    this._apnTag.setPageOpts({member, keywords})
+    throw new Error('AppNexusClient#setPageOpts must be implemented')
   }
 
+  /**
+   * Defines onEvent
+   * @param event
+   * @param targetId
+   * @param callback
+   */
   onEvent ({event, targetId, callback}) {
-    this._apnTag.onEvent(event, targetId, callback)
+    throw new Error('AppNexusClient#onEvent must be implemented')
   }
 
+  /**
+   * Method to define tags.
+   * @param invCode
+   * @param sizes
+   * @param targetId
+   */
   defineTag ({invCode, sizes, targetId}) {
-    this._apnTag.defineTag({
-      invCode,
-      sizes,
-      targetId
-    }
-    )
+    throw new Error('AppNexusClient#defineTag must be implemented')
   }
 
+  /**
+   * Load tags.
+   */
   loadTags () {
-    this._apnTag.loadTags()
+    throw new Error('AppNexusClient#loadTags must be implemented')
   }
 
+  /**
+   * Shows tags in the target.
+   * @param target
+   */
   showTag ({target}) {
-    this._apnTag.showTag(target)
+    throw new Error('AppNexusClient#showTag must be implemented')
   }
 }
