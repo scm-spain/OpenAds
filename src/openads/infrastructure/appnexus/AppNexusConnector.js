@@ -8,7 +8,7 @@ export default class AppNexusConnector extends Connector {
       configuration: connectorData.configuration
     })
     this._member = this.configuration.member
-    this._apnTag = appNexusClient
+    this._appNexusClient = appNexusClient
   }
 
   get member () {
@@ -18,14 +18,14 @@ export default class AppNexusConnector extends Connector {
   findAd ({targetId, adDefinition}) {
     console.log('AppNexusConnector - findAd', targetId, adDefinition)
 
-    this._apnTag.activateDebugMode()
+    this._appNexusClient.activateDebugMode()
 
-    this._apnTag.setPageOpts({
+    this._appNexusClient.setPageOpts({
       member: this._member,
       keywords: this.adapter.requestAdapter.keywords({adDefinition})
     })
 
-    this._apnTag.onEvent({
+    this._appNexusClient.onEvent({
       event: 'adAvailable',
       targetId: targetId,
       callback: (adRetrieved) => this.processAdRetrieved({
@@ -34,18 +34,18 @@ export default class AppNexusConnector extends Connector {
       })
     })
 
-    this._apnTag.defineTag({
+    this._appNexusClient.defineTag({
       invCode: this.adapter.requestAdapter.invCode({adDefinition}),
       sizes: this.adapter.requestAdapter.sizes({adDefinition}),
       targetId: targetId
     })
 
-    this._apnTag.loadTags()
+    this._appNexusClient.loadTags()
   }
 
   // TODO this function out of the repository should be nice?
   processAdRetrieved ({target, adRetrieved}) {
     console.log('Ad Retrieved: ' + JSON.stringify(adRetrieved))
-    this._apnTag.showTag({target})
+    this._appNexusClient.showTag({target})
   }
 }

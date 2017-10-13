@@ -1,6 +1,6 @@
 import {assert} from 'chai'
 import ConnectorServiceImpl from '../../../../openads/infrastructure/service/ConnectorServiceImpl'
-import FakeAppNexusClient from './FakeAppNexusClient'
+import FakeAppNexusClient from '../appnexus/FakeAppNexusClient'
 
 describe('Connector Resolver implementation', function () {
   describe('given a single connector for AppNexus', function () {
