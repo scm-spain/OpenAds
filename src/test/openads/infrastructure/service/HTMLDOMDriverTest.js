@@ -1,5 +1,5 @@
 import {assert} from 'chai'
-import HTMLDOMDriver from '../../../../webads/infrastructure/service/HTMLDOMDriver'
+import HTMLDOMDriver from '../../../../openads/infrastructure/service/HTMLDOMDriver'
 import {JSDOM} from 'jsdom'
 
 describe('DOM Driver HTML simple implementation', function () {

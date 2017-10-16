@@ -1,56 +1,59 @@
 {
-    "name": "@schibstedspain/OpenAds",
-    "version": "0.0.1",
-    "description": "OpenAds: Advertising library",
-    "main": "dist/",
-    "scripts": {
-        "cleanDistFolder": "rm -Rf ./dist",
-        "prepublishOnly": "npm run cleanDistFolder && npm run build",
-        "build": "babel src --ignore test --out-dir dist ",
-        "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\" || true",
-        "watch:js": "onchange 'src/**/*.js' -- npm run build",
-        "lint": "npm run lint:js && npm run lint:sass",
-        "lint:js": "sui-lint js",
-        "lint:sass": "sui-lint sass"
-    },
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/scm-spain/OpenAds.git"
-    },
-    "keywords": [
-        "ads",
-        "advertising",
-        "schibsted"
-    ],
-    "author": "The Mighty Ducks of Advertising",
-    "license": "ISC",
-    "devDependencies": {
-        "@schibstedspain/sui-lint": "^2.1.0",
-        "babel-cli": "^6.24.0",
-        "babel-loader": "^7.1.1",
-        "babel-polyfill": "^6.23.0",
-        "babel-preset-sui": "1",
-        "babel-register": "^6.24.0",
-        "chai": "^4.0.2",
-        "html-webpack-plugin": "^2.30.1",
-        "istanbul": "^0.4.5",
-        "jsdom": "^11.1.0",
-        "mocha": "^3.4.2",
-        "onchange": "^3.2.1",
-        "sinon": "^2.3.4"
-    },
-    "pre-commit": [
-        "lint",
-        "test"
-    ],
-    "babel": {
-        "presets": [
-            "sui"
-        ]
-    },
-    "eslintConfig": {
-        "extends": [
-            "./node_modules/@schibstedspain/sui-lint/eslintrc.js"
-        ]
-    }
+  "name": "@schibstedspain/OpenAds",
+  "version": "0.0.1",
+  "description": "OpenAds: Advertising library",
+  "main": "dist/",
+  "scripts": {
+    "cleanDistFolder": "rm -Rf ./dist",
+    "prepublishOnly": "npm run cleanDistFolder && npm run build",
+    "build": "babel src --ignore test --out-dir dist ",
+    "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\" || true",
+    "watch": "onchange 'src/**/*.js' -- npm run build",
+    "lint": "npm run lint:js && npm run lint:sass",
+    "lint:js": "sui-lint js",
+    "lint:sass": "sui-lint sass"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/scm-spain/OpenAds.git"
+  },
+  "keywords": [
+    "ads",
+    "advertising",
+    "schibsted"
+  ],
+  "author": "The Mighty Ducks of Advertising",
+  "license": "ISC",
+  "devDependencies": {
+    "@schibstedspain/sui-lint": "^2.1.0",
+    "babel-cli": "^6.24.0",
+    "babel-loader": "^7.1.1",
+    "babel-polyfill": "^6.23.0",
+    "babel-preset-sui": "1",
+    "babel-register": "^6.24.0",
+    "chai": "^4.0.2",
+    "html-webpack-plugin": "^2.30.1",
+    "istanbul": "^0.4.5",
+    "jsdom": "^11.1.0",
+    "mocha": "^3.4.2",
+    "onchange": "^3.2.1",
+    "sinon": "^2.3.4"
+  },
+  "pre-commit": [
+    "lint",
+    "test"
+  ],
+  "babel": {
+    "presets": [
+      "sui"
+    ]
+  },
+  "eslintConfig": {
+    "extends": [
+      "./node_modules/@schibstedspain/sui-lint/eslintrc.js"
+    ]
+  },
+  "dependencies": {
+    "@schibstedspain/ast": "^0.9.0"
+  }
 }
