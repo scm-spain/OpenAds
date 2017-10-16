@@ -1,4 +1,6 @@
 import Connector from '../../domain/connector/Connector'
+import NativeAdResponse from '../../domain/ad/NativeAdResponse'
+import HtmlAdResponse from '../../domain/ad/HtmlAdResponse'
 
 export default class AppNexusConnector extends Connector {
   constructor ({source, connectorData, appNexusClient}) {
@@ -28,9 +30,12 @@ export default class AppNexusConnector extends Connector {
     this._appNexusClient.onEvent({
       event: 'adAvailable',
       targetId: targetId,
-      callback: (adRetrieved) => this.processAdRetrieved({
-        target: targetId,
-        adRetrieved: adRetrieved
+      callback: (adRetrieved) => this.adapter.responseAdapter.onAdRetrieved({
+        adResponse: this._createAdResponse({
+          targetId: targetId,
+          adDefinition: adDefinition,
+          adRetrieved: adRetrieved
+        })
       })
     })
 
@@ -43,9 +48,21 @@ export default class AppNexusConnector extends Connector {
     this._appNexusClient.loadTags()
   }
 
-  // TODO this function out of the repository should be nice?
-  processAdRetrieved ({target, adRetrieved}) {
-    console.log('Ad Retrieved: ' + JSON.stringify(adRetrieved))
-    this._appNexusClient.showTag({target})
+  /**
+   *
+   * @private
+   */
+  _createAdResponse ({targetId, adDefinition, adRetrieved}) {
+    return adRetrieved.adType === 'native'
+        ? new NativeAdResponse({
+          targetId,
+          adDefinition,
+          adRetrieved})
+        : new HtmlAdResponse({
+          targetId,
+          adDefinition,
+          adRetrieved,
+          showAdCallback: () => this._appNexusClient.showTag({target: targetId})
+        })
   }
 }
