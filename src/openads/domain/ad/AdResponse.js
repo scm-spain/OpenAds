@@ -1,10 +1,9 @@
 const HTML = 'HTML'
 const NATIVE = 'Native'
 export default class AdResponse {
-  constructor ({responseType, targetId, adDefinition, adRetrieved}) {
+  constructor ({responseType, source, adRetrieved}) {
     this._responseType = responseType
-    this._targetId = targetId
-    this._adDefinition = adDefinition
+    this._source = source
     this._adRetrieved = adRetrieved
   }
   static get HTML () {
@@ -16,11 +15,8 @@ export default class AdResponse {
   get responseType () {
     return this._responseType
   }
-  get targetId () {
-    return this._targetId
-  }
-  get adDefinition () {
-    return this._adDefinition
+  get source () {
+    return this._source
   }
   get adRetrieved () {
     return this._adRetrieved

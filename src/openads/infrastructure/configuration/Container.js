@@ -2,9 +2,9 @@ import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/DisplayAdsUseCase'
 import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
 import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
-import AppNexusConnectorImpl from '../appnexus/AppNexusConnectorImpl'
+import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
 import AdChainedRepository from '../repository/AdChainedRepository'
-import AppNexusAdRepository from '../appnexus/AppNexusAdRepository'
+import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
 
 export default class Container {
   constructor ({config}) {

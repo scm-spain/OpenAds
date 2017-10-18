@@ -1,4 +1,4 @@
-import Connector from '../../domain/connector/Connector'
+import Connector from '../../../domain/connector/Connector'
 
 /**
  * @abstract

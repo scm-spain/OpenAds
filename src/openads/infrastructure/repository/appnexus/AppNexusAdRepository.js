@@ -1,6 +1,11 @@
-import AdRepository from '../../domain/ad/AdRepository'
+import AdRepository from '../../../domain/ad/AdRepository'
+import HtmlAdResponse from '../../../domain/ad/HtmlAdResponse'
 
 export default class AppNexusAdRepository extends AdRepository {
+    /**
+     *
+     * @param {AppNexusConnector} appNexusConnector
+     */
   constructor ({appNexusConnector}) {
     super()
     this._connector = appNexusConnector
@@ -16,10 +21,11 @@ export default class AppNexusAdRepository extends AdRepository {
       this._connector.onEvent({
         event: 'adAvailable',
         targetId: adRequest.containerId,
-        callback: (data) => {
-          console.log('CALLBACK', data)
-          resolve(data)
-        }
+        callback: (adRetrieved) => resolve(new HtmlAdResponse({
+          source: this._connector.source,
+          adRetrieved: adRetrieved,
+          renderFunction: () => this._connector.showTag({target: adRequest.containerId})
+        }))
       })
       this._connector.onEvent({
         event: 'adBadRequest',

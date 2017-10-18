@@ -1,5 +1,5 @@
 import {assert} from 'chai'
-import AppNexusConnector from '../../../../openads/infrastructure/appnexus/AppNexusConnectorImpl'
+import AppNexusConnector from '../../../../openads/infrastructure/connector/appnexus/AppNexusConnectorImpl'
 import FakeAppNexusClient from './FakeAppNexusClient'
 
 describe('AppNexusConnectorImpl implementation', function () {
