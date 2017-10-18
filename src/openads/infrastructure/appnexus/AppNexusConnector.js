@@ -1,68 +1,57 @@
 import Connector from '../../domain/connector/Connector'
-import NativeAdResponse from '../../domain/ad/NativeAdResponse'
-import HtmlAdResponse from '../../domain/ad/HtmlAdResponse'
 
+/**
+ * @abstract
+ */
 export default class AppNexusConnector extends Connector {
-  constructor ({source, connectorData, appNexusClient}) {
-    super({
-      source: source,
-      adapter: connectorData.adapter,
-      configuration: connectorData.configuration
-    })
-    this._member = this.configuration.member
-    this._appNexusClient = appNexusClient
-  }
-
-  get member () {
-    return this._member
-  }
-
-  findAd ({targetId, adDefinition}) {
-    console.log('AppNexusConnector - findAd', targetId, adDefinition)
-
-    this._appNexusClient.activateDebugMode()
-
-    this._appNexusClient.setPageOpts({
-      member: this._member,
-      keywords: this.adapter.requestAdapter.keywords({adDefinition})
-    })
-
-    this._appNexusClient.onEvent({
-      event: 'adAvailable',
-      targetId: targetId,
-      callback: (adRetrieved) => this.adapter.responseAdapter.onAdRetrieved({
-        adResponse: this._createAdResponse({
-          targetId: targetId,
-          adDefinition: adDefinition,
-          adRetrieved: adRetrieved
-        })
-      })
-    })
-
-    this._appNexusClient.defineTag({
-      invCode: this.adapter.requestAdapter.invCode({adDefinition}),
-      sizes: this.adapter.requestAdapter.sizes({adDefinition}),
-      targetId: targetId
-    })
-
-    this._appNexusClient.loadTags()
+  /**
+   * Activates the Debug mode.
+   */
+  activateDebugMode () {
+    throw new Error('AppNexusConnector#activateDebugMode must be implemented')
   }
 
   /**
-   *
-   * @private
+   * Sets page options.
+   * @param member
+   * @param keywords
    */
-  _createAdResponse ({targetId, adDefinition, adRetrieved}) {
-    return adRetrieved.adType === 'native'
-        ? new NativeAdResponse({
-          targetId,
-          adDefinition,
-          adRetrieved})
-        : new HtmlAdResponse({
-          targetId,
-          adDefinition,
-          adRetrieved,
-          showAdCallback: () => this._appNexusClient.showTag({target: targetId})
-        })
+  setPageOpts ({member, keywords}) {
+    throw new Error('AppNexusConnector#setPageOpts must be implemented')
+  }
+
+  /**
+   * Defines onEvent
+   * @param event
+   * @param targetId
+   * @param callback
+   */
+  onEvent ({event, targetId, callback}) {
+    throw new Error('AppNexusConnector#onEvent must be implemented')
+  }
+
+  /**
+   * Method to define tags.
+   * @param invCode
+   * @param sizes
+   * @param targetId
+   */
+  defineTag ({invCode, sizes, targetId}) {
+    throw new Error('AppNexusConnector#defineTag must be implemented')
+  }
+
+  /**
+   * Load tags.
+   */
+  loadTags () {
+    throw new Error('AppNexusConnector#loadTags must be implemented')
+  }
+
+  /**
+   * Shows tags in the target.
+   * @param target
+   */
+  showTag ({target}) {
+    throw new Error('AppNexusConnector#showTag must be implemented')
   }
 }

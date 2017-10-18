@@ -2,37 +2,63 @@ import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/DisplayAdsUseCase'
 import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
 import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
-import ApnTagAppNexusClient from '../appnexus/ApnTagAppNexusClient'
+import AppNexusConnectorImpl from '../appnexus/AppNexusConnectorImpl'
+import AdChainedRepository from '../repository/AdChainedRepository'
+import AppNexusAdRepository from '../appnexus/AppNexusAdRepository'
 
 export default class Container {
   constructor ({config}) {
     this._config = config
+    this._instances = new Map()
   }
 
-  buildDOMDriver () {
+  getInstance ({key}) {
+    if (undefined === this._instances.get(key)) {
+      this._instances.set(key, this['_build' + key]())
+    }
+    return this._instances.get(key)
+  }
+
+  _buildDOMDriver () {
     return new HTMLDOMDriver({dom: window.document})
   }
 
-  buildDisplayAdsUseCase () {
+  _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
-      connectorService: this.buildConnectorService(),
-      adDefinitionService: this.buildAdDefinitionService()
+      adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
     })
   }
 
-  buildConnectorService () {
+  _buildConnectorService () {
     return new ConnectorServiceImpl({
-      connectors: this._config.connectors, appNexusClient: this.buildAppNexusClient()
+      connectors: this._config.connectors,
+      appNexusClient: this.getInstance({key: 'AppNexusConnector'})
     })
   }
 
-  buildAdDefinitionService () {
+  _buildAdDefinitionService () {
     return new AdDefinitionServiceImpl({
       adDefinitions: this._config.adDefinitions
     })
   }
 
-  buildAppNexusClient () {
-    return new ApnTagAppNexusClient()
+  _buildAppNexusConnector () {
+    return new AppNexusConnectorImpl({
+      source: 'AppNexus',
+      connectorData: this._config.connectors.AppNexus
+    })
+  }
+
+  _buildAppNexusRepository () {
+    return new AppNexusAdRepository({
+      appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
+    })
+  }
+  _buildAdChainedRepository () {
+    return new AdChainedRepository({
+      googleRepository: null,
+      appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
+      configuration: this._config
+    })
   }
 }

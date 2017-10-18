@@ -1,10 +1,10 @@
 import {assert} from 'chai'
-import AppNexusConnector from '../../../../openads/infrastructure/appnexus/AppNexusConnector'
+import AppNexusConnector from '../../../../openads/infrastructure/appnexus/AppNexusConnectorImpl'
 import FakeAppNexusClient from './FakeAppNexusClient'
 
-describe('AppNexusConnector implementation', function () {
+describe('AppNexusConnectorImpl implementation', function () {
   describe('given valid constructor parameters', function () {
-    it('should create a new instance of AppNexusConnector according to parameters', function () {
+    it('should create a new instance of AppNexusConnectorImpl according to parameters', function () {
       const source = 'AppNexus'
       const connectorData =
         {

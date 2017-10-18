@@ -1,4 +1,4 @@
-import AppNexusClient from '../../../../openads/infrastructure/appnexus/AppNexusClient'
+import AppNexusClient from '../../../../openads/infrastructure/appnexus/AppNexusConnector'
 
 export default class FakeAppNexusClient extends AppNexusClient {
   activateDebugMode () {

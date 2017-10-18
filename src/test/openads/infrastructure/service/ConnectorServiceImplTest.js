@@ -4,7 +4,7 @@ import FakeAppNexusClient from '../appnexus/FakeAppNexusClient'
 
 describe('Connector Resolver implementation', function () {
   describe('given a single connector for AppNexus', function () {
-    it('should instantiate the AppNexusConnector', function () {
+    it('should instantiate the AppNexusConnectorImpl', function () {
       const givenConnectors =
         {
           'AppNexus': {

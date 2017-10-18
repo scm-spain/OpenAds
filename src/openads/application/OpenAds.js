@@ -4,7 +4,7 @@ export default class OpenAds {
   }
 
   displayAdsUseCase () {
-    return this._container.buildDisplayAdsUseCase()
+    return this._container.getInstance({key: 'DisplayAdsUseCase'})
   }
 
   environment () {
