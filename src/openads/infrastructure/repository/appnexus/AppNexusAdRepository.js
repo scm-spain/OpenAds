@@ -1,15 +1,22 @@
 import AdRepository from '../../../domain/ad/AdRepository'
-import HtmlAdResponse from '../../../domain/ad/HtmlAdResponse'
 
 export default class AppNexusAdRepository extends AdRepository {
     /**
      *
      * @param {AppNexusConnector} appNexusConnector
+     * @param {AppNexusResultMapper} appNexusResultMapper
      */
-  constructor ({appNexusConnector}) {
+  constructor ({appNexusConnector, appNexusResultMapper}) {
     super()
     this._connector = appNexusConnector
+    this._appNexusResultMapper = appNexusResultMapper
   }
+
+  /**
+   *
+   * @param adRequest
+   * @return {Promise<Ad>}
+   */
   findAd ({adRequest}) {
     return new Promise((resolve, reject) => {
       this._connector.activateDebugMode()
@@ -21,11 +28,7 @@ export default class AppNexusAdRepository extends AdRepository {
       this._connector.onEvent({
         event: 'adAvailable',
         targetId: adRequest.containerId,
-        callback: (adRetrieved) => resolve(new HtmlAdResponse({
-          source: this._connector.source,
-          adRetrieved: adRetrieved,
-          renderFunction: () => this._connector.showTag({target: adRequest.containerId})
-        }))
+        callback: (adRetrieved) => resolve(this._appNexusResultMapper.mapResponseToDomain({appNexusResponse: adRetrieved}))
       })
       this._connector.onEvent({
         event: 'adBadRequest',

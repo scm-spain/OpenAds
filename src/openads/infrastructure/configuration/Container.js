@@ -5,6 +5,9 @@ import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
 import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
 import AdChainedRepository from '../repository/AdChainedRepository'
 import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
+import AppNexusResultMapper from '../repository/appnexus/AppNexusResultMapper'
+import BannerFactory from '../../domain/ad/banner/BannerFactory'
+import AppNexusBannerRenderer from '../repository/appnexus/AppNexusBannerRenderer'
 
 export default class Container {
   constructor ({config}) {
@@ -51,7 +54,8 @@ export default class Container {
 
   _buildAppNexusRepository () {
     return new AppNexusAdRepository({
-      appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
+      appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
+      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'})
     })
   }
   _buildAdChainedRepository () {
@@ -59,6 +63,21 @@ export default class Container {
       googleRepository: null,
       appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
       configuration: this._config
+    })
+  }
+  _buildAppNexusResultMapper () {
+    return new AppNexusResultMapper({
+      bannerFactory: this.getInstance({key: 'BannerFactory'})
+    })
+  }
+  _buildBannerFactory () {
+    return new BannerFactory({
+      appNexusBannerRenderer: this.getInstance({key: 'AppNexusBannerRenderer'})
+    })
+  }
+  _buildAppNexusBannerRenderer () {
+    return new AppNexusBannerRenderer({
+      appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
     })
   }
 }

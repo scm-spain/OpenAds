@@ -8,6 +8,11 @@ export default class AdChainedRepository extends AdRepository {
     this._configuration = configuration
   }
 
+    /**
+     *
+     * @param adRequest
+     * @return {*|Promise.<Banner>}
+     */
   findAd ({adRequest}) {
     return this._appnexusRepository.findAd({adRequest})
   }

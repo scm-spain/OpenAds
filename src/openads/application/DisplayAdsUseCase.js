@@ -17,5 +17,6 @@ export default class DisplayAdsUseCase {
    */
   display ({adRequest}) {
     return this._adChainedRepository.findAd({adRequest})
+         .then(ad => ad.show())
   }
 }

@@ -21,27 +21,27 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   setPageOpts ({member, keywords}) {
-    this._appNexusClient.setPageOpts({member, keywords})
+    this._appNexusClient.anq.push(() => this._appNexusClient.setPageOpts({member, keywords}))
     return this
   }
 
   onEvent ({event, targetId, callback}) {
-    this._appNexusClient.onEvent(event, targetId, callback)
+    this._appNexusClient.anq.push(() => this._appNexusClient.onEvent(event, targetId, callback))
     return this
   }
 
   defineTag ({invCode, sizes, targetId}) {
-    this._appNexusClient.defineTag({invCode, sizes, targetId})
+    this._appNexusClient.anq.push(() => this._appNexusClient.defineTag({invCode, sizes, targetId}))
     return this
   }
 
   loadTags () {
-    this._appNexusClient.loadTags()
+    this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
     return this
   }
 
   showTag ({target}) {
-    this._appNexusClient.showTag({target})
+    this._appNexusClient.anq.push(() => this._appNexusClient.showTag(target))
     return this
   }
 }
