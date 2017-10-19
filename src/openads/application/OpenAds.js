@@ -3,6 +3,10 @@ export default class OpenAds {
     this._container = container
   }
 
+  findAdsUseCase () {
+    return this._container.getInstance({key: 'FindAdsUseCase'})
+  }
+
   displayAdsUseCase () {
     return this._container.getInstance({key: 'DisplayAdsUseCase'})
   }

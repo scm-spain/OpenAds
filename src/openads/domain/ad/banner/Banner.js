@@ -25,4 +25,20 @@ export default class Banner extends Ad {
       size: this._size
     })
   }
+
+  get containerId () {
+    return this._containerId
+  }
+
+  get source () {
+    return this._source
+  }
+
+  get content () {
+    return this._content
+  }
+
+  get size () {
+    return this._size
+  }
 }

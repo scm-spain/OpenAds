@@ -34,7 +34,6 @@ export default class AppNexusAdRepository extends AdRepository {
         event: 'adBadRequest',
         targetId: adRequest.containerId,
         callback: (data) => {
-          console.log('CALLBACK-adBadRequest', data)
           reject(data)
         }
       })

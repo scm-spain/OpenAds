@@ -8,6 +8,7 @@ import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
 import AppNexusResultMapper from '../repository/appnexus/AppNexusResultMapper'
 import BannerFactory from '../../domain/ad/banner/BannerFactory'
 import AppNexusBannerRenderer from '../repository/appnexus/AppNexusBannerRenderer'
+import FindAdUseCase from "../../application/FindAdUseCase";
 
 export default class Container {
   constructor ({config}) {
@@ -28,6 +29,12 @@ export default class Container {
 
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
+      adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
+    })
+  }
+
+  _buildFindAdsUseCase () {
+    return new FindAdUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
     })
   }
