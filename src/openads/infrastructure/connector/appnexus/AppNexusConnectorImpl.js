@@ -1,15 +1,13 @@
 import AppNexusConnector from './AppNexusConnector'
 
-require('@schibstedspain/ast')
-
 export default class AppNexusConnectorImpl extends AppNexusConnector {
-  constructor ({source, connectorData}) {
+  constructor ({source, connectorData, appNexusClient}) {
     super({
       source: source,
       configuration: connectorData.configuration
     })
     this._member = this.configuration.member
-    this._appNexusClient = apntag
+    this._appNexusClient = appNexusClient
   }
 
   get member () {

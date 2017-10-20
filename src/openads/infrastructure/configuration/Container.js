@@ -1,5 +1,5 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
-import DisplayAdsUseCase from '../../application/DisplayAdsUseCase'
+import DisplayAdsUseCase from '../../application/service/DisplayAdsUseCase'
 import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
 import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
 import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
@@ -8,7 +8,8 @@ import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
 import AppNexusResultMapper from '../repository/appnexus/AppNexusResultMapper'
 import BannerFactory from '../../domain/ad/banner/BannerFactory'
 import AppNexusBannerRenderer from '../repository/appnexus/AppNexusBannerRenderer'
-import FindAdUseCase from "../../application/FindAdUseCase";
+import FindAdUseCase from '../../application/service/FindAdUseCase'
+import AppNexusClient from '../connector/appnexus/AppNexusClient'
 
 export default class Container {
   constructor ({config}) {
@@ -55,8 +56,13 @@ export default class Container {
   _buildAppNexusConnector () {
     return new AppNexusConnectorImpl({
       source: 'AppNexus',
-      connectorData: this._config.connectors.AppNexus
+      connectorData: this._config.connectors.AppNexus,
+      appNexusClient: this.getInstance({key: 'AppNexusClient'})
     })
+  }
+
+  _buildAppNexusClient () {
+    return AppNexusClient.build()
   }
 
   _buildAppNexusRepository () {

@@ -1,6 +1,6 @@
-import ConnectorService from '../domain/service/ConnectorService'
-import AdDefinitionService from '../domain/service/AdDefinitionService'
-import AdRequest from '../domain/ad/AdRequest'
+import ConnectorService from '../../domain/service/ConnectorService'
+import AdDefinitionService from '../../domain/service/AdDefinitionService'
+import AdRequest from '../../domain/ad/AdRequest'
 
 export default class DisplayAdsUseCase {
   /**
