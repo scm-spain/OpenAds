@@ -47,12 +47,6 @@ export default class Container {
     })
   }
 
-  _buildAdDefinitionService () {
-    return new AdDefinitionServiceImpl({
-      adDefinitions: this._config.adDefinitions
-    })
-  }
-
   _buildAppNexusConnector () {
     return new AppNexusConnectorImpl({
       source: 'AppNexus',

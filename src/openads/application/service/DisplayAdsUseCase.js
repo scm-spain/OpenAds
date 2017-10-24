@@ -1,5 +1,3 @@
-import AdRequest from '../../domain/ad/AdRequest'
-
 export default class DisplayAdsUseCase {
   /**
    *

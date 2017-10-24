@@ -22,6 +22,7 @@ describe('AppNexus repository', function () {
     this.onEventSpy = sinon.spy(this.appNexusConnectorMock, 'onEvent')
     this.defineTagSpy = sinon.spy(this.appNexusConnectorMock, 'defineTag')
     this.loadTagsSpy = sinon.spy(this.appNexusConnectorMock, 'loadTags')
+    this.mapResponseToDomainSpy = sinon.spy(this.appNexusResultMapperMock, 'mapResponseToDomain')
   })
   describe('given a valid adRequest', function () {
     it('should return a Promise', function () {
@@ -53,9 +54,38 @@ describe('AppNexus repository', function () {
           expect(this.onEventSpy.calledTwice, 'onEvent not called twice').to.be.true
           expect(this.defineTagSpy.calledOnce, 'defineTag not called once').to.be.true
           expect(this.loadTagsSpy.calledOnce, 'loadTags not called once').to.be.true
+          expect(this.mapResponseToDomainSpy.calledOnce, 'mapResponseToDomain not called once').to.be.true
           done()
         })
         .catch(error => done(error))
+    })
+
+    it('should return a rejected Promise when someone call to callback on adBadRequest event', function (done) {
+      const givenAdRequest = {}
+
+      this.appNexusConnectorMock = {
+        activateDebugMode: () => this.appNexusConnectorMock,
+        setPageOpts: ({data}) => this.appNexusConnectorMock,
+        onEvent: ({event, targetId, callback}) => {
+          if (event === 'adBadRequest') callback('error')
+          return this.appNexusConnectorMock
+        },
+        defineTag: ({data}) => this.appNexusConnectorMock,
+        loadTags: () => this.appNexusConnectorMock
+      }
+
+      const appnexusRepository = new AppNexusAdRepository({
+        appNexusConnector: this.appNexusConnectorMock,
+        appNexusResultMapper: this.appNexusResultMapperMock
+      })
+
+      appnexusRepository.findAd({
+        adRequest: givenAdRequest
+      })
+        .then(ad => done(new Error('Promise should resolve as rejected')))
+        .catch(error => {
+          done()
+        })
     })
   })
 })
