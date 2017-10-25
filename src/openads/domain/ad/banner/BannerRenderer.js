@@ -1,5 +1,8 @@
+/**
+ * @interface
+ */
 export default class BannerRenderer {
-  render ({containerId, content, size}) {
+  render ({containerId}) {
     throw new Error('BannerRenderer#render must be implemented')
   }
 }
