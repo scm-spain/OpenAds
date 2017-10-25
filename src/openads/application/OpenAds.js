@@ -1,4 +1,8 @@
 export default class OpenAds {
+  /**
+   *
+   * @param {Container} container
+   */
   constructor ({container}) {
     this._container = container
   }

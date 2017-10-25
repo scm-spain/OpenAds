@@ -1,7 +1,6 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/service/DisplayAdsUseCase'
 import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
-import AdDefinitionServiceImpl from '../service/AdDefinitionServiceImpl'
 import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
 import AdChainedRepository from '../repository/AdChainedRepository'
 import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'

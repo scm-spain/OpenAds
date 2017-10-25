@@ -15,6 +15,8 @@ export default class AppNexusResultMapper {
      * @param {string} appNexusResponse.targetId
      * @param {string} appNexusResponse.adType
      * @param {string} appNexusResponse.banner.content
+     * @param {string} appNexusResponse.width
+     * @param {string} appNexusResponse.height
      */
   mapResponseToDomain ({appNexusResponse}) {
     switch (appNexusResponse.adType) {

@@ -20,9 +20,7 @@ export default class Banner extends Ad {
 
   show () {
     return this._renderer.render({
-      containerId: this._containerId,
-      content: this._content,
-      size: this._size
+      containerId: this._containerId
     })
   }
 
