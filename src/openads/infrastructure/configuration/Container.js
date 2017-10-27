@@ -1,6 +1,5 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DisplayAdsUseCase from '../../application/service/DisplayAdsUseCase'
-import ConnectorServiceImpl from '../service/ConnectorServiceImpl'
 import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
 import AdChainedRepository from '../repository/AdChainedRepository'
 import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
@@ -36,13 +35,6 @@ export default class Container {
   _buildFindAdsUseCase () {
     return new FindAdUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
-    })
-  }
-
-  _buildConnectorService () {
-    return new ConnectorServiceImpl({
-      connectors: this._config.connectors,
-      appNexusClient: this.getInstance({key: 'AppNexusConnector'})
     })
   }
 
