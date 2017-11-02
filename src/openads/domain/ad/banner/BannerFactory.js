@@ -5,8 +5,9 @@ export default class BannerFactory {
    *
    * @param {BannerRenderer} renderer
    */
-  constructor ({appNexusBannerRenderer}) {
+  constructor ({appNexusBannerRenderer, eventDispatcher}) {
     this._appNexusBannerRenderer = appNexusBannerRenderer
+    this._eventDispatcher = eventDispatcher
   }
 
   create ({containerId, source, content, size}) {
@@ -15,7 +16,8 @@ export default class BannerFactory {
       source,
       content,
       size,
-      renderer: this._resolveRenderer({source})
+      renderer: this._resolveRenderer({source}),
+      eventDispatcher: this._eventDispatcher
     })
   }
 
