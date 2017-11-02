@@ -1,5 +1,5 @@
+/* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
-import sinon from 'sinon'
 import AppNexusBannerRenderer from '../../../../../openads/infrastructure/service/appnexus/AppNexusBannerRenderer'
 
 describe('AppNexus Banner Renderer', function () {
