@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import sinon from 'sinon'
 import AppNexusConnectorImpl from '../../../../openads/infrastructure/connector/appnexus/AppNexusConnectorImpl'

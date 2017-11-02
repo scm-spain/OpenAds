@@ -1,4 +1,3 @@
-import BannerFactory from '../../../domain/ad/banner/BannerFactory'
 import Size from '../../../domain/ad/Size'
 
 export default class AppNexusResultMapper {

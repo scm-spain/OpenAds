@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import sinon from 'sinon'
 import AppNexusAdRepository from '../../../../../openads/infrastructure/repository/appnexus/AppNexusAdRepository'
@@ -83,7 +84,8 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => done(new Error('Promise should resolve as rejected')))
-        .catch(error => {
+        .catch(err => {
+          console.log(err)
           done()
         })
     })
