@@ -1,12 +1,14 @@
+import Connector from '../../../domain/connector/Connector'
+
 /**
  * @abstract
  */
-export default class AppNexusClient {
+export default class AppNexusConnector extends Connector {
   /**
    * Activates the Debug mode.
    */
   activateDebugMode () {
-    throw new Error('AppNexusClient#activateDebugMode must be implemented')
+    throw new Error('AppNexusConnector#activateDebugMode must be implemented')
   }
 
   /**
@@ -15,7 +17,7 @@ export default class AppNexusClient {
    * @param keywords
    */
   setPageOpts ({member, keywords}) {
-    throw new Error('AppNexusClient#setPageOpts must be implemented')
+    throw new Error('AppNexusConnector#setPageOpts must be implemented')
   }
 
   /**
@@ -25,7 +27,7 @@ export default class AppNexusClient {
    * @param callback
    */
   onEvent ({event, targetId, callback}) {
-    throw new Error('AppNexusClient#onEvent must be implemented')
+    throw new Error('AppNexusConnector#onEvent must be implemented')
   }
 
   /**
@@ -35,14 +37,14 @@ export default class AppNexusClient {
    * @param targetId
    */
   defineTag ({invCode, sizes, targetId}) {
-    throw new Error('AppNexusClient#defineTag must be implemented')
+    throw new Error('AppNexusConnector#defineTag must be implemented')
   }
 
   /**
    * Load tags.
    */
   loadTags () {
-    throw new Error('AppNexusClient#loadTags must be implemented')
+    throw new Error('AppNexusConnector#loadTags must be implemented')
   }
 
   /**
@@ -50,6 +52,6 @@ export default class AppNexusClient {
    * @param target
    */
   showTag ({target}) {
-    throw new Error('AppNexusClient#showTag must be implemented')
+    throw new Error('AppNexusConnector#showTag must be implemented')
   }
 }
