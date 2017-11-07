@@ -19,11 +19,9 @@ Currently we only support AppNexus Source so you can only provide your **member*
 ```ecmascript 6
 import OpenAds from '@schibstedspain/OpenAds'
 const openAds = OpenAds.init({config:{
-  connectors: {
+  Sources: {
     AppNexus: {
-      configuration: {
-        member: 4242
-      }
+      Member: 4242
     }
   }
 }})
