@@ -11,7 +11,6 @@ describe('AppNexusConnectorImpl implementation', function () {
       let appNexusClientMock = {}
 
       const appNexusConnector = new AppNexusConnectorImpl({source, connectorData, appNexusClientMock})
-        console.log(JSON.stringify(appNexusConnector))
       let member = appNexusConnector.member
       expect(member).to.equal(3296)
     })
