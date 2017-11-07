@@ -4,9 +4,9 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   constructor ({source, connectorData, appNexusClient}) {
     super({
       source: source,
-      configuration: connectorData.configuration
+      configuration: connectorData
     })
-    this._member = this.configuration.member
+    this._member = this.configuration.Member
     this._appNexusClient = appNexusClient
   }
 

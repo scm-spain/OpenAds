@@ -41,7 +41,7 @@ export default class Container {
   _buildAppNexusConnector () {
     return new AppNexusConnectorImpl({
       source: 'AppNexus',
-      connectorData: this._config.connectors.AppNexus,
+      connectorData: this._config.Sources.AppNexus,
       appNexusClient: this.getInstance({key: 'AppNexusClient'})
     })
   }
