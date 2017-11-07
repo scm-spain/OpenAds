@@ -7,27 +7,18 @@ describe('AppNexusConnectorImpl implementation', function () {
   describe('given valid constructor parameters', function () {
     it('should create a new instance of AppNexusConnectorImpl according to parameters', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusClientMock = {}
 
       const appNexusConnector = new AppNexusConnectorImpl({source, connectorData, appNexusClientMock})
+        console.log(JSON.stringify(appNexusConnector))
       let member = appNexusConnector.member
       expect(member).to.equal(3296)
     })
 
     it('should create a new instance of AppNexusConnectorImpl and set debug mode to true', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusClientMock = {
         'debug': false
       }
@@ -40,12 +31,7 @@ describe('AppNexusConnectorImpl implementation', function () {
 
     it('should create a new instance of AppNexusConnectorImpl and push setPageOpts function to the queue', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       let appNexusClientMock = {
@@ -65,12 +51,7 @@ describe('AppNexusConnectorImpl implementation', function () {
 
     it('should create a new instance of AppNexusConnectorImpl and push onEvent function to the queue', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       let appNexusClientMock = {
@@ -91,12 +72,7 @@ describe('AppNexusConnectorImpl implementation', function () {
 
     it('should create a new instance of AppNexusConnectorImpl and push defineTag function to the queue', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       let appNexusClientMock = {
@@ -116,12 +92,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     })
     it('should create a new instance of AppNexusConnectorImpl and push loadTags function to the queue', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       let appNexusClientMock = {
@@ -137,12 +108,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     })
     it('should create a new instance of AppNexusConnectorImpl and push showTag function to the queue', function () {
       const source = 'AppNexus'
-      const connectorData =
-        {
-          'configuration': {
-            'member': 3296
-          }
-        }
+      const connectorData = { 'Member': 3296 }
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       let appNexusClientMock = {
