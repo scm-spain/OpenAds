@@ -24,7 +24,7 @@ export default class Banner extends Ad {
 
   show () {
     this._eventDispatcher.dispatch({
-      eventName: 'PRE_SHOW',
+      eventName: 'PRE_RENDER',
       position: this._position,
       payload: this
     })
