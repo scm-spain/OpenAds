@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
-import sinon from 'sinon'
-import EventDispatcher from '../../../../openads/infrastructure/service/EventDispatcher'
 import Banner from '../../../../openads/domain/ad/banner/Banner'
 
 describe('Banner', function () {
