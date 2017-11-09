@@ -54,4 +54,11 @@ export default class AppNexusConnector extends Connector {
   showTag ({target}) {
     throw new Error('AppNexusConnector#showTag must be implemented')
   }
+
+  /**
+   * Resets the state to it's pre uninitialized state.
+   */
+  clearRequest () {
+    throw new Error('AppNexusConnector#clearRequest must be implemented')
+  }
 }

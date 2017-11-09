@@ -48,6 +48,10 @@ export default class OpenAds {
     })
   }
 
+  resetConnectors () {
+    this._container.getInstance({key: 'ResetConnectorsUseCase'}).resetConnectors()
+  }
+
   environment () {
     return this._container.config
   }
