@@ -10,9 +10,10 @@ export default class BannerFactory {
     this._eventDispatcher = eventDispatcher
   }
 
-  create ({containerId, source, content, size}) {
+  create ({containerId, position, source, content, size}) {
     return new Banner({
       containerId,
+      position,
       source,
       content,
       size,

@@ -1,18 +1,20 @@
 import Ad from '../Ad'
 
 export default class Banner extends Ad {
-    /**
-     *
-     * @param {string} containerId
-     * @param {string} source
-     * @param {string} content
-     * @param {Size} size
-     * @param {BannerRenderer} renderer
-     * @param {EventDispatcher} eventDispatcher
-     */
-  constructor ({containerId, source, content, size, renderer, eventDispatcher}) {
+  /**
+   *
+   * @param {string} containerId
+   * @param {string} position
+   * @param {string} source
+   * @param {string} content
+   * @param {Size} size
+   * @param {BannerRenderer} renderer
+   * @param {EventDispatcher} eventDispatcher
+   */
+  constructor ({containerId, position, source, content, size, renderer, eventDispatcher}) {
     super()
     this._containerId = containerId
+    this._position = position
     this._source = source
     this._content = content
     this._size = size
@@ -23,6 +25,7 @@ export default class Banner extends Ad {
   show () {
     this._eventDispatcher.dispatch({
       eventName: 'PRE_SHOW',
+      position: this._position,
       payload: this
     })
     return this._renderer.render({
@@ -32,6 +35,10 @@ export default class Banner extends Ad {
 
   get containerId () {
     return this._containerId
+  }
+
+  get position () {
+    return this._position
   }
 
   get source () {

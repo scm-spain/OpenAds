@@ -14,9 +14,11 @@ describe('AppNexus result mapper', function () {
       })
 
       const givenContent = '<html></html>'
+      const givenPosition = 'da_position'
       const givenTargetId = 'pepe_id'
       const givenAdType = 'banner'
       const banner = appNexusResultMapper.mapResponseToDomain({
+        position: givenPosition,
         appNexusResponse: {
           targetId: givenTargetId,
           adType: givenAdType,
@@ -34,6 +36,7 @@ describe('AppNexus result mapper', function () {
       expect(banner.size.height).to.be.equals(500)
       expect(banner.content).to.be.equals(givenContent)
       expect(banner.containerId).to.be.equals(givenTargetId)
+      expect(banner.position).to.be.equals(givenPosition)
     })
   })
 
