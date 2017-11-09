@@ -112,9 +112,35 @@ openAds.find({
       .then(ad => ad.show())      
 ```
 
+## Hooks support
+
+OpenAds supports registering a hook for processing a synchronous function callback when:
+
+* **PRE_RENDER**: 
+    * When an Banner#show method is called, before calling the banner renderer that will write the Ad content into the DOM, 
+    a 'PRE_RENDER' Event will be dispatched to the registered Position in which de Banner must be rendered.
+    
+You can register hooks to multiple positions for the same event, and also, N hooks can be registered for the same event 
+and position (they'll be executed in the registered order)
+    
+Registering the hook in the OpenAds client layer:
+```ecmascript 6
+// creating the hook specification
+const sampleHook = {
+   eventName: 'PRE_RENDER', 
+   position: 'TOP_1', 
+   callback: ({payload}) => console.log('The payload is the retrieved Ad', payload)
+}
+
+// registering the hook
+openAds.registerHook(sampleHook)
+
+// unregisitering the hook
+openAds.registerHook(sampleHook)
+```
+  
 # Roadmap
 
-* Add support for hooks in PRE rendering Ad
 * Add support for Native Ads
 * Add support to Google AdSense
 * Add support for passback sources 
