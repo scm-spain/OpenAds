@@ -28,8 +28,8 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     return this
   }
 
-  defineTag ({invCode, sizes, targetId}) {
-    this._appNexusClient.anq.push(() => this._appNexusClient.defineTag({invCode, sizes, targetId}))
+  defineTag ({member, targetId, invCode, sizes, keywords}) {
+    this._appNexusClient.anq.push(() => this._appNexusClient.defineTag({member, targetId, invCode, sizes, keywords}))
     return this
   }
 
