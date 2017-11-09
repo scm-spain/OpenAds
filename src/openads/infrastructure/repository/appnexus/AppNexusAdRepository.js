@@ -28,7 +28,10 @@ export default class AppNexusAdRepository extends AdRepository {
         .onEvent({
           event: 'adAvailable',
           targetId: adRequest.containerId,
-          callback: (adRetrieved) => resolve(this._appNexusResultMapper.mapResponseToDomain({appNexusResponse: adRetrieved}))
+          callback: (adRetrieved) => resolve(this._appNexusResultMapper.mapResponseToDomain({
+            position: adRequest.position,
+            appNexusResponse: adRetrieved
+          }))
         })
         .onEvent({
           event: 'adBadRequest',

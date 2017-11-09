@@ -32,6 +32,22 @@ export default class OpenAds {
     return this._container.getInstance({key: 'DisplayAdsUseCase'}).display({adRequest})
   }
 
+  registerHook ({eventName, position, callback}) {
+    this._container.getInstance({key: 'EventDispatcher'}).addObserver({
+      eventName,
+      position,
+      observer: callback
+    })
+  }
+
+  unregisterHook ({eventName, position, callback}) {
+    this._container.getInstance({key: 'EventDispatcher'}).removeObserver({
+      eventName,
+      position,
+      observer: callback
+    })
+  }
+
   environment () {
     return this._container.config
   }

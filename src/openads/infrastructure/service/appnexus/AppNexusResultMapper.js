@@ -11,17 +11,19 @@ export default class AppNexusResultMapper {
 
     /**
      *
+     * @param {string} position
      * @param {string} appNexusResponse.targetId
      * @param {string} appNexusResponse.adType
      * @param {string} appNexusResponse.banner.content
      * @param {string} appNexusResponse.width
      * @param {string} appNexusResponse.height
      */
-  mapResponseToDomain ({appNexusResponse}) {
+  mapResponseToDomain ({position, appNexusResponse}) {
     switch (appNexusResponse.adType) {
       case 'banner': {
         return this._bannerFactory.create({
           containerId: appNexusResponse.targetId,
+          position: position,
           source: 'AppNexus',
           content: appNexusResponse.banner.content,
           size: new Size({

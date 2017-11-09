@@ -8,11 +8,13 @@ import BannerFactory from '../../domain/ad/banner/BannerFactory'
 import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
+import EventDispatcher from '../service/EventDispatcher'
 
 export default class Container {
   constructor ({config}) {
     this._config = config
     this._instances = new Map()
+    this._buildEagerSingletonInstances()
   }
 
   getInstance ({key}) {
@@ -36,6 +38,10 @@ export default class Container {
     return new FindAdUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
     })
+  }
+
+  _buildEventDispatcher () {
+    return new EventDispatcher()
   }
 
   _buildAppNexusConnector () {
@@ -70,12 +76,17 @@ export default class Container {
   }
   _buildBannerFactory () {
     return new BannerFactory({
-      appNexusBannerRenderer: this.getInstance({key: 'AppNexusBannerRenderer'})
+      appNexusBannerRenderer: this.getInstance({key: 'AppNexusBannerRenderer'}),
+      eventDispatcher: this.getInstance({key: 'EventDispatcher'})
     })
   }
   _buildAppNexusBannerRenderer () {
     return new AppNexusBannerRenderer({
       appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
     })
+  }
+
+  _buildEagerSingletonInstances () {
+    this.getInstance({key: 'EventDispatcher'})
   }
 }
