@@ -14,7 +14,7 @@ export default class Container {
   constructor ({config}) {
     this._config = config
     this._instances = new Map()
-    this._buildEagerSingleTonInstances()
+    this._buildEagerSingletonInstances()
   }
 
   getInstance ({key}) {
@@ -86,7 +86,7 @@ export default class Container {
     })
   }
 
-  _buildEagerSingleTonInstances () {
+  _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
   }
 }
