@@ -16,4 +16,8 @@ export default class AdChainedRepository extends AdRepository {
   findAd ({adRequest}) {
     return this._appnexusRepository.findAd({adRequest})
   }
+
+  reset () {
+    this._appnexusRepository.reset()
+  }
 }

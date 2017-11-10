@@ -9,6 +9,7 @@ import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
 import EventDispatcher from '../service/EventDispatcher'
+import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
 
 export default class Container {
   constructor ({config}) {
@@ -36,6 +37,12 @@ export default class Container {
 
   _buildFindAdsUseCase () {
     return new FindAdUseCase({
+      adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
+    })
+  }
+
+  _buildResetConnectorsUseCase () {
+    return new ResetConnectorsUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
     })
   }

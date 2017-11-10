@@ -42,4 +42,9 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     this._appNexusClient.anq.push(() => this._appNexusClient.showTag(target))
     return this
   }
+
+  clearRequest () {
+    this._appNexusClient.anq.push(() => this._appNexusClient.clearRequest())
+    return this
+  }
 }
