@@ -51,7 +51,6 @@ describe('AppNexus repository', function () {
       })
         .then(ad => {
           expect(this.activateDebugModeSpy.calledOnce, 'activateDebugMode not called once').to.be.true
-          expect(this.setPageOptsSpy.calledOnce, 'setPageOpts not called once').to.be.true
           expect(this.onEventSpy.calledTwice, 'onEvent not called twice').to.be.true
           expect(this.defineTagSpy.calledOnce, 'defineTag not called once').to.be.true
           expect(this.loadTagsSpy.calledOnce, 'loadTags not called once').to.be.true

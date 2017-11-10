@@ -21,10 +21,6 @@ export default class AppNexusAdRepository extends AdRepository {
     return new Promise((resolve, reject) => {
       this._connector
         .activateDebugMode()
-        .setPageOpts({
-          member: this._connector.member,
-          keywords: adRequest.segmentation
-        })
         .onEvent({
           event: 'adAvailable',
           targetId: adRequest.containerId,
@@ -41,9 +37,11 @@ export default class AppNexusAdRepository extends AdRepository {
           }
         })
         .defineTag({
+          member: this._connector.member,
+          targetId: adRequest.containerId,
           invCode: adRequest.placement,
           sizes: adRequest.sizes,
-          targetId: adRequest.containerId
+          keywords: adRequest.segmentation
         })
         .loadTags()
     })
