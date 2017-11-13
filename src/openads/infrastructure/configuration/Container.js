@@ -71,7 +71,6 @@ export default class Container {
   }
   _buildAdChainedRepository () {
     return new AdChainedRepository({
-      googleRepository: null,
       appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
       configuration: this._config
     })

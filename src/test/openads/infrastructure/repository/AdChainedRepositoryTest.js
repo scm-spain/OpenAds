@@ -12,7 +12,6 @@ describe('Ad Chained repository', function () {
       }
       const adChainedRepository = new AdChainedRepository({
         appnexusRepository: appNexusRepositoryMock,
-        googleRepository: {},
         configuration: {}
       })
 
@@ -29,7 +28,6 @@ describe('Ad Chained repository', function () {
       const findAdSpy = sinon.spy(appNexusRepositoryMock, 'findAd')
       const adChainedRepository = new AdChainedRepository({
         appnexusRepository: appNexusRepositoryMock,
-        googleRepository: {},
         configuration: {}
       })
 
@@ -41,6 +39,22 @@ describe('Ad Chained repository', function () {
           done()
         })
         .catch(error => done(error))
+    })
+  })
+  describe('Calling the reset method', function () {
+    it('Should reset all chained repositories', function () {
+      const appNexusRepositoryMock = {
+        reset: () => null
+      }
+      const adChainedRepositoryResetSpy = sinon.spy(appNexusRepositoryMock, 'reset')
+
+      const adChainedRepository = new AdChainedRepository({
+        appnexusRepository: appNexusRepositoryMock,
+        configuration: {}
+      })
+      adChainedRepository.reset()
+
+      expect(adChainedRepositoryResetSpy.calledOnce).to.be.true
     })
   })
 })

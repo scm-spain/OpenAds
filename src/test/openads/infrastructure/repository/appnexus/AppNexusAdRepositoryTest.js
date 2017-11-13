@@ -13,16 +13,17 @@ describe('AppNexus repository', function () {
         return this.appNexusConnectorMock
       },
       defineTag: ({data}) => this.appNexusConnectorMock,
-      loadTags: () => this.appNexusConnectorMock
+      loadTags: () => this.appNexusConnectorMock,
+      reset: () => null
     }
     this.appNexusResultMapperMock = {
       mapResponseToDomain: ({appNexusResponse}) => {}
     }
     this.activateDebugModeSpy = sinon.spy(this.appNexusConnectorMock, 'activateDebugMode')
-    this.setPageOptsSpy = sinon.spy(this.appNexusConnectorMock, 'setPageOpts')
     this.onEventSpy = sinon.spy(this.appNexusConnectorMock, 'onEvent')
     this.defineTagSpy = sinon.spy(this.appNexusConnectorMock, 'defineTag')
     this.loadTagsSpy = sinon.spy(this.appNexusConnectorMock, 'loadTags')
+    this.resetSpy = sinon.spy(this.appNexusConnectorMock, 'reset')
     this.mapResponseToDomainSpy = sinon.spy(this.appNexusResultMapperMock, 'mapResponseToDomain')
   })
   describe('given a valid adRequest', function () {
@@ -87,6 +88,16 @@ describe('AppNexus repository', function () {
           console.log(err)
           done()
         })
+    })
+  })
+
+  describe('Calling the reset method', function () {
+    it('Should reset the connector', function () {
+      const appnexusRepository = new AppNexusAdRepository({
+        appNexusConnector: this.appNexusConnectorMock
+      })
+      appnexusRepository.reset()
+      expect(this.resetSpy.calledOnce).to.be.true
     })
   })
 })

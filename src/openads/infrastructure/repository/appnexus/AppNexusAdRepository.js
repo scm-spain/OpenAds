@@ -48,6 +48,6 @@ export default class AppNexusAdRepository extends AdRepository {
   }
 
   reset () {
-    this._connector.clearRequest()
+    this._connector.reset()
   }
 }
