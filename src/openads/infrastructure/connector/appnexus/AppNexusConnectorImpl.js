@@ -8,6 +8,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     })
     this._member = this.configuration.Member
     this._appNexusClient = appNexusClient
+    this._registeredEvents = new Map()
   }
 
   get member () {
@@ -24,7 +25,13 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   onEvent ({event, targetId, callback}) {
-    this._appNexusClient.anq.push(() => this._appNexusClient.onEvent(event, targetId, callback))
+    this._appNexusClient.anq.push(() => {
+      this._appNexusClient.onEvent(event, targetId, callback)
+      if (!this._registeredEvents.has(targetId)) {
+        this._registeredEvents.set(targetId, [])
+      }
+      this._registeredEvents.get(targetId).push(event)
+    })
     return this
   }
 
@@ -43,8 +50,14 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     return this
   }
 
-  clearRequest () {
-    this._appNexusClient.anq.push(() => this._appNexusClient.clearRequest())
+  reset () {
+    this._appNexusClient.anq.push(() => {
+      this._appNexusClient.clearRequest()
+      this._registeredEvents.forEach((eventArray, targetId) => {
+        eventArray.forEach(event => this._appNexusClient.offEvent(event, targetId))
+      })
+      this._registeredEvents = new Map()
+    })
     return this
   }
 }

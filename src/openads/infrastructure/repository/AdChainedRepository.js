@@ -1,10 +1,9 @@
 import AdRepository from '../../domain/ad/AdRepository'
 
 export default class AdChainedRepository extends AdRepository {
-  constructor ({appnexusRepository, googleRepository, configuration}) {
+  constructor ({appnexusRepository, configuration}) {
     super()
     this._appnexusRepository = appnexusRepository
-    this._googleRepository = googleRepository
     this._configuration = configuration
   }
 

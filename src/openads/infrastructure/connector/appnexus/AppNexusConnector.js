@@ -58,7 +58,7 @@ export default class AppNexusConnector extends Connector {
   /**
    * Resets the state to it's pre uninitialized state.
    */
-  clearRequest () {
+  reset () {
     throw new Error('AppNexusConnector#clearRequest must be implemented')
   }
 }

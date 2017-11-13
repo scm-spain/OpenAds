@@ -138,12 +138,22 @@ openAds.registerHook(sampleHook)
 // unregisitering the hook
 openAds.registerHook(sampleHook)
 ```
-  
+
+## Single Page Application Support
+
+OpenAds supports reloading Ads after page fragments refresh, commonly used in SPA websites.
+In order to do that, just call:
+```ecmascript 6
+// will clean any internal state of supported source connectors
+openAds.resetConnectors()
+```
+
 # Roadmap
 
 * Add support for Native Ads
 * Add support to Google AdSense
 * Add support for passback sources 
+* Add support for single Ad position refresh 
 
 
 # License

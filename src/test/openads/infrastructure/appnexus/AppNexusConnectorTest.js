@@ -122,4 +122,58 @@ describe('AppNexusConnectorImpl implementation', function () {
       expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
     })
   })
+  describe('Given two events registered for two different targets', () => {
+    beforeEach('Define the events', () => {
+      this.givenEvent11 = {event: 'event1', targetId: 'target1', callback: () => null}
+      this.givenEvent12 = {event: 'event1', targetId: 'target2', callback: () => null}
+      this.givenEvent21 = {event: 'event2', targetId: 'target1', callback: () => null}
+      this.givenEvent22 = {event: 'event2', targetId: 'target2', callback: () => null}
+    })
+    describe('Registering the events', () => {
+      it('Should register the events to the appnexus client', () => {
+        const appNexusQueue = {
+          push: (f) => f()
+        }
+        const appNexusClientMock = {
+          anq: appNexusQueue,
+          clearRequest: () => null,
+          offEvent: () => null,
+          onEvent: () => null
+        }
+        const onEventSpy = sinon.spy(appNexusClientMock, 'onEvent')
+
+        const appNexusConnector = new AppNexusConnectorImpl({appNexusClient: appNexusClientMock, source: {}, connectorData: {}})
+        appNexusConnector.onEvent(this.givenEvent11)
+        appNexusConnector.onEvent(this.givenEvent12)
+        appNexusConnector.onEvent(this.givenEvent21)
+        appNexusConnector.onEvent(this.givenEvent22)
+
+        expect(onEventSpy.callCount).to.equal(4)
+      })
+    })
+    describe('Calling the reset method', () => {
+      it('Should clear the requests and the registered events', () => {
+        const appNexusQueue = {
+          push: (f) => f()
+        }
+        const appNexusClientMock = {
+          anq: appNexusQueue,
+          clearRequest: () => null,
+          offEvent: () => null,
+          onEvent: () => null
+        }
+        const offEventSpy = sinon.spy(appNexusClientMock, 'offEvent')
+
+        const appNexusConnector = new AppNexusConnectorImpl({appNexusClient: appNexusClientMock, source: {}, connectorData: {}})
+        appNexusConnector.onEvent(this.givenEvent11)
+        appNexusConnector.onEvent(this.givenEvent12)
+        appNexusConnector.onEvent(this.givenEvent21)
+        appNexusConnector.onEvent(this.givenEvent22)
+
+        appNexusConnector.reset()
+
+        expect(offEventSpy.callCount).to.equal(4)
+      })
+    })
+  })
 })
