@@ -40,6 +40,36 @@ describe('AppNexus result mapper', function () {
     })
   })
 
+  describe('given a video reponse type from AppNexus', function () {
+    it('should return a Banner domain object', function () {
+      const appNexusResultMapper = new AppNexusResultMapper({
+        bannerFactory: new BannerFactory({
+          appNexusBannerRenderer: {}
+        })
+      })
+
+      const givenContent = '<html></html>'
+      const givenPosition = 'da_position'
+      const givenTargetId = 'pepe_id'
+      const givenAdType = 'video'
+      const banner = appNexusResultMapper.mapResponseToDomain({
+        position: givenPosition,
+        appNexusResponse: {
+          targetId: givenTargetId,
+          adType: givenAdType,
+          video: {
+            content: givenContent
+          }
+        }
+      })
+
+      expect(banner).to.be.an.instanceof(Banner)
+      expect(banner.content).to.be.equals(givenContent)
+      expect(banner.containerId).to.be.equals(givenTargetId)
+      expect(banner.position).to.be.equals(givenPosition)
+    })
+  })
+
   describe('given any different reponse type of banner from AppNexus', function () {
     it('should return an exception', function () {
       const appNexusResultMapper = new AppNexusResultMapper({
