@@ -32,6 +32,14 @@ export default class AppNexusResultMapper {
           })
         })
       }
+      case 'video': {
+        return this._bannerFactory.create({
+          containerId: appNexusResponse.targetId,
+          position: position,
+          source: 'AppNexus',
+          content: appNexusResponse.video.content
+        })
+      }
       default: {
         throw new Error('AdType not supported: ' + appNexusResponse.adType)
       }
