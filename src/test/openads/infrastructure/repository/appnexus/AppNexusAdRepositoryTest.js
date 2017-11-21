@@ -19,7 +19,6 @@ describe('AppNexus repository', function () {
     this.appNexusResultMapperMock = {
       mapResponseToDomain: ({appNexusResponse}) => {}
     }
-    this.activateDebugModeSpy = sinon.spy(this.appNexusConnectorMock, 'activateDebugMode')
     this.onEventSpy = sinon.spy(this.appNexusConnectorMock, 'onEvent')
     this.defineTagSpy = sinon.spy(this.appNexusConnectorMock, 'defineTag')
     this.loadTagsSpy = sinon.spy(this.appNexusConnectorMock, 'loadTags')
@@ -51,7 +50,6 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => {
-          expect(this.activateDebugModeSpy.calledOnce, 'activateDebugMode not called once').to.be.true
           expect(this.onEventSpy.calledTwice, 'onEvent not called twice').to.be.true
           expect(this.defineTagSpy.calledOnce, 'defineTag not called once').to.be.true
           expect(this.loadTagsSpy.calledOnce, 'loadTags not called once').to.be.true

@@ -20,7 +20,6 @@ export default class AppNexusAdRepository extends AdRepository {
   findAd ({adRequest}) {
     return new Promise((resolve, reject) => {
       this._connector
-        .activateDebugMode()
         .onEvent({
           event: 'adAvailable',
           targetId: adRequest.containerId,
