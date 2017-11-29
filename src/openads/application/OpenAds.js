@@ -48,6 +48,19 @@ export default class OpenAds {
     })
   }
 
+  registerNativeRenderer ({position, callback}) {
+    this._container.getInstance({key: 'NativeRendererProcessor'}).addPositionRenderer({
+      position,
+      renderer: callback
+    })
+  }
+
+  unregisterNativeRenderer ({position}) {
+    this._container.getInstance({key: 'NativeRendererProcessor'}).removePositionRenderer({
+      position
+    })
+  }
+
   resetConnectors () {
     this._container.getInstance({key: 'ResetConnectorsUseCase'}).resetConnectors()
   }

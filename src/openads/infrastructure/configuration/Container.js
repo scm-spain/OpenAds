@@ -8,8 +8,10 @@ import BannerFactory from '../../domain/ad/banner/BannerFactory'
 import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
-import EventDispatcher from '../service/EventDispatcher'
+import EventDispatcher from '../../domain/service/EventDispatcher'
 import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
+import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
+import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
 
 export default class Container {
   constructor ({config}) {
@@ -51,6 +53,18 @@ export default class Container {
     return new EventDispatcher()
   }
 
+  _buildNativeRendererProcessor () {
+    return new NativeRendererProcessor({
+      nativeRendererFactory: this.getInstance({key: 'NativeRendererFactory'})
+    })
+  }
+
+  _buildNativeRendererFactory () {
+    return new NativeRendererFactory({
+      domDriver: this.getInstance({key: 'DOMDriver'})
+    })
+  }
+
   _buildAppNexusConnector () {
     return new AppNexusConnectorImpl({
       source: 'AppNexus',
@@ -69,23 +83,27 @@ export default class Container {
       appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'})
     })
   }
+
   _buildAdChainedRepository () {
     return new AdChainedRepository({
       appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
       configuration: this._config
     })
   }
+
   _buildAppNexusResultMapper () {
     return new AppNexusResultMapper({
       bannerFactory: this.getInstance({key: 'BannerFactory'})
     })
   }
+
   _buildBannerFactory () {
     return new BannerFactory({
       appNexusBannerRenderer: this.getInstance({key: 'AppNexusBannerRenderer'}),
       eventDispatcher: this.getInstance({key: 'EventDispatcher'})
     })
   }
+
   _buildAppNexusBannerRenderer () {
     return new AppNexusBannerRenderer({
       appNexusConnector: this.getInstance({key: 'AppNexusConnector'})

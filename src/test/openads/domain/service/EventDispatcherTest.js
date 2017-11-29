@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import sinon from 'sinon'
-import EventDispatcher from '../../../../openads/infrastructure/service/EventDispatcher'
+import EventDispatcher from '../../../../openads/domain/service/EventDispatcher'
 
 describe('Event Dispatcher', function () {
   describe('Given a valid event, position and function', function () {

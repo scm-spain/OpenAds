@@ -3,6 +3,8 @@ import AppNexusResultMapper from '../../../../../openads/infrastructure/service/
 import BannerFactory from '../../../../../openads/domain/ad/banner/BannerFactory'
 import Banner from '../../../../../openads/domain/ad/banner/Banner'
 import Size from '../../../../../openads/domain/ad/Size'
+import Native from '../../../../../openads/domain/ad/native/Native'
+import NativeFactory from '../../../../../openads/domain/ad/native/NativeFactory'
 
 describe('AppNexus result mapper', function () {
   describe('given a banner reponse type from AppNexus', function () {
@@ -70,7 +72,35 @@ describe('AppNexus result mapper', function () {
     })
   })
 
-  describe('given any different reponse type of banner from AppNexus', function () {
+  describe('given a native reponse type from AppNexus', function () {
+    it('should return a Native domain object', function () {
+      const appNexusResultMapper = new AppNexusResultMapper({
+        nativeFactory: new NativeFactory({
+          nativeRendererProcessor: { getRenderer: () => {} }
+        })
+      })
+
+      const givenJson = {a: 'json'}
+      const givenPosition = 'da_position'
+      const givenTargetId = 'pepe_id'
+      const givenAdType = 'native'
+      const banner = appNexusResultMapper.mapResponseToDomain({
+        position: givenPosition,
+        appNexusResponse: {
+          targetId: givenTargetId,
+          adType: givenAdType,
+          native: givenJson
+        }
+      })
+
+      expect(banner).to.be.an.instanceof(Native)
+      expect(banner.json).to.deep.equal(givenJson)
+      expect(banner.containerId).to.be.equals(givenTargetId)
+      expect(banner.position).to.be.equals(givenPosition)
+    })
+  })
+
+  describe('given any unknown reponse type from AppNexus', function () {
     it('should return an exception', function () {
       const appNexusResultMapper = new AppNexusResultMapper({
         bannerFactory: new BannerFactory({
@@ -80,7 +110,7 @@ describe('AppNexus result mapper', function () {
 
       const givenContent = '<html></html>'
       const givenTargetId = 'pepe_id'
-      const givenAdType = 'native'
+      const givenAdType = 'whatever'
 
       expect(appNexusResultMapper.mapResponseToDomain.bind(appNexusResultMapper, {
         appNexusResponse: {
