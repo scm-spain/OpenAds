@@ -30,7 +30,7 @@ export default class NativeRendererProcessor {
 
   getRenderer ({position}) {
     if (!this.hasRenderer({position})) {
-      throw new Error(`No Renderer registered for position ${native.position}`)
+      throw new Error(`No Renderer registered for position ${position}`)
     }
     return this._positionRenderers[position]
   }

@@ -23,6 +23,7 @@ export default class AppNexusAdRepository extends AdRepository {
         resolve(this._appNexusResultMapper.mapResponseToDomain({
           position: adRequest.position,
           appNexusResponse: {
+            'targetId': adRequest.containerId,
             'adType': 'native',
             'source': 'rtb',
             'native': {
@@ -31,20 +32,20 @@ export default class AppNexusAdRepository extends AdRepository {
               'icon': {
                 'width': 50,
                 'height': 50,
-                'url': 'https://s.dcdn.es.s3.amazonaws.com/mightyducks/test-images/50x50.png'
+                'url': 'https://s.dcdn.es/mightyducks/test-images/50x50.png'
               },
               'image': {
                 'width': 300,
                 'height': 300,
-                'url': 'https://s.dcdn.es.s3.amazonaws.com/mightyducks/test-images/300x300.png'
+                'url': 'https://s.dcdn.es/mightyducks/test-images/300x300.png'
               },
               'cta': 'Give me a Click',
               'sponsoredBy': 'The Mighty Ducks',
               'impressionTrackers': [
-                'https://s.dcdn.es.s3.amazonaws.com/mightyducks/test-images/1x1.000.png'
+                'https://s.dcdn.es/mightyducks/test-images/1x1.000.png'
               ],
               'clickTrackers': [
-                'https://s.dcdn.es.s3.amazonaws.com/mightyducks/test-images/1x1-f00.png'
+                'https://s.dcdn.es/mightyducks/test-images/1x1-f00.png'
               ],
               'clickUrl': 'https://github.com/scm-spain/OpenAds',
               'clickFallbackUrl': ''

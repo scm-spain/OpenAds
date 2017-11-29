@@ -12,6 +12,7 @@ import EventDispatcher from '../../domain/service/EventDispatcher'
 import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
 import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
+import NativeFactory from '../../domain/ad/native/NativeFactory'
 
 export default class Container {
   constructor ({config}) {
@@ -93,7 +94,8 @@ export default class Container {
 
   _buildAppNexusResultMapper () {
     return new AppNexusResultMapper({
-      bannerFactory: this.getInstance({key: 'BannerFactory'})
+      bannerFactory: this.getInstance({key: 'BannerFactory'}),
+      nativeFactory: this.getInstance({key: 'NativeFactory'})
     })
   }
 
@@ -107,6 +109,13 @@ export default class Container {
   _buildAppNexusBannerRenderer () {
     return new AppNexusBannerRenderer({
       appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
+    })
+  }
+
+  _buildNativeFactory () {
+    return new NativeFactory({
+      nativeRendererProcessor: this.getInstance({key: 'NativeRendererProcessor'}),
+      eventDispatcher: this.getInstance({key: 'EventDispatcher'})
     })
   }
 

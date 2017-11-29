@@ -48,10 +48,10 @@ export default class OpenAds {
     })
   }
 
-  registerNativeRenderer ({position, callback}) {
+  registerNativeRenderer ({position, renderer}) {
     this._container.getInstance({key: 'NativeRendererProcessor'}).addPositionRenderer({
       position,
-      renderer: callback
+      renderer: renderer
     })
   }
 
