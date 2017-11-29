@@ -9,7 +9,7 @@ describe('Native Renderer', () => {
       const givenContainerId = 'test'
       const givenJson = {a: 'json'}
       const givenImpressionTrackers = ['url_i1', 'url_i2']
-      const givenClickTrackers = ['url_t1', 'url_t2']
+      const givenClickTrackers = ['url_t1', 'url_t2', 'url_t3']
 
       const createElementMock = (e) => {
         let element = {
@@ -44,6 +44,11 @@ describe('Native Renderer', () => {
       expect(clientRendererSpy.getCall(0).args[0].writeClickTrackers).to.be.a('function')
 
       expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length)
+
+      // if we call the writeClickTrackers function it should add the pixels to the container also
+      const writeClickTrackers = clientRendererSpy.getCall(0).args[0].writeClickTrackers
+      writeClickTrackers()
+      expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length + givenClickTrackers.length)
     })
   })
 })
