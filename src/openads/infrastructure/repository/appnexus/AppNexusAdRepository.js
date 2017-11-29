@@ -42,7 +42,7 @@ export default class AppNexusAdRepository extends AdRepository {
               'cta': 'Give me a Click',
               'sponsoredBy': 'The Mighty Ducks',
               'impressionTrackers': [
-                'https://s.dcdn.es/mightyducks/test-images/1x1.000.png'
+                'https://s.dcdn.es/mightyducks/test-images/1x1-000.png'
               ],
               'clickTrackers': [
                 'https://s.dcdn.es/mightyducks/test-images/1x1-f00.png'
