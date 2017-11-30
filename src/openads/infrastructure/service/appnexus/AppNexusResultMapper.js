@@ -4,9 +4,11 @@ export default class AppNexusResultMapper {
   /**
    *
    * @param {BannerFactory} bannerFactory
+   * @param {NativeFactory} nativeFactory
    */
-  constructor ({bannerFactory}) {
+  constructor ({bannerFactory, nativeFactory}) {
     this._bannerFactory = bannerFactory
+    this._nativeFactory = nativeFactory
   }
 
     /**
@@ -38,6 +40,16 @@ export default class AppNexusResultMapper {
           position: position,
           source: 'AppNexus',
           content: appNexusResponse.video.content
+        })
+      }
+      case 'native': {
+        return this._nativeFactory.create({
+          containerId: appNexusResponse.targetId,
+          position: position,
+          source: 'AppNexus',
+          json: appNexusResponse.native,
+          impressionTrackers: appNexusResponse.native.impressionTrackers,
+          clickTrackers: appNexusResponse.native.clickTrackers
         })
       }
       default: {
