@@ -16,11 +16,25 @@ export default class NativeRenderer {
     if (container === null) {
       throw new Error(`Ad Container with id ${containerId} does not exist`)
     }
-    const writeClickTrackers = () => {
-      this._writeTrackers({trackers: clickTrackers, container})
+    const renderedData = this._clientRenderer({json})
+    if (!renderedData || !renderedData.html) {
+      throw new Error(`Native renderer for ${containerId} did not generate html content`)
     }
-    const html = this._clientRenderer({json, writeClickTrackers})
-    container.innerHTML = html
+    container.innerHTML = renderedData.html
+
+    if (clickTrackers.length > 0 && renderedData.clickElementId) {
+      const clickElement = this._domDriver.getElementById({id: renderedData.clickElementId})
+      if (clickElement !== null) {
+        const oldClick = clickElement.onclick
+        clickElement.onclick = () => {
+          this._writeTrackers({trackers: clickTrackers, container})
+          if (typeof oldClick === 'function') {
+            oldClick()
+          }
+        }
+      }
+    }
+
     this._writeTrackers({trackers: impressionTrackers, container})
   }
 
