@@ -19,7 +19,7 @@ export default class AppNexusAdRepository extends AdRepository {
    */
   findAd ({adRequest}) {
     return new Promise((resolve, reject) => {
-      if (adRequest.position === 'NATIVE_TEST') {
+      if (adRequest.position === 'NATIVE_DESKTOP' || adRequest.position === 'NATIVE_MOBILE') {
         resolve(this._appNexusResultMapper.mapResponseToDomain({
           position: adRequest.position,
           appNexusResponse: {
