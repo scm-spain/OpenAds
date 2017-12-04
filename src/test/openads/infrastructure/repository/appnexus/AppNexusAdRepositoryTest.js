@@ -82,10 +82,7 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => done(new Error('Promise should resolve as rejected')))
-        .catch(err => {
-          console.log(err)
-          done()
-        })
+        .catch(() => done())
     })
   })
 

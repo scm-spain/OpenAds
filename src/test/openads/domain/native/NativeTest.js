@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
-import Banner from '../../../../openads/domain/ad/banner/Banner'
 import Native from '../../../../openads/domain/ad/native/Native'
 
 describe('Native', () => {

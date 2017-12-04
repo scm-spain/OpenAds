@@ -81,7 +81,12 @@ describe('Native Renderer', () => {
       const clickable = createElementMock()
       const domDriverMock = {
         getElementById: ({id}) => {
-          return id === givenContainerId ? container : id === givenClickElementId ? clickable : null
+          if (id === givenContainerId) {
+            return container
+          } else if (id === givenClickElementId) {
+            return clickable
+          }
+          return null
         },
         createElement: (e) => createElementMock(e)
       }
@@ -135,7 +140,12 @@ describe('Native Renderer', () => {
 
       const domDriverMock = {
         getElementById: ({id}) => {
-          return id === givenContainerId ? container : id === givenClickElementId ? clickable : null
+          if (id === givenContainerId) {
+            return container
+          } else if (id === givenClickElementId) {
+            return clickable
+          }
+          return null
         },
         createElement: (e) => createElementMock(e)
       }
