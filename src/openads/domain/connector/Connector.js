@@ -2,7 +2,7 @@
  * @abstract
  */
 export default class Connector {
-  constructor ({source, configuration}) {
+  constructor ({source, configuration} = {}) {
     this._source = source
     this._configuration = configuration
   }

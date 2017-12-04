@@ -4,8 +4,17 @@ import sinon from 'sinon'
 import NativeRenderer from '../../../../openads/domain/ad/native/NativeRenderer'
 
 describe('Native Renderer', () => {
+  describe('The render method', () => {
+    it('Should return a promise', () => {
+      const nativeRenderer = new NativeRenderer({
+        clientRenderer: () => null,
+        domDriver: sinon.stub()
+      })
+      expect(nativeRenderer.render({})).to.be.a('promise')
+    })
+  })
   describe('Given valid containerId, json and impressionTrackings', () => {
-    it('Should call to the client render method and print the impression trackings', () => {
+    it('Should call to the client render method and print the impression trackings', (done) => {
       const givenContainerId = 'test'
       const givenJson = {a: 'json'}
       const givenImpressionTrackers = ['url_i1', 'url_i2']
@@ -44,16 +53,17 @@ describe('Native Renderer', () => {
         containerId: givenContainerId,
         json: givenJson,
         impressionTrackers: givenImpressionTrackers
-      })
+      }).then(() => {
+        expect(clientRendererFunctionSpy.calledOnce).to.be.true
+        expect(clientRendererFunctionSpy.getCall(0).args[0].json).to.deep.equal(givenJson)
 
-      expect(clientRendererFunctionSpy.calledOnce).to.be.true
-      expect(clientRendererFunctionSpy.getCall(0).args[0].json).to.deep.equal(givenJson)
-
-      expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length)
+        expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length)
+        done()
+      }).catch(e => done(e))
     })
   })
   describe('Given valid containerId, json and impressionTrackings and providing clickTrackers', () => {
-    it('Should register a method to the returned clickElementId that write clickTrackers to container if previous onclick was not defined on it', () => {
+    it('Should register a method to the returned clickElementId that write clickTrackers to container if previous onclick was not defined on it', (done) => {
       const givenContainerId = 'test'
       const givenClickElementId = 'clickable'
       const givenJson = {a: 'json'}
@@ -71,7 +81,12 @@ describe('Native Renderer', () => {
       const clickable = createElementMock()
       const domDriverMock = {
         getElementById: ({id}) => {
-          return id === givenContainerId ? container : id === givenClickElementId ? clickable : null
+          if (id === givenContainerId) {
+            return container
+          } else if (id === givenClickElementId) {
+            return clickable
+          }
+          return null
         },
         createElement: (e) => createElementMock(e)
       }
@@ -95,15 +110,15 @@ describe('Native Renderer', () => {
         json: givenJson,
         impressionTrackers: givenImpressionTrackers,
         clickTrackers: givenClickTrackers
-      })
-
-      expect(clickable.onclick).not.undefined
-
-      clickable.onclick()
-
-      expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length + givenClickTrackers.length)
+      }).then(() => {
+        expect(clickable.onclick).not.undefined
+          // simulate user onclick
+        clickable.onclick()
+        expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length + givenClickTrackers.length)
+        done()
+      }).catch(e => done(e))
     })
-    it('Should register a method to the returned clickElementId that write clickTrackers to container and call previous element onclickif previous onclick was defined on it', () => {
+    it('Should register a method to the returned clickElementId that write clickTrackers to container and call previous element onclickif previous onclick was defined on it', (done) => {
       const givenContainerId = 'test'
       const givenClickElementId = 'clickable'
       const givenJson = {a: 'json'}
@@ -125,7 +140,12 @@ describe('Native Renderer', () => {
 
       const domDriverMock = {
         getElementById: ({id}) => {
-          return id === givenContainerId ? container : id === givenClickElementId ? clickable : null
+          if (id === givenContainerId) {
+            return container
+          } else if (id === givenClickElementId) {
+            return clickable
+          }
+          return null
         },
         createElement: (e) => createElementMock(e)
       }
@@ -149,14 +169,15 @@ describe('Native Renderer', () => {
         json: givenJson,
         impressionTrackers: givenImpressionTrackers,
         clickTrackers: givenClickTrackers
-      })
+      }).then(() => {
+        expect(clickable.onclick).not.undefined
 
-      expect(clickable.onclick).not.undefined
+        clickable.onclick()
 
-      clickable.onclick()
-
-      expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length + givenClickTrackers.length)
-      expect(clickableClickSpy.calledOnce).to.be.true
+        expect(container._appendedChildren.length).to.equal(givenImpressionTrackers.length + givenClickTrackers.length)
+        expect(clickableClickSpy.calledOnce).to.be.true
+        done()
+      }).catch(e => done(e))
     })
   })
 })
