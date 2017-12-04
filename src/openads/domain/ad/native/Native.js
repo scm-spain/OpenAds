@@ -51,8 +51,4 @@ export default class Native extends Ad {
   get json () {
     return this._json
   }
-
-  get clickTrackers () {
-    return this._clickTrackers
-  }
 }

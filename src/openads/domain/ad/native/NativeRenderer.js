@@ -12,30 +12,34 @@ export default class NativeRenderer {
     this._clientRenderer = clientRenderer
   }
   render ({containerId, json, impressionTrackers = [], clickTrackers = []} = {}) {
-    const container = this._domDriver.getElementById({id: containerId})
-    if (container === null) {
-      throw new Error(`Ad Container with id ${containerId} does not exist`)
-    }
-    const renderedData = this._clientRenderer({json})
-    if (!renderedData || !renderedData.html) {
-      throw new Error(`Native renderer for ${containerId} did not generate html content`)
-    }
-    container.innerHTML = renderedData.html
+    return new Promise((resolve, reject) => {
+      const container = this._domDriver.getElementById({id: containerId})
+      if (container === null) {
+        reject(new Error(`Ad Container with id ${containerId} does not exist`))
+      }
+      const renderedData = this._clientRenderer({json})
+      if (!renderedData || !renderedData.html) {
+        reject(new Error(`Native renderer for ${containerId} did not generate html content`))
+      }
+      container.innerHTML = renderedData.html
 
-    if (clickTrackers.length > 0 && renderedData.clickElementId) {
-      const clickElement = this._domDriver.getElementById({id: renderedData.clickElementId})
-      if (clickElement !== null) {
-        const oldClick = clickElement.onclick
-        clickElement.onclick = () => {
-          this._writeTrackers({trackers: clickTrackers, container})
-          if (typeof oldClick === 'function') {
-            oldClick()
+      if (clickTrackers.length > 0 && renderedData.clickElementId) {
+        const clickElement = this._domDriver.getElementById({id: renderedData.clickElementId})
+        if (clickElement !== null) {
+          const oldClick = clickElement.onclick
+          clickElement.onclick = () => {
+            this._writeTrackers({trackers: clickTrackers, container})
+            if (typeof oldClick === 'function') {
+              oldClick()
+            }
           }
         }
       }
-    }
 
-    this._writeTrackers({trackers: impressionTrackers, container})
+      this._writeTrackers({trackers: impressionTrackers, container})
+
+      resolve(true)
+    })
   }
 
   _writeTrackers ({trackers, container}) {

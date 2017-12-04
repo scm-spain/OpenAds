@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import sinon from 'sinon'
-import AppNexusConnectorImpl from '../../../../openads/infrastructure/connector/appnexus/AppNexusConnectorImpl'
+import AppNexusConnectorImpl from '../../../../../openads/infrastructure/connector/appnexus/AppNexusConnectorImpl'
 
 describe('AppNexusConnectorImpl implementation', function () {
   describe('given valid constructor parameters', function () {

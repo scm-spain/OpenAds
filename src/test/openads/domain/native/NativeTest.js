@@ -1,10 +1,11 @@
 /* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import Banner from '../../../../openads/domain/ad/banner/Banner'
+import Native from '../../../../openads/domain/ad/native/Native'
 
-describe('Banner', function () {
-  describe('Given a banner instance', function () {
-    it('Calling show method should dispatch the PRE_RENDER event before calling the renderer', function () {
+describe('Native', () => {
+  describe('Given a native instance', () => {
+    it('Calling show method should dispatch the PRE_RENDER event before calling the renderer', () => {
       const givenContainerId = 'pos_1_id'
       const givenPosition = 'POS1'
 
@@ -12,9 +13,9 @@ describe('Banner', function () {
         expect(eventName).to.equal('PRE_RENDER')
         expect(position).to.equal(givenPosition)
         expect(payload.containerId).to.equal(givenContainerId)
-        givenBanner._dispatched = true
+        givenNative._dispatched = true
       }
-      const givenBanner = new Banner({
+      const givenNative = new Native({
         containerId: 'pos_1_id',
         position: 'POS1',
         eventDispatcher: {
@@ -22,17 +23,17 @@ describe('Banner', function () {
         },
         renderer: {
           render: () => {
-            if (undefined === givenBanner._dispatched) {
+            if (undefined === givenNative._dispatched) {
               expect.fail('Event was not dispatched')
             }
-            givenBanner._rendered = true
+            givenNative._rendered = true
           }
         }
       })
 
-      givenBanner.show()
-      expect(givenBanner._dispatched).to.be.true
-      expect(givenBanner._rendered).to.be.true
+      givenNative.show()
+      expect(givenNative._dispatched).to.be.true
+      expect(givenNative._rendered).to.be.true
     })
   })
 })
