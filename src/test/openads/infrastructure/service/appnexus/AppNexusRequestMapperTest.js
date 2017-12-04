@@ -34,6 +34,22 @@ describe('AppNexusRequestMapper test', () => {
             'type': 'text',
             'required': true,
             'max': 35
+          },
+          'body': {
+            'type': 'text',
+            'required': true,
+            'max': 1000
+          },
+          'image': {
+            'type': 'image',
+            'required': true
+          },
+          'icon': {
+            'type': 'image'
+          },
+          'clickUrl': {
+            'type': 'url',
+            'required': true
           }
         }
       }
@@ -48,6 +64,17 @@ describe('AppNexusRequestMapper test', () => {
           'title': {
             'required': true,
             'max_length': 35
+          },
+          'body': {
+            'max_length': 1000,
+            'required': true
+          },
+          'clickUrl': {
+            'required': true
+          },
+          'icon': {},
+          'image': {
+            'required': true
           }
         }
       }
