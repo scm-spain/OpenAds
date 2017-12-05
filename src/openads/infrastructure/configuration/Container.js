@@ -114,7 +114,8 @@ export default class Container {
 
   _buildAppNexusBannerRenderer () {
     return new AppNexusBannerRenderer({
-      appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
+      appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
+      domDriver: this.getInstance({key: 'DOMDriver'})
     })
   }
 
