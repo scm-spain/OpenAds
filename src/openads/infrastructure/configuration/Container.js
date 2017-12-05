@@ -8,8 +8,12 @@ import BannerFactory from '../../domain/ad/banner/BannerFactory'
 import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
-import EventDispatcher from '../service/EventDispatcher'
+import EventDispatcher from '../../domain/service/EventDispatcher'
 import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
+import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
+import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
+import NativeFactory from '../../domain/ad/native/NativeFactory'
+import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
 
 export default class Container {
   constructor ({config}) {
@@ -51,6 +55,18 @@ export default class Container {
     return new EventDispatcher()
   }
 
+  _buildNativeRendererProcessor () {
+    return new NativeRendererProcessor({
+      nativeRendererFactory: this.getInstance({key: 'NativeRendererFactory'})
+    })
+  }
+
+  _buildNativeRendererFactory () {
+    return new NativeRendererFactory({
+      domDriver: this.getInstance({key: 'DOMDriver'})
+    })
+  }
+
   _buildAppNexusConnector () {
     return new AppNexusConnectorImpl({
       source: 'AppNexus',
@@ -66,29 +82,46 @@ export default class Container {
   _buildAppNexusRepository () {
     return new AppNexusAdRepository({
       appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
-      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'})
+      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'}),
+      appNexusRequestMapper: this.getInstance({key: 'AppNexusRequestMapper'})
     })
   }
+
   _buildAdChainedRepository () {
     return new AdChainedRepository({
       appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
       configuration: this._config
     })
   }
+
   _buildAppNexusResultMapper () {
     return new AppNexusResultMapper({
-      bannerFactory: this.getInstance({key: 'BannerFactory'})
+      bannerFactory: this.getInstance({key: 'BannerFactory'}),
+      nativeFactory: this.getInstance({key: 'NativeFactory'})
     })
   }
+
+  _buildAppNexusRequestMapper () {
+    return new AppNexusRequestMapper()
+  }
+
   _buildBannerFactory () {
     return new BannerFactory({
       appNexusBannerRenderer: this.getInstance({key: 'AppNexusBannerRenderer'}),
       eventDispatcher: this.getInstance({key: 'EventDispatcher'})
     })
   }
+
   _buildAppNexusBannerRenderer () {
     return new AppNexusBannerRenderer({
       appNexusConnector: this.getInstance({key: 'AppNexusConnector'})
+    })
+  }
+
+  _buildNativeFactory () {
+    return new NativeFactory({
+      nativeRendererProcessor: this.getInstance({key: 'NativeRendererProcessor'}),
+      eventDispatcher: this.getInstance({key: 'EventDispatcher'})
     })
   }
 

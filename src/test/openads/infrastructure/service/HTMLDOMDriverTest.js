@@ -1,4 +1,6 @@
-import {assert} from 'chai'
+/* eslint-disable no-unused-expressions */
+import {assert, expect} from 'chai'
+import sinon from 'sinon'
 import HTMLDOMDriver from '../../../../openads/infrastructure/service/HTMLDOMDriver'
 import {JSDOM} from 'jsdom'
 
@@ -118,5 +120,16 @@ describe('DOM Driver HTML simple implementation', function () {
     })
 
     assert.throws(sideEffect, Error, `Element with ID ${givenId} not found!`)
+  })
+  it('Should call givenDocument create method.', () => {
+    const givenDocumentMock = {
+      createElement: () => null
+    }
+    let createElementSpy = sinon.spy(givenDocumentMock, 'createElement')
+
+    const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocumentMock})
+    htmlDOMDriver.createElement({tagName: 'whatever'})
+
+    expect(createElementSpy.called).to.be.true
   })
 })

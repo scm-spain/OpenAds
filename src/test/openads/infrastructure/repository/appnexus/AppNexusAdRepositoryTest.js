@@ -19,11 +19,23 @@ describe('AppNexus repository', function () {
     this.appNexusResultMapperMock = {
       mapResponseToDomain: ({appNexusResponse}) => {}
     }
+    this.requestMock = {
+      member: {},
+      targetId: {},
+      invCode: {},
+      sizes: {},
+      keywords: {},
+      native: {}
+    }
+    this.appNexusRequestMapperMock = {
+      mapDomainToRequest: ({member, targetId, invCode, sizes, keywords, native}) => this.requestMock
+    }
     this.onEventSpy = sinon.spy(this.appNexusConnectorMock, 'onEvent')
     this.defineTagSpy = sinon.spy(this.appNexusConnectorMock, 'defineTag')
     this.loadTagsSpy = sinon.spy(this.appNexusConnectorMock, 'loadTags')
     this.resetSpy = sinon.spy(this.appNexusConnectorMock, 'reset')
     this.mapResponseToDomainSpy = sinon.spy(this.appNexusResultMapperMock, 'mapResponseToDomain')
+    this.mapDomainToRequestSpy = sinon.spy(this.appNexusRequestMapperMock, 'mapDomainToRequest')
   })
   describe('given a valid adRequest', function () {
     it('should return a Promise', function () {
@@ -31,7 +43,8 @@ describe('AppNexus repository', function () {
 
       const appnexusRepository = new AppNexusAdRepository({
         appNexusConnector: this.appNexusConnectorMock,
-        appNexusResultMapper: this.appNexusResultMapperMock
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
       })
 
       expect(appnexusRepository.findAd({
@@ -43,7 +56,8 @@ describe('AppNexus repository', function () {
 
       const appnexusRepository = new AppNexusAdRepository({
         appNexusConnector: this.appNexusConnectorMock,
-        appNexusResultMapper: this.appNexusResultMapperMock
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
       })
 
       appnexusRepository.findAd({
@@ -54,6 +68,7 @@ describe('AppNexus repository', function () {
           expect(this.defineTagSpy.calledOnce, 'defineTag not called once').to.be.true
           expect(this.loadTagsSpy.calledOnce, 'loadTags not called once').to.be.true
           expect(this.mapResponseToDomainSpy.calledOnce, 'mapResponseToDomain not called once').to.be.true
+          expect(this.mapDomainToRequestSpy.calledOnce, 'mapResponseToDomain not called once').to.be.true
           done()
         })
         .catch(error => done(error))
@@ -75,24 +90,24 @@ describe('AppNexus repository', function () {
 
       const appnexusRepository = new AppNexusAdRepository({
         appNexusConnector: this.appNexusConnectorMock,
-        appNexusResultMapper: this.appNexusResultMapperMock
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
       })
 
       appnexusRepository.findAd({
         adRequest: givenAdRequest
       })
         .then(ad => done(new Error('Promise should resolve as rejected')))
-        .catch(err => {
-          console.log(err)
-          done()
-        })
+        .catch(() => done())
     })
   })
 
   describe('Calling the reset method', function () {
     it('Should reset the connector', function () {
       const appnexusRepository = new AppNexusAdRepository({
-        appNexusConnector: this.appNexusConnectorMock
+        appNexusConnector: this.appNexusConnectorMock,
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
       })
       appnexusRepository.reset()
       expect(this.resetSpy.calledOnce).to.be.true

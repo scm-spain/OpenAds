@@ -112,6 +112,80 @@ openAds.find({
       .then(ad => ad.show())      
 ```
 
+## Native support
+
+OpenAds supports rendering Native Ads, only delegating to the OpenAds client the HTML generation from a JSON response.
+
+### Register a Native Renderer binded to a Position
+
+You can bind a Native Renderer to a specific Ad Position, so depending on you page Ad Positions to render, you're able
+to show a Native Ad in a way or another.
+
+To do so, you only need to register to OpenAds a renderer function that:
+* accepts and is enabled to process a 'json' parameter containing the Native Ad data (the data contents depend on what 
+is requested to the Ad Server, so it will contain open fields)
+* has to return an Object containing
+    * 'html' field (mandatory): The rendered HTML (for example, a HTML string template aplying the JSON object into it)
+    * 'clickableElementId' field (optional, but nice to have): The clickable DOM element id of the generated HTML that is expected to
+    throw the redirect (usually will be the entire HTML content, but it can be a nested button also)
+
+With that, OpenAds will ensure that:
+* the returned HTML will be written into the request's 'containerId', replacing any old content.
+* the impression trackers (if any) will be nested to the 'containerId' after rendering the HTML (so you don't need to print them manually)
+* the click trackers (if any) will be nested to the 'containerId' after an user clicks to the 'clickableElementId' (so you don't 
+need to print them manually)
+
+Example:
+
+```ecmascript 6
+// renderer for a link like Ad
+const nativeTextRenderer = ({json}) => {
+    const aId = 'ad-list-text-1'
+    const html = `<a id='${aId}' href='${json.clickUrl}'>${json.title}</a>`
+    return {
+        html: html,
+        clickElementId: aId
+    }
+}
+// registering the link like Ad renderer for all requests where adRequest.position = 'list-text'
+openAds.registerNativeRenderer({
+  position: 'list-text',
+  renderer: nativeTextRenderer
+})
+```
+
+### Request a Native Ad
+
+```ecmascript 6
+// display ads
+// this diplay will look up the registered nativeTextRenderer
+openAds.display({
+  adRequest: {
+    containerId: 'my-native-text-container',
+    position: 'list-text',
+    //... segmentation, placement, ...
+    native: {
+        // fields requested for the response JSON
+        // these fields are open (but not all would be accepted by the requested Ad Server)
+        // you can define 'text', 'image', or 'url' data types
+        title: {type: 'text', required: true, max: 50}, // required text of max 50 characters
+        image: {type: 'image', required: false}, // optional image
+        clickUrl: {type: 'url', required: true} // required url
+    }
+  }
+})
+```
+
+In the sample, when a 'list-text' position is requested with a Native specification allowed by the used 
+connector (p.ex. AppNexus) and it's response is a Native Ad, when calling the OpenAds#display method
+or finding and Ad with OpenAds#find and calling the Ad#show method, the Ad render will look up the
+registered Native Renderer for the specified position (nativeTextRenderer) and request the html to 
+write it to the DOM.
+
+After it, it will write the impression trackers also, and register an onclick function to the 
+clickElementId (wrapping any previous onclick function) to write click trackers when the user
+interacts with the Ad.  
+
 ## Hooks support
 
 OpenAds supports registering a hook for processing a synchronous function callback when:
@@ -150,7 +224,6 @@ openAds.resetConnectors()
 
 # Roadmap
 
-* Add support for Native Ads
 * Add support to Google AdSense
 * Add support for passback sources 
 * Add support for single Ad position refresh 

@@ -24,4 +24,8 @@ export default class HTMLDOMDriver extends DOMDriver {
     domElement.innerHTML = value
     return domElement
   }
+
+  createElement ({tagName}) {
+    return this._dom.createElement(tagName)
+  }
 }
