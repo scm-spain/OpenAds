@@ -176,4 +176,36 @@ describe('AppNexusConnectorImpl implementation', function () {
       })
     })
   })
+  describe('Given an AppNexusConnector with an AppNexusClient', () => {
+    it('Should call client methods', () => {
+      const sourceMock = {}
+      const connectorDataMock = {}
+      const appNexusQueue = {
+        push: (f) => f()
+      }
+      const appNexusClientMock = {
+        anq: appNexusQueue,
+        setPageOpts: () => null,
+        defineTag: () => null,
+        loadTags: () => null,
+        showTag: () => null
+      }
+      const setPageOptsSpy = sinon.spy(appNexusClientMock, 'setPageOpts')
+      const defineTagSpy = sinon.spy(appNexusClientMock, 'defineTag')
+      const loadTagsSpy = sinon.spy(appNexusClientMock, 'loadTags')
+      const showTagSpy = sinon.spy(appNexusClientMock, 'showTag')
+
+      const appNexusConnectorImpl = new AppNexusConnectorImpl({source: sourceMock, connectorData: connectorDataMock, appNexusClient: appNexusClientMock})
+
+      appNexusConnectorImpl.setPageOpts({})
+      appNexusConnectorImpl.defineTag({})
+      appNexusConnectorImpl.loadTags({})
+      appNexusConnectorImpl.showTag({})
+
+      expect(setPageOptsSpy.called).to.be.true
+      expect(defineTagSpy.called).to.be.true
+      expect(loadTagsSpy.called).to.be.true
+      expect(showTagSpy.called).to.be.true
+    })
+  })
 })
