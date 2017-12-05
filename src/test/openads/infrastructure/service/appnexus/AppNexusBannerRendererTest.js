@@ -2,9 +2,9 @@
 import {expect} from 'chai'
 import AppNexusBannerRenderer from '../../../../../openads/infrastructure/service/appnexus/AppNexusBannerRenderer'
 
-describe('AppNexus Banner Renderer', function () {
-  describe('given a DOM id node', function () {
-    it('should return a promise', function () {
+describe('AppNexus Banner Renderer', () => {
+  describe('given a DOM id node', () => {
+    it('should return a promise', () => {
       const givenContainerId = 'div_id_target'
       const appNexusConnectorMock = {
         onEvent: ({
@@ -16,9 +16,13 @@ describe('AppNexus Banner Renderer', function () {
         },
         showTag: ({target}) => appNexusConnectorMock
       }
+      const domDriverMock = {
+        getElementById: () => null
+      }
 
       const appNexusBannerRenderer = new AppNexusBannerRenderer({
-        appNexusConnector: appNexusConnectorMock
+        appNexusConnector: appNexusConnectorMock,
+        domDriver: domDriverMock
       })
 
       expect(appNexusBannerRenderer.render({
@@ -38,9 +42,13 @@ describe('AppNexus Banner Renderer', function () {
         },
         showTag: ({target}) => appNexusConnectorMock
       }
+      const domDriverMock = {
+        getElementById: () => null
+      }
 
       const appNexusBannerRenderer = new AppNexusBannerRenderer({
-        appNexusConnector: appNexusConnectorMock
+        appNexusConnector: appNexusConnectorMock,
+        domDriver: domDriverMock
       })
 
       appNexusBannerRenderer.render({
@@ -51,6 +59,32 @@ describe('AppNexus Banner Renderer', function () {
           done()
         })
         .catch(error => done(error))
+    })
+    it('should clean the container inner html', function (done) {
+      const givenContainerId = 'div_id_target'
+      const appNexusConnectorMock = {
+        onEvent: ({event, targetId, callback}) => {
+          callback()
+          return appNexusConnectorMock
+        },
+        showTag: ({target}) => appNexusConnectorMock
+      }
+      const containerMock = {innerHTML: 'this is the previous inner html'}
+      const domDriverMock = {
+        getElementById: () => containerMock
+      }
+
+      const appNexusBannerRenderer = new AppNexusBannerRenderer({
+        appNexusConnector: appNexusConnectorMock,
+        domDriver: domDriverMock
+      })
+
+      appNexusBannerRenderer.render({
+        containerId: givenContainerId
+      }).then(() => {
+        expect(containerMock.innerHTML).to.equal('')
+        done()
+      }).catch(error => done(error))
     })
   })
 })
