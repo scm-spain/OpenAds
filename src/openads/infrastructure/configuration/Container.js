@@ -13,6 +13,7 @@ import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUse
 import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
 import NativeFactory from '../../domain/ad/native/NativeFactory'
+import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
 
 export default class Container {
   constructor ({config}) {
@@ -81,7 +82,8 @@ export default class Container {
   _buildAppNexusRepository () {
     return new AppNexusAdRepository({
       appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
-      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'})
+      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'}),
+      appNexusRequestMapper: this.getInstance({key: 'AppNexusRequestMapper'})
     })
   }
 
@@ -97,6 +99,10 @@ export default class Container {
       bannerFactory: this.getInstance({key: 'BannerFactory'}),
       nativeFactory: this.getInstance({key: 'NativeFactory'})
     })
+  }
+
+  _buildAppNexusRequestMapper () {
+    return new AppNexusRequestMapper()
   }
 
   _buildBannerFactory () {

@@ -4,6 +4,20 @@ import sinon from 'sinon'
 import NativeRenderer from '../../../../openads/domain/ad/native/NativeRenderer'
 
 describe('Native Renderer', () => {
+  describe('Constructor method', () => {
+    it('Should fail when client renderer is not a function', (done) => {
+      try {
+        const nativeRenderer = new NativeRenderer({
+          domDriver: undefined,
+          clientRenderer: undefined
+        })
+        nativeRenderer.render()
+        done(new Error('Should be throwing an error.'))
+      } catch (err) {
+        done()
+      }
+    })
+  })
   describe('The render method', () => {
     it('Should return a promise', () => {
       const nativeRenderer = new NativeRenderer({

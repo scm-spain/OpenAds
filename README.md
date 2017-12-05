@@ -147,39 +147,31 @@ const nativeTextRenderer = ({json}) => {
         clickElementId: aId
     }
 }
-// renderer for a card like Ad
-const nativeCardRenderer = ({json}) => {
-    const aId = 'ad-list-card-1'
-    const html = `<div ... with the card content`
-    return {
-        html: html,
-        clickElementId: aId
-    }
-}
 // registering the link like Ad renderer for all requests where adRequest.position = 'list-text'
 openAds.registerNativeRenderer({
   position: 'list-text',
   renderer: nativeTextRenderer
 })
-// registering the link like Ad renderer for all requests where adRequest.position = 'list-card'
-openAds.registerNativeRenderer({
-  position: 'list-card',
-  renderer: nativeCardRenderer
-})
+```
 
+### Request a Native Ad
+
+```ecmascript 6
 // display ads
 // this diplay will look up the registered nativeTextRenderer
 openAds.display({
   adRequest: {
-    position: 'list-text'
-    //...
-  }
-})
-// this display will look up the registered nativeCardRenderer
-openAds.display({
-  adRequest: {
-    position: 'list-card'
-    //...
+    containerId: 'my-native-text-container',
+    position: 'list-text',
+    //... segmentation, placement, ...
+    native: {
+        // fields requested for the response JSON
+        // these fields are open (but not all would be accepted by the requested Ad Server)
+        // you can define 'text', 'image', or 'url' data types
+        title: {type: 'text', required: true, max: 50}, // required text of max 50 characters
+        image: {type: 'image', required: false}, // optional image
+        clickUrl: {type: 'url', required: true} // required url
+    }
   }
 })
 ```

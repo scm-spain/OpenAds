@@ -5,11 +5,13 @@ export default class AppNexusAdRepository extends AdRepository {
      *
      * @param {AppNexusConnector} appNexusConnector
      * @param {AppNexusResultMapper} appNexusResultMapper
+     * @param {AppNexusRequestMapper} appNexusRequestMapper
      */
-  constructor ({appNexusConnector, appNexusResultMapper}) {
+  constructor ({appNexusConnector, appNexusResultMapper, appNexusRequestMapper}) {
     super()
     this._connector = appNexusConnector
     this._appNexusResultMapper = appNexusResultMapper
+    this._appNexusRequestMapper = appNexusRequestMapper
   }
 
   /**
@@ -19,41 +21,7 @@ export default class AppNexusAdRepository extends AdRepository {
    */
   findAd ({adRequest}) {
     return new Promise((resolve, reject) => {
-      if (adRequest.position === 'NATIVE_DESKTOP' || adRequest.position === 'NATIVE_MOBILE') {
-        resolve(this._appNexusResultMapper.mapResponseToDomain({
-          position: adRequest.position,
-          appNexusResponse: {
-            'targetId': adRequest.containerId,
-            'adType': 'native',
-            'source': 'rtb',
-            'native': {
-              'title': 'Hardcoding Creativities for OpenAds',
-              'body': 'The better option is to get it from the AdServer but we need now to develop the render capability until requesting is complete',
-              'icon': {
-                'width': 50,
-                'height': 50,
-                'url': 'https://s.dcdn.es/mightyducks/test-images/50x50.png'
-              },
-              'image': {
-                'width': 300,
-                'height': 300,
-                'url': 'https://s.dcdn.es/mightyducks/test-images/300x300.png'
-              },
-              'cta': 'Give me a Click',
-              'sponsoredBy': 'The Mighty Ducks',
-              'impressionTrackers': [
-                'https://s.dcdn.es/mightyducks/test-images/1x1-000.png'
-              ],
-              'clickTrackers': [
-                'https://s.dcdn.es/mightyducks/test-images/1x1-f00.png'
-              ],
-              'clickUrl': 'https://github.com/scm-spain/OpenAds',
-              'clickFallbackUrl': ''
-            }
-          }
-        }))
-      } else {
-        this._connector
+      this._connector
               .onEvent({
                 event: 'adAvailable',
                 targetId: adRequest.containerId,
@@ -69,15 +37,15 @@ export default class AppNexusAdRepository extends AdRepository {
                   reject(data)
                 }
               })
-              .defineTag({
+              .defineTag(this._appNexusRequestMapper.mapDomainToRequest({
                 member: this._connector.member,
                 targetId: adRequest.containerId,
                 invCode: adRequest.placement,
                 sizes: adRequest.sizes,
-                keywords: adRequest.segmentation
-              })
+                keywords: adRequest.segmentation,
+                native: adRequest.native
+              }))
               .loadTags()
-      }
     })
   }
 
