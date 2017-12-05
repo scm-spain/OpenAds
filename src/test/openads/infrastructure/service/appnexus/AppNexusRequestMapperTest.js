@@ -72,7 +72,9 @@ describe('AppNexusRequestMapper test', () => {
           'clickUrl': {
             'required': true
           },
-          'icon': {},
+          'icon': {
+            'required': false
+          },
           'image': {
             'required': true
           }

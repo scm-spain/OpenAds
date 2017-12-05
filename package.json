@@ -34,7 +34,7 @@
     "chai": "^4.0.2",
     "html-webpack-plugin": "^2.30.1",
     "istanbul": "^1.1.0-alpha.1",
-    "jsdom": "^11.1.0",
+    "jsdom": "^11.5.1",
     "mocha": "^3.4.2",
     "onchange": "^3.2.1",
     "sinon": "^2.3.4"

@@ -37,7 +37,7 @@ export default class AppNexusRequestMapper {
   }
 
   _mapNativeText ({value}) {
-    let result = {}
+    let result = {required: false}
     if (value.required) {
       result.required = true
     }
@@ -48,7 +48,7 @@ export default class AppNexusRequestMapper {
   }
 
   _mapNativeImage ({value}) {
-    let result = {}
+    let result = {required: false}
     if (value.required) {
       result.required = true
     }
@@ -56,7 +56,7 @@ export default class AppNexusRequestMapper {
   }
 
   _mapNativeUrl ({value}) {
-    let result = {}
+    let result = {required: false}
     if (value.required) {
       result.required = true
     }
