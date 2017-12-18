@@ -49,7 +49,8 @@ export default class AppNexusResultMapper {
           source: 'AppNexus',
           json: appNexusResponse.native,
           impressionTrackers: appNexusResponse.native.impressionTrackers,
-          clickTrackers: appNexusResponse.native.clickTrackers
+          clickTrackers: appNexusResponse.native.clickTrackers,
+          viewabilityTrackers: appNexusResponse.native.javascriptTrackers
         })
       }
       default: {
