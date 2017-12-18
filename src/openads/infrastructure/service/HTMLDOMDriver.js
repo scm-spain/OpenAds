@@ -14,8 +14,8 @@ export default class HTMLDOMDriver extends DOMDriver {
     return this._dom.getElementsByClassName(className)
   }
 
-  getElementsByTagName ({name}) {
-    return this._dom.getElementsByTagName(name)
+  getElementsByTagName ({tagName}) {
+    return this._dom.getElementsByTagName(tagName)
   }
 
   writeElementById ({id, value}) {
