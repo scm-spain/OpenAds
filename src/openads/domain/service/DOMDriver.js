@@ -10,7 +10,7 @@ export default class DOMDriver {
     throw new Error('DOMDriver#getElementsByClassName must be implemented')
   }
 
-  getElementsByTagName ({name}) {
+  getElementsByTagName ({tagName}) {
     throw new Error('DOMDriver#getElementsByTagName must be implemented')
   }
 

@@ -64,7 +64,7 @@ describe('DOM Driver HTML simple implementation', function () {
     const givenDocument = new JSDOM('<!DOCTYPE html><div class="forlayo">Hello world</div>').window.document
     const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocument})
 
-    const result = htmlDOMDriver.getElementsByTagName({name: 'div'})
+    const result = htmlDOMDriver.getElementsByTagName({tagName: 'div'})
 
     assert.equal(result.length, 1)
     assert.equal(result[0].nodeName.toLowerCase(), 'div')
@@ -79,7 +79,7 @@ describe('DOM Driver HTML simple implementation', function () {
     ).window.document
     const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocument})
 
-    const result = htmlDOMDriver.getElementsByTagName({name: 'div'})
+    const result = htmlDOMDriver.getElementsByTagName({tagName: 'div'})
 
     assert.equal(result.length, 3)
     assert.equal(result[0].nodeName.toLowerCase(), 'div')
@@ -95,7 +95,7 @@ describe('DOM Driver HTML simple implementation', function () {
     const givenDocument = new JSDOM('<!DOCTYPE html><div class="forlayo">Hello world</div>').window.document
     const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocument})
 
-    const result = htmlDOMDriver.getElementsByTagName({name: 'notFoundClassName'})
+    const result = htmlDOMDriver.getElementsByTagName({tagName: 'notFoundClassName'})
     assert.equal(result.length, 0)
   })
   it('should write given value on element', function () {
