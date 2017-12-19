@@ -7,10 +7,13 @@ export default class Native extends Ad {
      * @param {string} position
      * @param {string} source
      * @param {string} json
+     * @param {Array} impressionTrackers
+     * @param {Array} clickTrackers
+     * @param {string} viewabilityTrackers
      * @param {NativeRenderer} renderer
      * @param {EventDispatcher} eventDispatcher
      */
-  constructor ({containerId, position, source, json, impressionTrackers, clickTrackers, renderer, eventDispatcher}) {
+  constructor ({containerId, position, source, json, impressionTrackers, clickTrackers, viewabilityTrackers, renderer, eventDispatcher}) {
     super()
     this._containerId = containerId
     this._position = position
@@ -18,6 +21,7 @@ export default class Native extends Ad {
     this._json = json
     this._impressionTrackers = impressionTrackers
     this._clickTrackers = clickTrackers
+    this._viewabilityTrackers = viewabilityTrackers
     this._renderer = renderer
     this._eventDispatcher = eventDispatcher
   }
@@ -32,7 +36,8 @@ export default class Native extends Ad {
       containerId: this._containerId,
       json: this._json,
       impressionTrackers: this._impressionTrackers,
-      clickTrackers: this._clickTrackers
+      clickTrackers: this._clickTrackers,
+      viewabilityTrackers: this._viewabilityTrackers
     })
   }
 

@@ -1,9 +1,9 @@
 export default class NativeRenderer {
-  /**
-   *
-   * @param {DOMDriver} domDriver
-   * @param clientRenderer
-   */
+    /**
+     *
+     * @param {DOMDriver} domDriver
+     * @param clientRenderer
+     */
   constructor ({domDriver, clientRenderer}) {
     if (typeof clientRenderer !== 'function') {
       throw new Error('Client Renderer must be a function')
@@ -11,7 +11,17 @@ export default class NativeRenderer {
     this._domDriver = domDriver
     this._clientRenderer = clientRenderer
   }
-  render ({containerId, json, impressionTrackers = [], clickTrackers = []} = {}) {
+
+    /**
+     *
+     * @param {string} containerId
+     * @param {Object} json
+     * @param {Array} impressionTrackers
+     * @param {Array} clickTrackers
+     * @param {string} viewabilityTrackers
+     * @return {Promise}
+     */
+  render ({containerId, json, impressionTrackers = [], clickTrackers = [], viewabilityTrackers} = {}) {
     return new Promise((resolve, reject) => {
       const container = this._domDriver.getElementById({id: containerId})
       if (container === null) {
@@ -28,7 +38,7 @@ export default class NativeRenderer {
         if (clickElement !== null) {
           const oldClick = clickElement.onclick
           clickElement.onclick = () => {
-            this._writeTrackers({trackers: clickTrackers, container})
+            this._writePixelTrackers({trackers: clickTrackers, container})
             if (typeof oldClick === 'function') {
               oldClick()
             }
@@ -36,14 +46,17 @@ export default class NativeRenderer {
         }
       }
 
-      this._writeTrackers({trackers: impressionTrackers, container})
+      this._writePixelTrackers({trackers: impressionTrackers, container})
+      this._writeScriptTrackers({trackers: viewabilityTrackers, container})
 
       resolve(true)
     })
   }
 
-  _writeTrackers ({trackers, container}) {
-    trackers.forEach(url => container.appendChild(this._createPixel({url})))
+  _writePixelTrackers ({trackers, container}) {
+    if (trackers) {
+      trackers.forEach(url => container.appendChild(this._createPixel({url})))
+    }
   }
 
   _createPixel ({url}) {
@@ -53,5 +66,13 @@ export default class NativeRenderer {
     img.width = 0
     img.style = 'display:none;'
     return img
+  }
+
+  _writeScriptTrackers ({trackers, container}) {
+    if (trackers) {
+      const temp = this._domDriver.createElement({tagName: 'div'})
+      temp.innerHTML = trackers
+      Array.from(temp.getElementsByTagName('script')).forEach(script => container.appendChild(script))
+    }
   }
 }
