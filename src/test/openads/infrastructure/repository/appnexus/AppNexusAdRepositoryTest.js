@@ -103,14 +103,26 @@ describe('AppNexus repository', function () {
   })
 
   describe('Calling the reset method', function () {
-    it('Should reset the connector', function () {
+    it('Should return a promise', function () {
+      const appnexusRepository = new AppNexusAdRepository({
+        appNexusConnector: this.appNexusConnectorMock,
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
+      })
+      expect(appnexusRepository.reset()).to.be.a('promise')
+    })
+    it('Should reset the connector', function (done) {
       const appnexusRepository = new AppNexusAdRepository({
         appNexusConnector: this.appNexusConnectorMock,
         appNexusResultMapper: this.appNexusResultMapperMock,
         appNexusRequestMapper: this.appNexusRequestMapperMock
       })
       appnexusRepository.reset()
-      expect(this.resetSpy.calledOnce).to.be.true
+          .then(() => {
+            expect(this.resetSpy.calledOnce).to.be.true
+            done()
+          })
+          .catch(e => done(e))
     })
   })
 })
