@@ -3,6 +3,6 @@ export default class ResetConnectorsUseCase {
     this._adChainedRepository = adChainedRepository
   }
   resetConnectors () {
-    this._adChainedRepository.reset()
+    return this._adChainedRepository.reset()
   }
 }
