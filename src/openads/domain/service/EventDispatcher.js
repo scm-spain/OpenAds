@@ -1,6 +1,7 @@
 export default class EventDispatcher {
-  constructor () {
+  constructor ({logger}) {
     this._observers = new Map()
+    this._logger = logger
   }
 
   /**
@@ -10,6 +11,7 @@ export default class EventDispatcher {
    * @returns {Number}
    */
   addObserver ({eventName, position, observer}) {
+    this._logger.info('Registering Event Dispatcher', 'eventName:', eventName, 'position:', position)
     if (!eventName) {
       throw new Error('Event Name is required')
     }
@@ -23,12 +25,14 @@ export default class EventDispatcher {
   }
 
   removeObserver ({eventName, position, observer}) {
+    this._logger.info('Removing Event Dispatcher', 'eventName:', eventName, 'position:', position)
     let eventMap = this._getEventMap({eventName})
     let positionObservers = this._getEventPositionObservers({eventName, position})
     eventMap.set(position, positionObservers.filter(registeredObserver => registeredObserver !== observer))
   }
 
   dispatch ({eventName, position, payload}) {
+    this._logger.debug('Dispatching Event', 'eventName:', eventName, 'position:', position, 'payload:', payload)
     this._getEventPositionObservers({eventName, position}).forEach(observer => observer({payload}))
   }
 

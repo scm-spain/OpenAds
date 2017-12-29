@@ -222,6 +222,28 @@ In order to do that, just call:
 openAds.resetConnectors()
 ```
 
+## Logging
+
+In order to debug what's happening with the Ads Loading, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as it's logging framework.
+Also, it's using the [LogLevel Plugin Prefix](https://github.com/kutuluk/loglevel-plugin-prefix) plugin to configure how the log messages will be displayed.
+
+To configure it, you can set this node into the **config** object when initializing OpenAds:
+
+```ecmascript 6
+const openAds = OpenAds.init({config: {
+  LogLevel: {
+    Logger: 'A-String', // defaults to 'OpenAds'
+    Level: 'debug', // defaults to 'error'
+    PrefixOptions: {
+      // check options in https://github.com/kutuluk/loglevel-plugin-prefix
+      template: '[%t] %l | %n:', // defaults to '[%t] %l | %n:'
+      timestampFormatter: (date) => ... // defaults to return a formatted date as 'yyyy-mm-dd hh:mi:ss.zzz'
+    }
+  }
+  //, Sources: ...
+}})
+```
+
 # Roadmap
 
 * Add support to Google AdSense

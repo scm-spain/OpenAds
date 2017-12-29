@@ -3,8 +3,9 @@ export default class DisplayAdsUseCase {
    *
    * @param {AdRepository} adChainedRepository
    */
-  constructor ({adChainedRepository}) {
+  constructor ({adChainedRepository, logger}) {
     this._adChainedRepository = adChainedRepository
+    this._logger = logger
   }
 
   /**
@@ -17,6 +18,7 @@ export default class DisplayAdsUseCase {
    * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
    */
   display ({adRequest}) {
+    this._logger.info('Display Ad', 'adRequest:', adRequest)
     return this._adChainedRepository.findAd({adRequest})
          .then(ad => ad.show())
   }
