@@ -13,9 +13,15 @@ describe('Native Renderer Processor', () => {
         create: () => { return {} }
       }
       const createSpy = sinon.spy(nativeRendererFactoryMock, 'create')
+      const loggerSpy = sinon.spy()
 
+      const loggerMock = {
+        info: (title, log) => loggerSpy(),
+        debug: (...params) => null
+      }
       const nativeRendererProcessor = new NativeRendererProcessor({
-        nativeRendererFactory: nativeRendererFactoryMock
+        nativeRendererFactory: nativeRendererFactoryMock,
+        logger: loggerMock
       })
 
       nativeRendererProcessor.addPositionRenderer({
@@ -23,7 +29,8 @@ describe('Native Renderer Processor', () => {
         renderer: givenRenderer
       })
 
-      expect(createSpy.calledOnce).to.be.true
+      expect(createSpy.calledOnce, 'create method from renderer factory should be called once').to.be.true
+      expect(loggerSpy.calledOnce, 'logger info method should be called once').to.be.true
       expect(nativeRendererProcessor.hasRenderer({position: givenPosition})).to.be.true
       expect(() => {
         nativeRendererProcessor.getRenderer({position: givenPosition})
@@ -40,9 +47,14 @@ describe('Native Renderer Processor', () => {
       const nativeRendererFactoryMock = {
         create: () => { return {} }
       }
+      const loggerSpy = sinon.spy()
 
+      const loggerMock = {
+        info: (title, log) => loggerSpy()
+      }
       const nativeRendererProcessor = new NativeRendererProcessor({
-        nativeRendererFactory: nativeRendererFactoryMock
+        nativeRendererFactory: nativeRendererFactoryMock,
+        logger: loggerMock
       })
 
       nativeRendererProcessor.addPositionRenderer({
@@ -52,6 +64,7 @@ describe('Native Renderer Processor', () => {
       nativeRendererProcessor.removePositionRenderer({position: givenPosition})
 
       expect(nativeRendererProcessor.hasRenderer({position: givenPosition})).to.be.false
+      expect(loggerSpy.calledTwice, 'logger info method should be called twice, one for addPositionRenderer ').to.be.true
     })
     it('Should return false in hasRenderer if the position is not registered', () => {
       const givenPosition = 'TEST'

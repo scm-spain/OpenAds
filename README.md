@@ -224,10 +224,10 @@ openAds.resetConnectors()
 
 ## Logging
 
-In order to debug what's happening with the Ads Loading, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as it's logging framework.
-Also, it's using the [LogLevel Plugin Prefix](https://github.com/kutuluk/loglevel-plugin-prefix) plugin to configure how the log messages will be displayed.
+In order to debug what is happening with Ads Loading, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as its logging framework.
+Also, it is using the [LogLevel Plugin Prefix](https://github.com/kutuluk/loglevel-plugin-prefix) to configure how log messages will be displayed.
 
-To configure it, you can set this node into the **config** object when initializing OpenAds:
+In order to set the Logger up, add 'LogLevel' node entry into the **config** object when calling OpenAds 'init' method as follows:
 
 ```ecmascript 6
 const openAds = OpenAds.init({config: {

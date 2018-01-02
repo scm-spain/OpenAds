@@ -12,8 +12,13 @@ describe('Display ads use case', function () {
           show: () => null
         })
       }
+      const loggerMock = {
+        info: (title, log) => null
+      }
+
       const displayAdsUseCase = new DisplayAdsUseCase({
-        adChainedRepository: adChainedRepositoryMock
+        adChainedRepository: adChainedRepositoryMock,
+        logger: loggerMock
       })
       expect(displayAdsUseCase.display({
         adRequest: givenAdRequest
@@ -29,21 +34,28 @@ describe('Display ads use case', function () {
         sizes: [[980, 90], [970, 90]]
       }
       const showAdSpy = sinon.spy()
+      const loggerSpy = sinon.spy()
       const adChainedRepositoryMock = {
         findAd: ({adRequest}) => Promise.resolve({
           show: () => showAdSpy()
         })
       }
       const findAdSpy = sinon.spy(adChainedRepositoryMock, 'findAd')
+
+      const loggerMock = {
+        info: (title, log) => loggerSpy()
+      }
       const displayAdsUseCase = new DisplayAdsUseCase({
-        adChainedRepository: adChainedRepositoryMock
+        adChainedRepository: adChainedRepositoryMock,
+        logger: loggerMock
       })
       displayAdsUseCase.display({
         adRequest: givenAdRequest
       })
-        .then(result => {
+        .then(() => {
           expect(findAdSpy.calledOnce, 'findAd should be called once').to.be.true
           expect(showAdSpy.calledOnce, 'show should be called once').to.be.true
+          expect(loggerSpy.calledOnce, 'logger info should be called once').to.be.true
           done()
         })
         .catch(error => done(error))
