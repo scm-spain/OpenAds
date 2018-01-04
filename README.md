@@ -1,6 +1,6 @@
 # OpenAds 
 
-[![Build status](https://travis-ci.org/scm-spain/OpenAds.svg?branch=master)](https://travis-ci.org/scm-spain/OpenAds)
+[![Build status](https://travis-ci.org/scm-spain/OpenAds.svg?branch=master)](https://travis-ci.org/scm-spain/OpenAds) [![codecov](https://codecov.io/gh/scm-spain/OpenAds/branch/master/graph/badge.svg)](https://codecov.io/gh/scm-spain/OpenAds)
 
 Powerful advertising abstraction library to deliver ads in a web environment providing you a common connector for different sources.
 It helps you to show ads in a easy way using simple use cases and work with sources like AppNexus or Google.
