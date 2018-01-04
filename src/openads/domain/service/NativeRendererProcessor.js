@@ -4,7 +4,7 @@ export default class NativeRendererProcessor {
     this._nativeRendererFactory = nativeRendererFactory
   }
 
-    /**
+  /**
      * @param {string} position
      * @callback {rendererCallback} renderer function
      */

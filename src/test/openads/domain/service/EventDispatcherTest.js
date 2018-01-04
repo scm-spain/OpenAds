@@ -100,7 +100,7 @@ describe('Event Dispatcher', function () {
       }
       const eventDispatcher = new EventDispatcher()
       expect(() => eventDispatcher.addObserver(givenEvent))
-                .to.throw('Event Name is required')
+        .to.throw('Event Name is required')
     })
   })
   describe('Given an invalid position', function () {
@@ -111,7 +111,7 @@ describe('Event Dispatcher', function () {
       }
       const eventDispatcher = new EventDispatcher()
       expect(() => eventDispatcher.addObserver(givenEvent))
-                .to.throw('Position is required')
+        .to.throw('Position is required')
     })
   })
   describe('Given a non function observer', function () {
@@ -123,7 +123,7 @@ describe('Event Dispatcher', function () {
       }
       const eventDispatcher = new EventDispatcher()
       expect(() => eventDispatcher.addObserver(givenEvent))
-                .to.throw('Observer must be a function')
+        .to.throw('Observer must be a function')
     })
   })
   describe('Given two function observers on same position and event', function () {
