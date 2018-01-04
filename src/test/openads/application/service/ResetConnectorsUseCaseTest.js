@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+
 import {expect} from 'chai'
 import sinon from 'sinon'
 import ResetConnectorsUseCase from '../../../../openads/application/service/ResetConnectorsUseCase'
