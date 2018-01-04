@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+
 import {expect} from 'chai'
 import BannerRenderer from '../../../../openads/domain/ad/banner/BannerRenderer'
 
