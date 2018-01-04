@@ -7,7 +7,7 @@ export default class AdChainedRepository extends AdRepository {
     this._configuration = configuration
   }
 
-    /**
+  /**
      *
      * @param adRequest
      * @return {*|Promise.<Banner>}

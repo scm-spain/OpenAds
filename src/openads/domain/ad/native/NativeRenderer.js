@@ -1,5 +1,5 @@
 export default class NativeRenderer {
-    /**
+  /**
      *
      * @param {DOMDriver} domDriver
      * @param clientRenderer
@@ -12,7 +12,7 @@ export default class NativeRenderer {
     this._clientRenderer = clientRenderer
   }
 
-    /**
+  /**
      *
      * @param {string} containerId
      * @param {Object} json

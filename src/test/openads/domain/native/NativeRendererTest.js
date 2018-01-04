@@ -180,7 +180,7 @@ describe('Native Renderer', () => {
         clickTrackers: givenClickTrackers
       }).then(() => {
         expect(clickable.onclick).not.undefined
-          // simulate user onclick
+        // simulate user onclick
         clickable.onclick()
         expect(container._appendedChildren.length).to.equal(givenClickTrackers.length)
         done()

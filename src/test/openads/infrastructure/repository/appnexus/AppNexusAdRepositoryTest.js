@@ -81,7 +81,7 @@ describe('AppNexus repository', function () {
         activateDebugMode: () => this.appNexusConnectorMock,
         setPageOpts: ({data}) => this.appNexusConnectorMock,
         onEvent: ({event, targetId, callback}) => {
-          if (event === 'adBadRequest') callback('error')
+          if (event === 'adBadRequest') callback(new Error('error'))
           return this.appNexusConnectorMock
         },
         defineTag: ({data}) => this.appNexusConnectorMock,
@@ -118,11 +118,11 @@ describe('AppNexus repository', function () {
         appNexusRequestMapper: this.appNexusRequestMapperMock
       })
       appnexusRepository.reset()
-          .then(() => {
-            expect(this.resetSpy.calledOnce).to.be.true
-            done()
-          })
-          .catch(e => done(e))
+        .then(() => {
+          expect(this.resetSpy.calledOnce).to.be.true
+          done()
+        })
+        .catch(e => done(e))
     })
   })
 })

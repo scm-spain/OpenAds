@@ -8,9 +8,9 @@ describe('AppNexus Banner Renderer', () => {
       const givenContainerId = 'div_id_target'
       const appNexusConnectorMock = {
         onEvent: ({
-            event,
-            targetId,
-            callback
+          event,
+          targetId,
+          callback
         }) => {
           return appNexusConnectorMock
         },

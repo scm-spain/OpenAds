@@ -5,7 +5,7 @@ export default class NativeRendererProcessor {
     this._logger = logger
   }
 
-    /**
+  /**
      * @param {string} position
      * @callback {rendererCallback} renderer function
      */
