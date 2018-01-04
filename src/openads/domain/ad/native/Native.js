@@ -1,7 +1,7 @@
 import Ad from '../Ad'
 
 export default class Native extends Ad {
-    /**
+  /**
      *
      * @param {string} containerId
      * @param {string} position

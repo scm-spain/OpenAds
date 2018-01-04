@@ -11,8 +11,7 @@
     "coverage": "istanbul cover --report html _mocha -- ./src/test --recursive --compilers js:babel-register",
     "coverage:ci": "istanbul cover _mocha -- ./src/test --recursive --compilers js:babel-register && codecov",
     "watch": "onchange 'src/**/*.js' -- npm run build",
-    "lint": "npm run lint:js",
-    "lint:js": "sui-lint js"
+    "lint": "sui-lint js"
   },
   "repository": {
     "type": "git",
@@ -26,7 +25,7 @@
   "author": "The Mighty Ducks of Advertising",
   "license": "ISC",
   "devDependencies": {
-    "@schibstedspain/sui-lint": "^2.1.0",
+    "@s-ui/lint": "^2.7.0",
     "babel-cli": "^6.24.0",
     "babel-loader": "^7.1.1",
     "babel-polyfill": "^6.23.0",
@@ -52,7 +51,7 @@
   },
   "eslintConfig": {
     "extends": [
-      "./node_modules/@schibstedspain/sui-lint/eslintrc.js"
+      "./node_modules/@s-ui/lint/eslintrc.js"
     ]
   },
   "dependencies": {

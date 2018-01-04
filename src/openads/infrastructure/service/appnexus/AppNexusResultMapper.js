@@ -11,7 +11,7 @@ export default class AppNexusResultMapper {
     this._nativeFactory = nativeFactory
   }
 
-    /**
+  /**
      *
      * @param {string} position
      * @param {string} appNexusResponse.targetId

@@ -1,7 +1,7 @@
 import BannerRenderer from '../../../domain/ad/banner/BannerRenderer'
 
 export default class AppNexusBannerRenderer extends BannerRenderer {
-    /**
+  /**
      *
      * @param {AppNexusConnector} appNexusConnector
      * @param {DOMDriver} domDriver
