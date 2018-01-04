@@ -1,4 +1,10 @@
 language: node_js
 node_js:
   - "6"
-script: "npm run test && npm run lint"
+script:
+  - npm run lint
+  - npm test
+  - npm run coverage:ci
+
+after_success:
+- bash <(curl -s https://codecov.io/bash)
