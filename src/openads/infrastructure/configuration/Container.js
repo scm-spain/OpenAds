@@ -14,7 +14,9 @@ import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
 import NativeFactory from '../../domain/ad/native/NativeFactory'
 import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
-import LogLevelLoggerInitializer from '../logging/LogLevelLoggerInitializer'
+import LogLevel from 'loglevel'
+import LogLevelPrefix from 'loglevel-plugin-prefix'
+import LogLevelLoggerFactory from '../logger/LogLevelLoggerFactory'
 
 export default class Container {
   constructor ({config}) {
@@ -35,7 +37,15 @@ export default class Container {
   }
 
   _buildLogger () {
-    return LogLevelLoggerInitializer.createLogger({config: this._config.LogLevel})
+    return this.getInstance({key: 'LogLevelLoggerFactory'}).createLogger({name: 'OpenAds'})
+  }
+
+  _buildLogLevelLoggerFactory () {
+    return new LogLevelLoggerFactory({
+      logLevelInstance: LogLevel,
+      logMessagePrefixInstance: LogLevelPrefix,
+      loggerConfig: this._config.LogLevel
+    })
   }
 
   _buildDOMDriver () {
