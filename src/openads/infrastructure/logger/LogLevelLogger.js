@@ -8,19 +8,19 @@ export default class LogLevelLogger extends Logger {
   }
 
   debug (...message) {
-    return this._logLevel.debug(message)
+    return this._logLevel.debug(...message)
   }
 
   info (...message) {
-    return this._logLevel.info(message)
+    return this._logLevel.info(...message)
   }
 
   warn (...message) {
-    return this._logLevel.warn(message)
+    return this._logLevel.warn(...message)
   }
 
   error (...message) {
-    return this._logLevel.error(message)
+    return this._logLevel.error(...message)
   }
 
   setLevel (level) {

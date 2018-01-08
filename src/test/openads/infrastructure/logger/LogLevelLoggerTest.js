@@ -66,7 +66,7 @@ describe('LogLevel Logger', function () {
       const spy = sinon.spy(givenLogLevel, 'debug')
       const logger = new LogLevelLogger({logLevel: givenLogLevel})
       logger.debug('a', 'debug', 'message')
-      expect(spy.args[0][0].length).to.equal(3)
+      expect(spy.args[0].length).to.equal(3)
     })
   })
   describe('When logging a info messages', function () {
@@ -77,7 +77,7 @@ describe('LogLevel Logger', function () {
       const spy = sinon.spy(givenLogLevel, 'info')
       const logger = new LogLevelLogger({logLevel: givenLogLevel})
       logger.info('a', 'info', 'message')
-      expect(spy.args[0][0].length).to.equal(3)
+      expect(spy.args[0].length).to.equal(3)
     })
   })
   describe('When logging a warn messages', function () {
@@ -88,7 +88,7 @@ describe('LogLevel Logger', function () {
       const spy = sinon.spy(givenLogLevel, 'warn')
       const logger = new LogLevelLogger({logLevel: givenLogLevel})
       logger.warn('a', 'warn', 'message')
-      expect(spy.args[0][0].length).to.equal(3)
+      expect(spy.args[0].length).to.equal(3)
     })
   })
   describe('When logging a error messages', function () {
@@ -99,7 +99,7 @@ describe('LogLevel Logger', function () {
       const spy = sinon.spy(givenLogLevel, 'error')
       const logger = new LogLevelLogger({logLevel: givenLogLevel})
       logger.error('a', 'error', 'message')
-      expect(spy.args[0][0].length).to.equal(3)
+      expect(spy.args[0].length).to.equal(3)
     })
   })
   describe('When getting debug to be enabled', function () {
