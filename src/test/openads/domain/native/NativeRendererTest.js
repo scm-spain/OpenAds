@@ -186,7 +186,7 @@ describe('Native Renderer', () => {
         done()
       }).catch(e => done(e))
     })
-    it('Should register a method to the returned clickElementId that write clickTrackers to container and call previous element onclickif previous onclick was defined on it', (done) => {
+    it('Should register a method to the returned clickElementId that write clickTrackers to container and call previous element onclick if previous onclick was defined on it', (done) => {
       const givenContainerId = 'test'
       const givenClickElementId = 'clickable'
       const givenJson = {a: 'json'}
@@ -246,6 +246,95 @@ describe('Native Renderer', () => {
         expect(clickableClickSpy.calledOnce).to.be.true
         done()
       }).catch(e => done(e))
+    })
+  })
+  describe('Given a non existing containerId', () => {
+    it('Should fail when rendering', (done) => {
+      const givenContainerId = 'shouldNotBeFoundInDom'
+      const givenJson = {a: 'json'}
+
+      const domDriverMock = {
+        getElementById: ({id}) => {
+          return null
+        }
+      }
+
+      const rendererMock = {
+        rendererFunction: ({json}) => {
+          return {
+            html: 'hello',
+            clickElementId: 'whatever'
+          }
+        }
+      }
+
+      const nativeRenderer = new NativeRenderer({
+        clientRenderer: rendererMock.rendererFunction,
+        domDriver: domDriverMock
+      })
+
+      nativeRenderer.render({
+        containerId: givenContainerId,
+        json: givenJson
+      }).then(() => {
+        done(new Error('Should have failed when rendering due to inexistent containerId in DOM'))
+      }).catch(e => done())
+    })
+  })
+  describe('Given a valid container Id, Ad, but invalid client renderer', () => {
+    it('Should fail if client renderer returns null', (done) => {
+      const givenContainerId = 'test'
+      const givenJson = {a: 'json'}
+
+      const domDriverMock = {
+        getElementById: ({id}) => {
+          return id === givenContainerId ? {} : null
+        }
+      }
+
+      const rendererMock = {
+        rendererFunction: ({json}) => null
+      }
+      const nativeRenderer = new NativeRenderer({
+        clientRenderer: rendererMock.rendererFunction,
+        domDriver: domDriverMock
+      })
+
+      nativeRenderer.render({
+        containerId: givenContainerId,
+        json: givenJson
+      }).then(() => {
+        done(new Error('Should fail if client renderer returns null'))
+      }).catch(e => done())
+    })
+    it('Should fail if no html is returned by client renderer', (done) => {
+      const givenContainerId = 'test'
+      const givenJson = {a: 'json'}
+
+      const domDriverMock = {
+        getElementById: ({id}) => {
+          return id === givenContainerId ? {} : null
+        }
+      }
+
+      const rendererMock = {
+        rendererFunction: ({json}) => {
+          return {
+            clickElementId: 'id'
+          }
+        }
+      }
+      const nativeRenderer = new NativeRenderer({
+        clientRenderer: rendererMock.rendererFunction,
+        domDriver: domDriverMock
+      })
+
+      nativeRenderer.render({
+        containerId: givenContainerId,
+        json: givenJson
+      }).then(() => {
+        done(new Error('Should fail if client renderer html is invalid'))
+      }).catch(e => done())
     })
   })
 })

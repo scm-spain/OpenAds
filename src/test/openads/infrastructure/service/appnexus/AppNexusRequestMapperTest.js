@@ -50,7 +50,8 @@ describe('AppNexusRequestMapper test', () => {
           'clickUrl': {
             'type': 'url',
             'required': true
-          }
+          },
+          'whatever': null
         }
       }
 
@@ -77,7 +78,8 @@ describe('AppNexusRequestMapper test', () => {
           },
           'image': {
             'required': true
-          }
+          },
+          'whatever': {}
         }
       }
 
@@ -91,6 +93,33 @@ describe('AppNexusRequestMapper test', () => {
       })
 
       expect(expectedResult).deep.equal(result)
+    })
+    it('Should fail if unsupported native value type is specified', () => {
+      const appNexusRequestMapper = new AppNexusRequestMapper()
+      const givenRequest = {
+        member: 'member',
+        targetId: 'targetId',
+        invCode: 'invCode',
+        sizes: 'sizes',
+        keywords: 'keywords',
+        native: {
+          'invalid': {
+            'type': 'whatever',
+            'required': true
+          }
+        }
+      }
+
+      expect(() => {
+        appNexusRequestMapper.mapDomainToRequest({
+          member: givenRequest.member,
+          targetId: givenRequest.targetId,
+          invCode: givenRequest.invCode,
+          sizes: givenRequest.sizes,
+          keywords: givenRequest.keywords,
+          native: givenRequest.native
+        })
+      }).to.throw('Unsupported native value type whatever')
     })
   })
 })
