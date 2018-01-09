@@ -17,6 +17,8 @@ import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
 import LogLevel from 'loglevel'
 import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerFactory from '../logger/LogLevelLoggerFactory'
+import LoggerInitializer from '../../domain/service/LoggerInitializer'
+import QueryStringContextParametersService from '../service/QueryStringContextParametersService'
 
 export default class Container {
   constructor ({config}) {
@@ -37,14 +39,27 @@ export default class Container {
   }
 
   _buildLogger () {
-    return this.getInstance({key: 'LogLevelLoggerFactory'}).createLogger({name: 'OpenAds'})
+    return this.getInstance({key: 'LoggerFactory'}).createLogger({name: 'OpenAds'})
   }
 
-  _buildLogLevelLoggerFactory () {
+  _buildLoggerFactory () {
     return new LogLevelLoggerFactory({
       logLevelInstance: LogLevel,
       logMessagePrefixInstance: LogLevelPrefix,
       loggerConfig: this._config.LogLevel
+    })
+  }
+
+  _buildLoggerInitializer () {
+    return new LoggerInitializer({
+      logger: this.getInstance({key: 'Logger'}),
+      contextParametersService: this.getInstance({key: 'ContextParametersService'})
+    })
+  }
+
+  _buildContextParametersService () {
+    return new QueryStringContextParametersService({
+      domDriver: this.getInstance({key: 'DOMDriver'})
     })
   }
 
@@ -153,6 +168,7 @@ export default class Container {
   }
 
   _buildEagerSingletonInstances () {
+    this.getInstance({key: 'LoggerInitializer'})
     this.getInstance({key: 'EventDispatcher'})
   }
 }
