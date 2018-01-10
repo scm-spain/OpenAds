@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import Logger from '../../../../openads/domain/logger/Logger'
 

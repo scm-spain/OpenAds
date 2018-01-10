@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import ContextParametersService from '../../../../openads/domain/service/ContextParametersService'
 

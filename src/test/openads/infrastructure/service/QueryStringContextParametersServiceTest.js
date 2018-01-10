@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-expressions */
 import {expect} from 'chai'
 import QueryStringContextParametersService from '../../../../openads/infrastructure/service/QueryStringContextParametersService'
 
