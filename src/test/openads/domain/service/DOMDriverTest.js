@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-expressions */
+
 import {expect} from 'chai'
 import DOMDriver from '../../../../openads/domain/service/DOMDriver'
 
