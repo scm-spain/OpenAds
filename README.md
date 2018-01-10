@@ -243,7 +243,12 @@ const openAds = OpenAds.init({config: {
 }})
 ```
 
-Navigating in a browser, adding **openads_debug** to the URL's query string, will enable the debug mode automatically
+While navigating in a browser, adding openads_debug keyword to the URL query string will enable the debug mode automatically.
+
+For example:
+```
+http://your.web.app/page?price=5000&openads_debug
+```
 
 # Roadmap
 
