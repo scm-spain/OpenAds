@@ -33,4 +33,10 @@ describe('DOMDriver', () => {
       givenDOMDriver.createElement({})
     }).to.throw()
   })
+  it('Should return an error calling to DOMDriver#getQueryString instead of a extending class implementation', () => {
+    const givenDOMDriver = new DOMDriver()
+    expect(() => {
+      givenDOMDriver.getQueryString()
+    }).to.throw()
+  })
 })

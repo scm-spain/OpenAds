@@ -28,4 +28,8 @@ export default class HTMLDOMDriver extends DOMDriver {
   createElement ({tagName}) {
     return this._dom.createElement(tagName)
   }
+
+  getQueryString () {
+    return this._dom.location.search.slice(1)
+  }
 }

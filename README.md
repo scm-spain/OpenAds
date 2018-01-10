@@ -243,6 +243,8 @@ const openAds = OpenAds.init({config: {
 }})
 ```
 
+Navigating in a browser, adding **openads_debug** to the URL's query string, will enable the debug mode automatically
+
 # Roadmap
 
 * Add support to Google AdSense

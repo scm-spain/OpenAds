@@ -1,7 +1,9 @@
 import LogLevelLogger from './LogLevelLogger'
+import LoggerFactory from '../../domain/logger/LoggerFactory'
 
-export default class LogLevelLoggerFactory {
+export default class LogLevelLoggerFactory extends LoggerFactory {
   constructor ({logLevelInstance, logMessagePrefixInstance, loggerConfig = {}} = {}) {
+    super()
     this._logLevelInstance = logLevelInstance
     this._logMessagePrefixInstance = logMessagePrefixInstance
     this._loggerConfig = loggerConfig
