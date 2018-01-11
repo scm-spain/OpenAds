@@ -9,7 +9,7 @@ It helps you to show ads in a easy way using simple use cases and work with sour
 OpenAds is available as the ```@schibstedspain/OpenAds``` package on [npm](https://www.npmjs.com/)
 To install the stable version:
 ```
-npm install --save @schibstedspain/OpenAds
+npm install --save @schibstedspain/openads
 ```
 
 # Usage
@@ -17,7 +17,7 @@ First of all you must include OpenAds and **initialize it** with your desired co
 Currently we only support AppNexus Source so you can only provide your **member** number
 
 ```ecmascript 6
-import OpenAds from '@schibstedspain/OpenAds'
+import OpenAds from '@schibstedspain/openads'
 const openAds = OpenAds.init({config:{
   Sources: {
     AppNexus: {
