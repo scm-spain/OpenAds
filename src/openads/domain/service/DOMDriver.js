@@ -21,4 +21,8 @@ export default class DOMDriver {
   createElement ({tagName}) {
     throw new Error('DOMDriver#createElement must be implemented')
   }
+
+  getQueryString () {
+    throw new Error('DOMDriver#getQueryString must be implemented')
+  }
 }

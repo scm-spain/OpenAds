@@ -3,8 +3,9 @@ export default class FindAdUseCase {
    *
    * @param {AdRepository} adChainedRepository
    */
-  constructor ({adChainedRepository}) {
+  constructor ({adChainedRepository, logger}) {
     this._adChainedRepository = adChainedRepository
+    this._logger = logger
   }
 
   /**
@@ -17,6 +18,7 @@ export default class FindAdUseCase {
    * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
    */
   find ({adRequest}) {
-    return this._adChainedRepository.findAd({adRequest})
+    return Promise.resolve(this._logger.info('Find Ad', 'adRequest:', adRequest))
+      .then(() => this._adChainedRepository.findAd({adRequest}))
   }
 }

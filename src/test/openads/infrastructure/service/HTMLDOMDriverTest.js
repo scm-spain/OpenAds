@@ -132,4 +132,24 @@ describe('DOM Driver HTML simple implementation', function () {
 
     expect(createElementSpy.called).to.be.true
   })
+  it('Should return the query string if it exists, without the ? separator', () => {
+    const givenDocumentMock = {
+      location: {
+        search: '?a=b&c=d&e'
+      }
+    }
+    const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocumentMock})
+    const queryString = htmlDOMDriver.getQueryString()
+    expect(queryString).to.equal('a=b&c=d&e')
+  })
+  it('Should return empty query string if it does not exist in dom\'s location', () => {
+    const givenDocumentMock = {
+      location: {
+        search: ''
+      }
+    }
+    const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocumentMock})
+    const queryString = htmlDOMDriver.getQueryString()
+    expect(queryString).to.equal('')
+  })
 })

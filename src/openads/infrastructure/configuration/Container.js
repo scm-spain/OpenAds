@@ -14,6 +14,11 @@ import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
 import NativeFactory from '../../domain/ad/native/NativeFactory'
 import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
+import LogLevel from 'loglevel'
+import LogLevelPrefix from 'loglevel-plugin-prefix'
+import LogLevelLoggerFactory from '../logger/LogLevelLoggerFactory'
+import LoggerInitializer from '../../domain/service/LoggerInitializer'
+import QueryStringContextParametersService from '../service/QueryStringContextParametersService'
 
 export default class Container {
   constructor ({config}) {
@@ -24,9 +29,38 @@ export default class Container {
 
   getInstance ({key}) {
     if (undefined === this._instances.get(key)) {
-      this._instances.set(key, this['_build' + key]())
+      try {
+        this._instances.set(key, this['_build' + key]())
+      } catch (e) {
+        throw new Error(`Error creating instance: ${key}`, e)
+      }
     }
     return this._instances.get(key)
+  }
+
+  _buildLogger () {
+    return this.getInstance({key: 'LoggerFactory'}).createLogger({name: 'OpenAds'})
+  }
+
+  _buildLoggerFactory () {
+    return new LogLevelLoggerFactory({
+      logLevelInstance: LogLevel,
+      logMessagePrefixInstance: LogLevelPrefix,
+      loggerConfig: this._config.LogLevel
+    })
+  }
+
+  _buildLoggerInitializer () {
+    return new LoggerInitializer({
+      logger: this.getInstance({key: 'Logger'}),
+      contextParametersService: this.getInstance({key: 'ContextParametersService'})
+    })
+  }
+
+  _buildContextParametersService () {
+    return new QueryStringContextParametersService({
+      domDriver: this.getInstance({key: 'DOMDriver'})
+    })
   }
 
   _buildDOMDriver () {
@@ -35,29 +69,35 @@ export default class Container {
 
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
+      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
+      logger: this.getInstance({key: 'Logger'})
     })
   }
 
   _buildFindAdsUseCase () {
     return new FindAdUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
+      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
+      logger: this.getInstance({key: 'Logger'})
     })
   }
 
   _buildResetConnectorsUseCase () {
     return new ResetConnectorsUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'})
+      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
+      logger: this.getInstance({key: 'Logger'})
     })
   }
 
   _buildEventDispatcher () {
-    return new EventDispatcher()
+    return new EventDispatcher({
+      logger: this.getInstance({key: 'Logger'})
+    })
   }
 
   _buildNativeRendererProcessor () {
     return new NativeRendererProcessor({
-      nativeRendererFactory: this.getInstance({key: 'NativeRendererFactory'})
+      nativeRendererFactory: this.getInstance({key: 'NativeRendererFactory'}),
+      logger: this.getInstance({key: 'Logger'})
     })
   }
 
@@ -71,7 +111,8 @@ export default class Container {
     return new AppNexusConnectorImpl({
       source: 'AppNexus',
       connectorData: this._config.Sources.AppNexus,
-      appNexusClient: this.getInstance({key: 'AppNexusClient'})
+      appNexusClient: this.getInstance({key: 'AppNexusClient'}),
+      logger: this.getInstance({key: 'Logger'})
     })
   }
 
@@ -127,6 +168,7 @@ export default class Container {
   }
 
   _buildEagerSingletonInstances () {
+    this.getInstance({key: 'LoggerInitializer'})
     this.getInstance({key: 'EventDispatcher'})
   }
 }

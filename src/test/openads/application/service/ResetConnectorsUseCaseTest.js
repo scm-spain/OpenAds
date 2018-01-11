@@ -5,13 +5,22 @@ import ResetConnectorsUseCase from '../../../../openads/application/service/Rese
 
 describe('Reset Connectors use case', function () {
   it('Should reset the repository', function () {
-    const adChainedRepository = {
-      reset: () => null
+    const loggerSpy = sinon.spy()
+    const adChainedRepositoryResetSpy = sinon.spy()
+    const adChainedRepositoryMock = {
+      reset: () => adChainedRepositoryResetSpy()
     }
-    const adChainedRepositoryResetSpy = sinon.spy(adChainedRepository, 'reset')
-
-    const useCase = new ResetConnectorsUseCase({adChainedRepository})
+    const loggerMock = {
+      info: (title, log) => loggerSpy()
+    }
+    const useCase = new ResetConnectorsUseCase({
+      adChainedRepository: adChainedRepositoryMock,
+      logger: loggerMock
+    })
     useCase.resetConnectors()
-    expect(adChainedRepositoryResetSpy.calledOnce).to.be.true
+      .then(() => {
+        expect(adChainedRepositoryResetSpy.calledOnce, 'reset method should be called once').to.be.true
+        expect(loggerSpy.calledOnce, 'logger info should be called once').to.be.true
+      })
   })
 })
