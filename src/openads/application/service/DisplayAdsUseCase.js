@@ -18,7 +18,7 @@ export default class DisplayAdsUseCase {
    * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
    */
   display ({adRequest}) {
-    return Promise.resolve(this._logger.info('Display Ad', 'adRequest:', adRequest))
+    return Promise.resolve(this._logger.info('Display Ad', '| adRequest:', adRequest))
       .then(() => this._adChainedRepository.findAd({adRequest}))
       .then(ad => ad.show())
   }

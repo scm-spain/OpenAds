@@ -10,7 +10,7 @@ export default class NativeRendererProcessor {
      * @callback {rendererCallback} renderer function
      */
   addPositionRenderer ({position, renderer}) {
-    this._logger.info('Registering Native Renderer', 'position:', position)
+    this._logger.info('Registering Native Renderer', '| position:', position)
     if (!position) {
       throw new Error('Position is required')
     }
@@ -23,7 +23,7 @@ export default class NativeRendererProcessor {
   }
 
   removePositionRenderer ({position}) {
-    this._logger.info('Unregistering Native Renderer', 'position:', position)
+    this._logger.info('Unregistering Native Renderer', '| position:', position)
     delete this._positionRenderers[position]
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@schibstedspain/openads",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "OpenAds: Advertising library",
   "main": "dist/",
   "scripts": {
@@ -57,7 +57,7 @@
   "dependencies": {
     "@schibstedspain/ast": "^0.11.0",
     "loglevel": "^1.6.1",
-    "loglevel-plugin-prefix": "^0.5.3",
+    "loglevel-plugin-prefix": "^0.7.2",
     "querystring": "^0.2.0"
   }
 }

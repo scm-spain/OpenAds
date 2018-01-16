@@ -231,13 +231,15 @@ In order to set the Logger up, add 'LogLevel' node entry into the **config** obj
 
 ```ecmascript 6
 const openAds = OpenAds.init({config: {
+  // LogLevel configuration
   LogLevel: {
-    Level: 'debug', // defaults to 'error'
-    PrefixOptions: {
-      // check options in https://github.com/kutuluk/loglevel-plugin-prefix
-      template: '[%t] %l | %n:', // defaults to '[%t] %l | %n:'
-      timestampFormatter: (date) => ... // defaults to return a formatted date as 'YYYY-MM-DD HH:mm:ss.zzz'
-    }
+    Level: 'debug' // defaults to 'error'
+  },
+  // LogLevel Plugin Prefix configuration
+  LogLevelPrefix: {
+    // check options in https://github.com/kutuluk/loglevel-plugin-prefix
+    template: '[%t] %l | %n:', // defaults to '[%t] %l | %n:'
+    timestampFormatter: (date) => ... // defaults to return a formatted date as 'YYYY-MM-DD HH:mm:ss.zzz'
   }
   //, Sources: ...
 }})

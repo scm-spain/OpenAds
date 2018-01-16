@@ -22,13 +22,13 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   setPageOpts ({member, keywords}) {
-    this._logger.debug('Setting AppNexus Page Opts', 'member:', member, 'keywords:', keywords)
+    this._logger.debug('Setting AppNexus Page Opts', '| member:', member, '| keywords:', keywords)
     this._appNexusClient.anq.push(() => this._appNexusClient.setPageOpts({member, keywords}))
     return this
   }
 
   onEvent ({event, targetId, callback}) {
-    this._logger.debug('Activating AppNexus Listener', 'event:', event, 'targetId:', targetId)
+    this._logger.debug('Activating AppNexus Listener', '| event:', event, '|targetId:', targetId)
     this._appNexusClient.anq.push(() => {
       this._appNexusClient.onEvent(event, targetId, callback)
       if (!this._registeredEvents.has(targetId)) {
@@ -40,7 +40,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   defineTag ({member, targetId, invCode, sizes, keywords, native}) {
-    this._logger.debug('Defining AppNexus Tag', 'member:', member, 'targetId:', targetId, 'invCode:', invCode, 'sizes:', sizes, 'keywords:', keywords, 'native:', native)
+    this._logger.debug('Defining AppNexus Tag', '| member:', member, '| targetId:', targetId, '| invCode:', invCode, '| sizes:', sizes, '| keywords:', keywords, '| native:', native)
     this._appNexusClient.anq.push(() => this._appNexusClient.defineTag({member, targetId, invCode, sizes, keywords, native}))
     return this
   }
@@ -52,7 +52,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   showTag ({target}) {
-    this._logger.debug('Showing AppNexus Tag', 'target:', target)
+    this._logger.debug('Showing AppNexus Tag', '| target:', target)
     this._appNexusClient.anq.push(() => this._appNexusClient.showTag(target))
     return this
   }
