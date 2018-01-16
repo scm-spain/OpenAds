@@ -16,9 +16,9 @@ import NativeFactory from '../../domain/ad/native/NativeFactory'
 import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
 import LogLevel from 'loglevel'
 import LogLevelPrefix from 'loglevel-plugin-prefix'
-import LogLevelLoggerFactory from '../logger/LogLevelLoggerFactory'
-import LoggerInitializer from '../../domain/service/LoggerInitializer'
-import QueryStringContextParametersService from '../service/QueryStringContextParametersService'
+import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
+import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
+import LogLevelConfigurator from '../logger/LogLevelConfigurator'
 
 export default class Container {
   constructor ({config}) {
@@ -39,27 +39,30 @@ export default class Container {
   }
 
   _buildLogger () {
-    return this.getInstance({key: 'LoggerFactory'}).createLogger({name: 'OpenAds'})
-  }
-
-  _buildLoggerFactory () {
-    return new LogLevelLoggerFactory({
-      logLevelInstance: LogLevel,
-      logMessagePrefixInstance: LogLevelPrefix,
-      loggerConfig: this._config.LogLevel
+    return this.getInstance({key: 'LoggerInitializer'}).logger({
+      loggerName: 'OpenAds'
     })
   }
 
   _buildLoggerInitializer () {
-    return new LoggerInitializer({
-      logger: this.getInstance({key: 'Logger'}),
-      contextParametersService: this.getInstance({key: 'ContextParametersService'})
+    return new LogLevelLoggerInitializer({
+      loggerPrefixConfigurator: this.getInstance({key: 'LoggerPrefixConfigurator'}),
+      loggerLevelConfigurator: this.getInstance({key: 'LoggerLevelConfigurator'})
     })
   }
 
-  _buildContextParametersService () {
-    return new QueryStringContextParametersService({
-      domDriver: this.getInstance({key: 'DOMDriver'})
+  _buildLoggerPrefixConfigurator () {
+    return new LogLevelPrefixConfigurator({
+      logLevelPrefix: LogLevelPrefix,
+      options: this._config.LogLevelPrefix
+    })
+  }
+
+  _buildLoggerLevelConfigurator () {
+    return new LogLevelConfigurator({
+      domDriver: this.getInstance({key: 'DOMDriver'}),
+      logLevel: LogLevel,
+      options: this._config.LogLevel
     })
   }
 
@@ -168,7 +171,6 @@ export default class Container {
   }
 
   _buildEagerSingletonInstances () {
-    this.getInstance({key: 'LoggerInitializer'})
     this.getInstance({key: 'EventDispatcher'})
   }
 }
