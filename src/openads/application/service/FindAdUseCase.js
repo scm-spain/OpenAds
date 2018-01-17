@@ -18,7 +18,8 @@ export default class FindAdUseCase {
    * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
    */
   find ({adRequest}) {
-    return Promise.resolve(this._logger.info('Find Ad', '| adRequest:', adRequest))
+    return Promise.resolve()
+      .then(() => this._logger.info('Find Ad', '| adRequest:', adRequest))
       .then(() => this._adChainedRepository.findAd({adRequest}))
   }
 }

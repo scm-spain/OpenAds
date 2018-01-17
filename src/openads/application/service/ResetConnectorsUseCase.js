@@ -4,7 +4,8 @@ export default class ResetConnectorsUseCase {
     this._logger = logger
   }
   resetConnectors () {
-    return Promise.resolve(this._logger.info('Reset connectors'))
+    return Promise.resolve()
+      .then(() => this._logger.info('Reset connectors'))
       .then(() => this._adChainedRepository.reset())
   }
 }
