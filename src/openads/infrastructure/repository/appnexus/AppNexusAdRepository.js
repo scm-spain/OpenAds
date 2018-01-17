@@ -44,6 +44,20 @@ export default class AppNexusAdRepository extends AdRepository {
             reject(data)
           }
         })
+        .onEvent({
+          event: 'adNoBid',
+          targetId: adRequest.containerId,
+          callback: (data) => {
+            reject(data)
+          }
+        })
+        .onEvent({
+          event: 'adRequestFailure',
+          targetId: adRequest.containerId,
+          callback: (data) => {
+            reject(data)
+          }
+        })
         .defineTag(this._appNexusRequestMapper.mapDomainToRequest({
           member: this._connector.member,
           targetId: adRequest.containerId,

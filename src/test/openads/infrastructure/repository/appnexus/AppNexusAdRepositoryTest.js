@@ -64,10 +64,12 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => {
-          expect(this.onEventSpy.callCount, 'onEvent has not registered all events').to.equal(3)
+          expect(this.onEventSpy.callCount, 'onEvent has not registered all events').to.equal(5)
           expect(this.onEventSpy.args[0][0]['event'], 'adAvailable not registered').to.equal('adAvailable')
           expect(this.onEventSpy.args[1][0]['event'], 'adBadRequest not registered').to.equal('adBadRequest')
           expect(this.onEventSpy.args[2][0]['event'], 'adError not registered').to.equal('adError')
+          expect(this.onEventSpy.args[3][0]['event'], 'adNoBid not registered').to.equal('adNoBid')
+          expect(this.onEventSpy.args[4][0]['event'], 'adRequestFailure not registered').to.equal('adRequestFailure')
           expect(this.defineTagSpy.calledOnce, 'defineTag not called once').to.be.true
           expect(this.loadTagsSpy.calledOnce, 'loadTags not called once').to.be.true
           expect(this.mapResponseToDomainSpy.calledOnce, 'mapResponseToDomain not called once').to.be.true
@@ -112,6 +114,60 @@ describe('AppNexus repository', function () {
         setPageOpts: ({data}) => this.appNexusConnectorMock,
         onEvent: ({event, targetId, callback}) => {
           if (event === 'adError') callback(new Error('error'))
+          return this.appNexusConnectorMock
+        },
+        defineTag: ({data}) => this.appNexusConnectorMock,
+        loadTags: () => this.appNexusConnectorMock
+      }
+
+      const appnexusRepository = new AppNexusAdRepository({
+        appNexusConnector: this.appNexusConnectorMock,
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
+      })
+
+      appnexusRepository.findAd({
+        adRequest: givenAdRequest
+      })
+        .then(ad => done(new Error('Promise should resolve as rejected')))
+        .catch(() => done())
+    })
+
+    it('should return a rejected Promise when someone call to callback on adNoBid event', function (done) {
+      const givenAdRequest = {}
+
+      this.appNexusConnectorMock = {
+        activateDebugMode: () => this.appNexusConnectorMock,
+        setPageOpts: ({data}) => this.appNexusConnectorMock,
+        onEvent: ({event, targetId, callback}) => {
+          if (event === 'adNoBid') callback(new Error('error'))
+          return this.appNexusConnectorMock
+        },
+        defineTag: ({data}) => this.appNexusConnectorMock,
+        loadTags: () => this.appNexusConnectorMock
+      }
+
+      const appnexusRepository = new AppNexusAdRepository({
+        appNexusConnector: this.appNexusConnectorMock,
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
+      })
+
+      appnexusRepository.findAd({
+        adRequest: givenAdRequest
+      })
+        .then(ad => done(new Error('Promise should resolve as rejected')))
+        .catch(() => done())
+    })
+
+    it('should return a rejected Promise when someone call to callback on adRequestFailure event', function (done) {
+      const givenAdRequest = {}
+
+      this.appNexusConnectorMock = {
+        activateDebugMode: () => this.appNexusConnectorMock,
+        setPageOpts: ({data}) => this.appNexusConnectorMock,
+        onEvent: ({event, targetId, callback}) => {
+          if (event === 'adRequestFailure') callback(new Error('error'))
           return this.appNexusConnectorMock
         },
         defineTag: ({data}) => this.appNexusConnectorMock,
