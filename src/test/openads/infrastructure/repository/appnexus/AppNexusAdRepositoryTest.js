@@ -64,7 +64,10 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => {
-          expect(this.onEventSpy.calledTwice, 'onEvent not called twice').to.be.true
+          expect(this.onEventSpy.callCount, 'onEvent has not registered all events').to.equal(3)
+          expect(this.onEventSpy.args[0][0]['event'], 'adAvailable not registered').to.equal('adAvailable')
+          expect(this.onEventSpy.args[1][0]['event'], 'adBadRequest not registered').to.equal('adBadRequest')
+          expect(this.onEventSpy.args[2][0]['event'], 'adError not registered').to.equal('adError')
           expect(this.defineTagSpy.calledOnce, 'defineTag not called once').to.be.true
           expect(this.loadTagsSpy.calledOnce, 'loadTags not called once').to.be.true
           expect(this.mapResponseToDomainSpy.calledOnce, 'mapResponseToDomain not called once').to.be.true
