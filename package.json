@@ -1,6 +1,6 @@
 {
   "name": "@schibstedspain/openads",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "OpenAds: Advertising library",
   "main": "dist/",
   "scripts": {

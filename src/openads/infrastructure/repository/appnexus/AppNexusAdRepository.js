@@ -50,6 +50,8 @@ export default class AppNexusAdRepository extends AdRepository {
   }
 
   reset () {
-    return Promise.resolve(this._connector.reset())
+    return Promise.resolve({then: (resolve) => resolve(
+      this._connector.reset()
+    )})
   }
 }
