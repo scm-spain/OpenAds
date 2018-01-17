@@ -103,6 +103,33 @@ describe('AppNexus repository', function () {
         .then(ad => done(new Error('Promise should resolve as rejected')))
         .catch(() => done())
     })
+
+    it('should return a rejected Promise when someone call to callback on adError event', function (done) {
+      const givenAdRequest = {}
+
+      this.appNexusConnectorMock = {
+        activateDebugMode: () => this.appNexusConnectorMock,
+        setPageOpts: ({data}) => this.appNexusConnectorMock,
+        onEvent: ({event, targetId, callback}) => {
+          if (event === 'adError') callback(new Error('error'))
+          return this.appNexusConnectorMock
+        },
+        defineTag: ({data}) => this.appNexusConnectorMock,
+        loadTags: () => this.appNexusConnectorMock
+      }
+
+      const appnexusRepository = new AppNexusAdRepository({
+        appNexusConnector: this.appNexusConnectorMock,
+        appNexusResultMapper: this.appNexusResultMapperMock,
+        appNexusRequestMapper: this.appNexusRequestMapperMock
+      })
+
+      appnexusRepository.findAd({
+        adRequest: givenAdRequest
+      })
+        .then(ad => done(new Error('Promise should resolve as rejected')))
+        .catch(() => done())
+    })
   })
 
   describe('Calling the reset method', function () {
