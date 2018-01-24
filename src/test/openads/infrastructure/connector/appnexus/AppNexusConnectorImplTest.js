@@ -163,7 +163,7 @@ describe('AppNexusConnectorImpl implementation', function () {
       const loggerSpy = sinon.spy()
       let appNexusClientMock = {
         anq: appNexusQueue,
-        showTag: ({target}) => undefined
+        showTag: ({targetId}) => undefined
       }
       const loggerMock = {
         debug: (title, log) => loggerSpy()
@@ -174,7 +174,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         appNexusClient: appNexusClientMock,
         logger: loggerMock
       })
-      const mutatedAppNexusConnector = appNexusConnector.showTag({target: 'Odin'})
+      const mutatedAppNexusConnector = appNexusConnector.showTag({targetId: 'Odin'})
 
       expect(appNexusClientMock.anq).to.have.lengthOf(1)
       expect(qSpy.called).to.be.true
@@ -234,7 +234,6 @@ describe('AppNexusConnectorImpl implementation', function () {
           onEvent: () => null
         }
         const offEventSpy = sinon.spy(appNexusClientMock, 'offEvent')
-        const loggerSpy = sinon.spy(this.loggerMock, 'debug')
 
         const appNexusConnector = new AppNexusConnectorImpl({
           appNexusClient: appNexusClientMock,
@@ -247,10 +246,18 @@ describe('AppNexusConnectorImpl implementation', function () {
           .onEvent(this.givenEvent12)
           .onEvent(this.givenEvent21)
           .onEvent(this.givenEvent22)
-          .reset()
+          .reset({targetId: 'target1'})
+          .reset({targetId: 'target2'})
 
         expect(offEventSpy.callCount).to.equal(4)
-        expect(loggerSpy.callCount, 'logger debug method should be called four times for onEvent and one more for reset method').to.equal(5)
+        expect(offEventSpy.args[0][0]).to.equal('event1')
+        expect(offEventSpy.args[0][1]).to.equal('target1')
+        expect(offEventSpy.args[1][0]).to.equal('event2')
+        expect(offEventSpy.args[1][1]).to.equal('target1')
+        expect(offEventSpy.args[2][0]).to.equal('event1')
+        expect(offEventSpy.args[2][1]).to.equal('target2')
+        expect(offEventSpy.args[3][0]).to.equal('event2')
+        expect(offEventSpy.args[3][1]).to.equal('target2')
       })
     })
   })

@@ -14,7 +14,7 @@ describe('AppNexus repository', function () {
       },
       defineTag: ({data}) => this.appNexusConnectorMock,
       loadTags: () => this.appNexusConnectorMock,
-      reset: () => null
+      reset: () => this.appNexusConnectorMock
     }
     this.appNexusResultMapperMock = {
       mapResponseToDomain: ({appNexusResponse}) => {}
@@ -64,6 +64,8 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => {
+          expect(this.resetSpy.callCount, 'reset has not been called').to.equal(1)
+          expect(this.resetSpy.args[0][0]['targetId'], 'reset has not been called with correct targetId').to.equal(givenAdRequest.containerId)
           expect(this.onEventSpy.callCount, 'onEvent has not registered all events').to.equal(5)
           expect(this.onEventSpy.args[0][0]['event'], 'adAvailable not registered').to.equal('adAvailable')
           expect(this.onEventSpy.args[1][0]['event'], 'adBadRequest not registered').to.equal('adBadRequest')
@@ -185,30 +187,6 @@ describe('AppNexus repository', function () {
       })
         .then(ad => done(new Error('Promise should resolve as rejected')))
         .catch(() => done())
-    })
-  })
-
-  describe('Calling the reset method', function () {
-    it('Should return a promise', function () {
-      const appnexusRepository = new AppNexusAdRepository({
-        appNexusConnector: this.appNexusConnectorMock,
-        appNexusResultMapper: this.appNexusResultMapperMock,
-        appNexusRequestMapper: this.appNexusRequestMapperMock
-      })
-      expect(appnexusRepository.reset()).to.be.a('promise')
-    })
-    it('Should reset the connector', function (done) {
-      const appnexusRepository = new AppNexusAdRepository({
-        appNexusConnector: this.appNexusConnectorMock,
-        appNexusResultMapper: this.appNexusResultMapperMock,
-        appNexusRequestMapper: this.appNexusRequestMapperMock
-      })
-      appnexusRepository.reset()
-        .then(() => {
-          expect(this.resetSpy.calledOnce).to.be.true
-          done()
-        })
-        .catch(e => done(e))
     })
   })
 })

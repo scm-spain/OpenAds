@@ -22,6 +22,7 @@ export default class AppNexusAdRepository extends AdRepository {
   findAd ({adRequest}) {
     return new Promise((resolve, reject) => {
       this._connector
+        .reset({targetId: adRequest.containerId})
         .onEvent({
           event: 'adAvailable',
           targetId: adRequest.containerId,
@@ -68,10 +69,5 @@ export default class AppNexusAdRepository extends AdRepository {
         }))
         .loadTags()
     })
-  }
-
-  reset () {
-    return Promise.resolve()
-      .then(() => this._connector.reset())
   }
 }

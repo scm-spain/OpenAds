@@ -28,7 +28,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   onEvent ({event, targetId, callback}) {
-    this._logger.debug('Activating AppNexus Listener', '| event:', event, '|targetId:', targetId)
+    this._logger.debug('Activating AppNexus Listener', '| event:', event, '| targetId:', targetId)
     this._appNexusClient.anq.push(() => {
       this._appNexusClient.onEvent(event, targetId, callback)
       if (!this._registeredEvents.has(targetId)) {
@@ -51,20 +51,19 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     return this
   }
 
-  showTag ({target}) {
-    this._logger.debug('Showing AppNexus Tag', '| target:', target)
-    this._appNexusClient.anq.push(() => this._appNexusClient.showTag(target))
+  showTag ({targetId}) {
+    this._logger.debug('Showing AppNexus Tag', '| targetId:', targetId)
+    this._appNexusClient.anq.push(() => this._appNexusClient.showTag(targetId))
     return this
   }
 
-  reset () {
-    this._logger.debug('Reset AppNexus connector')
+  reset ({targetId}) {
+    this._logger.debug('Removing AppNexus events', '| targetId:', targetId)
     this._appNexusClient.anq.push(() => {
-      this._appNexusClient.clearRequest()
-      this._registeredEvents.forEach((eventArray, targetId) => {
-        eventArray.forEach(event => this._appNexusClient.offEvent(event, targetId))
-      })
-      this._registeredEvents = new Map()
+      if (this._registeredEvents.has(targetId)) {
+        this._registeredEvents.get(targetId).forEach(event => this._appNexusClient.offEvent(event, targetId))
+        this._registeredEvents.delete(targetId)
+      }
     })
     return this
   }

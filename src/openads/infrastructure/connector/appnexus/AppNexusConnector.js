@@ -51,14 +51,14 @@ export default class AppNexusConnector extends Connector {
    * Shows tags in the target.
    * @param target
    */
-  showTag ({target}) {
+  showTag ({targetId}) {
     throw new Error('AppNexusConnector#showTag must be implemented')
   }
 
   /**
-   * Resets the state to it's pre uninitialized state.
+   * Resets the state for a target.
    */
-  reset () {
-    throw new Error('AppNexusConnector#clearRequest must be implemented')
+  reset ({targetId}) {
+    throw new Error('AppNexusConnector#reset must be implemented')
   }
 }

@@ -21,7 +21,7 @@ export default class AppNexusBannerRenderer extends BannerRenderer {
           targetId: containerId,
           callback: (adRetrieved) => resolve(true)
         })
-        .showTag({target: containerId})
+        .showTag({targetId: containerId})
     })
   }
 

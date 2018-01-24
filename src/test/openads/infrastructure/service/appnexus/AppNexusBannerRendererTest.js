@@ -14,7 +14,7 @@ describe('AppNexus Banner Renderer', () => {
         }) => {
           return appNexusConnectorMock
         },
-        showTag: ({target}) => appNexusConnectorMock
+        showTag: ({targetId}) => appNexusConnectorMock
       }
       const domDriverMock = {
         getElementById: () => null
@@ -40,7 +40,7 @@ describe('AppNexus Banner Renderer', () => {
           callback()
           return appNexusConnectorMock
         },
-        showTag: ({target}) => appNexusConnectorMock
+        showTag: ({targetId}) => appNexusConnectorMock
       }
       const domDriverMock = {
         getElementById: () => null
@@ -67,7 +67,7 @@ describe('AppNexus Banner Renderer', () => {
           callback()
           return appNexusConnectorMock
         },
-        showTag: ({target}) => appNexusConnectorMock
+        showTag: ({targetId}) => appNexusConnectorMock
       }
       const containerMock = {innerHTML: 'this is the previous inner html'}
       const domDriverMock = {

@@ -9,7 +9,6 @@ import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
 import EventDispatcher from '../../domain/service/EventDispatcher'
-import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
 import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
 import NativeFactory from '../../domain/ad/native/NativeFactory'
@@ -79,13 +78,6 @@ export default class Container {
 
   _buildFindAdsUseCase () {
     return new FindAdUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
-      logger: this.getInstance({key: 'Logger'})
-    })
-  }
-
-  _buildResetConnectorsUseCase () {
-    return new ResetConnectorsUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
       logger: this.getInstance({key: 'Logger'})
     })

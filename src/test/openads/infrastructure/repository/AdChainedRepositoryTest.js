@@ -1,4 +1,3 @@
-
 import {expect} from 'chai'
 import sinon from 'sinon'
 import AdChainedRepository from '../../../../openads/infrastructure/repository/AdChainedRepository'
@@ -39,22 +38,6 @@ describe('Ad Chained repository', function () {
           done()
         })
         .catch(error => done(error))
-    })
-  })
-  describe('Calling the reset method', function () {
-    it('Should reset all chained repositories', function () {
-      const appNexusRepositoryMock = {
-        reset: () => null
-      }
-      const adChainedRepositoryResetSpy = sinon.spy(appNexusRepositoryMock, 'reset')
-
-      const adChainedRepository = new AdChainedRepository({
-        appnexusRepository: appNexusRepositoryMock,
-        configuration: {}
-      })
-      adChainedRepository.reset()
-
-      expect(adChainedRepositoryResetSpy.calledOnce).to.be.true
     })
   })
 })
