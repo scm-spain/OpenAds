@@ -13,11 +13,11 @@ describe('Add Positions Use Case', () => {
     dispatch: (input) => null
   })
   const createPositionFactoryMock = ({create}) => ({
-    create: (input) => create(input)
+    create: (input) => Promise.resolve(create(input))
   })
   const createPositionRepositoryMock = ({create, exists}) => ({
-    create: (input) => create(input),
-    exists: (input) => exists(input)
+    create: (input) => Promise.resolve(create(input)),
+    exists: (input) => Promise.resolve(exists(input))
   })
   describe('Create positions', () => {
     it('Should return a promise', () => {
@@ -69,8 +69,8 @@ describe('Add Positions Use Case', () => {
       useCase.addPositions(givenPosition1, givenPosition2)
         .then(() => {
           expect(spyCreate.callCount).to.equal(2)
-          expect(spyCreate.args[0][0]['containerId']).to.equal(givenPosition1.containerId)
-          expect(spyCreate.args[1][0]['containerId']).to.equal(givenPosition2.containerId)
+          expect(spyCreate.args[0][0]['position']['containerId']).to.equal(givenPosition1.containerId)
+          expect(spyCreate.args[1][0]['position']['containerId']).to.equal(givenPosition2.containerId)
           expect(spyWarn.called).to.be.false
           expect(spyDispatcher.args[0][0]['eventName']).to.equal('START_ADD_POSITIONS')
           expect(spyDispatcher.args[1][0]['eventName']).to.equal('END_ADD_POSITIONS')
@@ -103,7 +103,7 @@ describe('Add Positions Use Case', () => {
       useCase.addPositions(givenPosition1, givenPosition2)
         .then(() => {
           expect(spyCreate.calledOnce).to.be.true
-          expect(spyCreate.args[0][0]['containerId']).to.equal(givenPosition2.containerId)
+          expect(spyCreate.args[0][0]['position']['containerId']).to.equal(givenPosition2.containerId)
           expect(spyWarn.calledOnce).to.be.true
           expect(spyDispatcher.calledTwice).to.be.true
           expect(spyDispatcher.args[0][0]['eventName']).to.equal('START_ADD_POSITIONS')

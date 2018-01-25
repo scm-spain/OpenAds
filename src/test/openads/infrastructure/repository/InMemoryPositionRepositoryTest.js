@@ -1,5 +1,4 @@
 import {expect} from 'chai'
-import sinon from 'sinon'
 import InMemoryPositionRepository from '../../../../openads/infrastructure/repository/InMemoryPositionRepository'
 
 describe('In Memory Position Repository', () => {
@@ -22,14 +21,16 @@ describe('In Memory Position Repository', () => {
     })
   })
   describe('Creating and looking for existance of a position', () => {
-    const givenContainerId = 'id1'
+    const givenPosition = {
+      containerId: 'id1'
+    }
 
     it('Should exist after creation without failure with unexisting containerId', (done) => {
       const loggerMock = createLoggerMock()
       const repository = new InMemoryPositionRepository({logger: loggerMock})
-      repository.create({containerId: givenContainerId})
+      repository.create({position: givenPosition})
         .then(() => {
-          repository.exists({containerId: givenContainerId})
+          repository.exists({containerId: givenPosition.containerId})
             .then(exist => {
               expect(exist).to.be.true
               done()
@@ -41,9 +42,9 @@ describe('In Memory Position Repository', () => {
     it('Should fail attempting to create two times a position with same containerId', (done) => {
       const loggerMock = createLoggerMock()
       const repository = new InMemoryPositionRepository({logger: loggerMock})
-      repository.create({containerId: givenContainerId})
+      repository.create({position: givenPosition})
         .then(() => {
-          repository.create({containerId: givenContainerId})
+          repository.create({containerId: givenPosition.containerId})
             .then(() => done(new Error('Should fail')))
             .catch(e => done())
         })
@@ -52,7 +53,7 @@ describe('In Memory Position Repository', () => {
     it('Should tell that a position does not exist if it has not been created previously', (done) => {
       const loggerMock = createLoggerMock()
       const repository = new InMemoryPositionRepository({logger: loggerMock})
-      repository.exists({containerId: givenContainerId})
+      repository.exists({containerId: givenPosition.containerId})
         .then((result) => {
           if (result) {
             done(new Error('Exist should be false'))

@@ -7,14 +7,14 @@ export default class InMemoryPositionRepository extends PositionRepository {
     this._db = new Map()
   }
 
-  create ({containerId, name, source, placement, segmentation, sizes, native}) {
+  create ({position}) {
     return Promise.resolve()
-      .then(() => this._logger.debug('Position Repository | create', '| containerId:', containerId, '| name:', name, '| source:', source, '| placement:', placement, '| segmentation:', segmentation, '| sizes:', sizes, '| native:', native))
+      .then(() => this._logger.debug('Position Repository | create', position))
       .then(() => {
-        if (!this._db.has(containerId)) {
-          this._db.set(containerId, {containerId, name, source, placement, segmentation, sizes, native})
+        if (!this._db.has(position.containerId)) {
+          this._db.set(position.containerId, position)
         } else {
-          throw new Error('Attempting to create duplicated Position for containerId: ' + containerId)
+          throw new Error('Attempting to create duplicated Position for containerId: ' + position.containerId)
         }
       })
   }
