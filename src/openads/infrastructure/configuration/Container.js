@@ -69,20 +69,6 @@ export default class Container {
     return new HTMLDOMDriver({dom: window.document})
   }
 
-  _buildDisplayAdsUseCase () {
-    return new DisplayAdsUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
-      logger: this.getInstance({key: 'Logger'})
-    })
-  }
-
-  _buildFindAdsUseCase () {
-    return new FindAdUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
-      logger: this.getInstance({key: 'Logger'})
-    })
-  }
-
   _buildEventDispatcher () {
     return new EventDispatcher({
       logger: this.getInstance({key: 'Logger'})
@@ -113,21 +99,6 @@ export default class Container {
 
   _buildAppNexusClient () {
     return AppNexusClient.build()
-  }
-
-  _buildAppNexusRepository () {
-    return new AppNexusAdRepository({
-      appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
-      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'}),
-      appNexusRequestMapper: this.getInstance({key: 'AppNexusRequestMapper'})
-    })
-  }
-
-  _buildAdChainedRepository () {
-    return new AdChainedRepository({
-      appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
-      configuration: this._config
-    })
   }
 
   _buildAppNexusResultMapper () {

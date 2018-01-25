@@ -9,27 +9,35 @@ export default class OpenAds {
 
   /**
    *
-   * @param {AdRequest} adRequest
-   * @param {string} adRequest.position - Position where Ad will be displayed
-   * @param {string} adRequest.containerId - DOM element where Ad will be rendered
-   * @param {string} adRequest.segmentation - Segmentation to target the Ad
-   * @param {string} adRequest.placement - Placement to target the Ad
-   * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
+   * @param {...Position} positions
+   * @return {*}
    */
-  find ({adRequest}) {
-    return this._container.getInstance({key: 'FindAdsUseCase'}).find({adRequest})
+  addPositions (...positions) {
+    return this._container.getInstance({key: 'AddPositionsUseCase'}).addPositions(...positions)
   }
+
   /**
    *
-   * @param {AdRequest} adRequest
-   * @param {string} adRequest.position - Position where Ad will be displayed
-   * @param {string} adRequest.containerId - DOM element where Ad will be rendered
-   * @param {string} adRequest.segmentation - Segmentation to target the Ad
-   * @param {string} adRequest.placement - Placement to target the Ad
-   * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
+   * @param containerId
+   * @param name
+   * @param source
+   * @param placement
+   * @param segmentation
+   * @param sizes
+   * @param native
+   * @return {*}
    */
-  display ({adRequest}) {
-    return this._container.getInstance({key: 'DisplayAdsUseCase'}).display({adRequest})
+  modifyPosition ({containerId, name, source, placement, segmentation, sizes, native}) {
+    return this._container.getInstance({key: 'ModifyPositionUseCase'}).modifyPosition({containerId, name, source, placement, segmentation, sizes, native})
+  }
+
+  /**
+   *
+   * @param {...Number} containerIds
+   * @return {*}
+   */
+  displayPositions (...containerIds) {
+    return this._container.getInstance({key: 'DisplayPositionsUseCase'}).displayPositions(...containerIds)
   }
 
   registerHook ({eventName, position, callback}) {
@@ -45,19 +53,6 @@ export default class OpenAds {
       eventName,
       position,
       observer: callback
-    })
-  }
-
-  registerNativeRenderer ({position, renderer}) {
-    this._container.getInstance({key: 'NativeRendererProcessor'}).addPositionRenderer({
-      position,
-      renderer: renderer
-    })
-  }
-
-  unregisterNativeRenderer ({position}) {
-    this._container.getInstance({key: 'NativeRendererProcessor'}).removePositionRenderer({
-      position
     })
   }
 
