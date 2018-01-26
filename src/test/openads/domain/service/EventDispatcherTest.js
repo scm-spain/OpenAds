@@ -1,7 +1,7 @@
 
 import {expect} from 'chai'
 import sinon from 'sinon'
-import EventDispatcher from '../../../../openads/domain/service/EventDispatcher'
+import EventDispatcher from '../../../../openads/domain/service/DomainEventBus'
 
 describe('Event Dispatcher', function () {
   beforeEach(function () {

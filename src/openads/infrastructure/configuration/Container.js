@@ -1,14 +1,11 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
-import DisplayAdsUseCase from '../../application/service/DisplayAdsUseCase'
 import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
-import AdChainedRepository from '../repository/AdChainedRepository'
-import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
+
 import AppNexusResultMapper from '../service/appnexus/AppNexusResultMapper'
 import BannerFactory from '../../domain/ad/banner/BannerFactory'
 import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
-import FindAdUseCase from '../../application/service/FindAdUseCase'
+
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
-import EventDispatcher from '../../domain/service/EventDispatcher'
 import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
 import NativeFactory from '../../domain/ad/native/NativeFactory'
@@ -67,12 +64,6 @@ export default class Container {
 
   _buildDOMDriver () {
     return new HTMLDOMDriver({dom: window.document})
-  }
-
-  _buildEventDispatcher () {
-    return new EventDispatcher({
-      logger: this.getInstance({key: 'Logger'})
-    })
   }
 
   _buildNativeRendererProcessor () {
@@ -134,6 +125,5 @@ export default class Container {
   }
 
   _buildEagerSingletonInstances () {
-    this.getInstance({key: 'EventDispatcher'})
   }
 }
