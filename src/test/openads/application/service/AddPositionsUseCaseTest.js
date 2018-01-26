@@ -72,8 +72,13 @@ describe('Add Positions Use Case', () => {
           expect(spyCreate.args[0][0]['position']['containerId']).to.equal(givenPosition1.containerId)
           expect(spyCreate.args[1][0]['position']['containerId']).to.equal(givenPosition2.containerId)
           expect(spyWarn.called).to.be.false
+          expect(spyDispatcher.callCount).to.equal(4)
           expect(spyDispatcher.args[0][0]['eventName']).to.equal('START_ADD_POSITIONS')
-          expect(spyDispatcher.args[1][0]['eventName']).to.equal('END_ADD_POSITIONS')
+          expect(spyDispatcher.args[1][0]['eventName']).to.equal('ADDED_POSITION')
+          expect(spyDispatcher.args[1][0]['payload']).to.not.undefined
+          expect(spyDispatcher.args[2][0]['eventName']).to.equal('ADDED_POSITION')
+          expect(spyDispatcher.args[2][0]['payload']).to.not.undefined
+          expect(spyDispatcher.args[3][0]['eventName']).to.equal('END_ADD_POSITIONS')
           done()
         })
         .catch(e => done(e))
@@ -105,9 +110,11 @@ describe('Add Positions Use Case', () => {
           expect(spyCreate.calledOnce).to.be.true
           expect(spyCreate.args[0][0]['position']['containerId']).to.equal(givenPosition2.containerId)
           expect(spyWarn.calledOnce).to.be.true
-          expect(spyDispatcher.calledTwice).to.be.true
+          expect(spyDispatcher.callCount).to.equal(3)
           expect(spyDispatcher.args[0][0]['eventName']).to.equal('START_ADD_POSITIONS')
-          expect(spyDispatcher.args[1][0]['eventName']).to.equal('END_ADD_POSITIONS')
+          expect(spyDispatcher.args[1][0]['eventName']).to.equal('ADDED_POSITION')
+          expect(spyDispatcher.args[1][0]['payload']).to.not.undefined
+          expect(spyDispatcher.args[2][0]['eventName']).to.equal('END_ADD_POSITIONS')
           done()
         })
         .catch(e => done(e))

@@ -10,8 +10,9 @@ export default class InMemoryPositionRepository extends PositionRepository {
   create ({position}) {
     return Promise.resolve()
       .then(() => this._logger.debug('Position Repository | create', position))
-      .then(() => {
-        if (!this._db.has(position.containerId)) {
+      .then(() => this.exists({containerId: position.containerId}))
+      .then(exist => {
+        if (!exist) {
           this._db.set(position.containerId, position)
         } else {
           throw new Error('Attempting to create duplicated Position for containerId: ' + position.containerId)
