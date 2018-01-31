@@ -24,6 +24,10 @@ class DomainEventBus {
   getObservers () {
     return this._observers
   }
+
+  clearAllObservers () {
+    this._observers.clear()
+  }
 }
 
 const domainEventBus = new DomainEventBus()
