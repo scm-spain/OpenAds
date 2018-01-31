@@ -1,6 +1,7 @@
 import DomainEventBus from '../service/DomainEventBus'
 import {pagePositionAdded} from './pagePositionAdded'
 import {pageCreated} from './pageCreated'
+import {pageSegmentationChanged} from './pageSegmentationChanged'
 
 export default class Page {
   constructor ({id, segmentation, positions}) {
@@ -53,7 +54,19 @@ export default class Page {
     })})
   }
 
-  updateSegmentation ({segmentation}) {}
+  changeSegmentation ({segmentation}) {
+    this._segmentation = segmentation
+    DomainEventBus.raise({domainEvent: pageSegmentationChanged({
+      id: positionId,
+      domId,
+      name,
+      source,
+      placement,
+      segmentation,
+      sizes,
+      native
+    })})
+  }
   refreshPage () {}
 }
 

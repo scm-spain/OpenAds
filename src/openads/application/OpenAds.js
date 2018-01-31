@@ -7,6 +7,10 @@ export default class OpenAds {
     this._container = container
   }
 
+  createPage ({id, segmentation, positions}) {
+    return this._container.getInstance({key: 'CreatePageUseCase'}).createPage({id, segmentation, positions})
+  }
+
   /**
    *
    * @param {...Position} positions
