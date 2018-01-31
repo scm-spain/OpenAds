@@ -1,5 +1,2 @@
 import OpenAds from './openads/infrastructure/bootstrap/index'
-
-export {
-  OpenAds
-}
+export default OpenAds
