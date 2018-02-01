@@ -3,7 +3,12 @@ import {
   appnexusAdAvailable, appnexusAdBadRequest, appnexusAdError, appnexusAdNoBID, appnexusAdRequestFailure
 } from './event/events'
 
-const pageCreatedSubscriberFactory = appnexusConnector => (payload, dispatcher) => {
+/**
+ *
+ * @param {AppNexusConnector} appnexusConnector
+ * @returns {function({payload?: *, dispatcher?: *})}
+ */
+const pageCreatedSubscriberFactory = appnexusConnector => ({payload, dispatcher}) => {
   payload.positions.forEach(position => appnexusConnector
     .defineTag({
       member: appnexusConnector.member,
@@ -16,7 +21,7 @@ const pageCreatedSubscriberFactory = appnexusConnector => (payload, dispatcher) 
     .onEvent({
       event: AD_AVAILABLE,
       targetId: position.domId,
-      callback: (adResponse) => dispatcher(appnexusAdAvailable(adResponse))
+      callback: (adResponse) => dispatcher(appnexusAdAvailable({pageId: payload.id, positionId: position.id, adResponse}))
     })
     .onEvent({
       event: AD_BAD_REQUEST,
