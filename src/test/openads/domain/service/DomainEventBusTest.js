@@ -5,32 +5,35 @@ import DomainEventBusWrapper from './helper/DomainEventBusWrapper'
 
 describe('DomainEventBus test', () => {
   describe('Given a registered DomainEventBus', () => {
-    let spy = sinon.spy()
+    let observerSpy = sinon.spy()
     beforeEach(function () {
-      spy.reset()
+      observerSpy.reset()
     })
     it('Should execute observer callback using the raised payload', (done) => {
       const givenEventName = 'givenEventName'
-      DomainEventBus.register({eventName: givenEventName, observer: spy})
       const domainEvent = {
         eventName: givenEventName,
         payload: 'domainEvent payload'
       }
+      DomainEventBus.clearAllObservers()
+      DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
       DomainEventBus.raise({domainEvent})
-      expect(spy.calledOnce).equal(true)
-      expect(spy.lastCall.args[0].payload).equal(domainEvent.payload)
+
+      expect(observerSpy.calledOnce).equal(true)
+      expect(observerSpy.lastCall.args[0].payload).equal(domainEvent.payload)
       expect(DomainEventBus.getObservers().size).equal(1)
 
       const domainEventBusTestHelper = new DomainEventBusWrapper()
       const givenEventName2 = 'givenEventName2'
-      domainEventBusTestHelper.register({eventName: givenEventName2, observer: spy})
       const domainEvent2 = {
         eventName: givenEventName2,
         payload: 'domainEvent 2 payload'
       }
+      domainEventBusTestHelper.register({eventName: givenEventName2, observer: observerSpy})
       domainEventBusTestHelper.raise({domainEvent: domainEvent2})
-      expect(spy.calledTwice).equal(true)
-      expect(spy.lastCall.args[0].payload).equal(domainEvent2.payload)
+
+      expect(observerSpy.calledTwice).equal(true)
+      expect(observerSpy.lastCall.args[0].payload).equal(domainEvent2.payload)
       expect(DomainEventBus.getObservers().size).equal(2)
       done()
     })
@@ -47,19 +50,45 @@ describe('DomainEventBus test', () => {
       }
 
       DomainEventBus.clearAllObservers()
-      DomainEventBus.register({eventName: givenEventName, observer: spy})
-      DomainEventBus.register({eventName: givenEventName, observer: spy})
+      DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
+      DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
       DomainEventBus.raise({domainEvent: domainEvent})
-      expect(spy.getCalls().length).equal(2)
-      expect(spy.getCall(0).args[0].payload).equal(domainEvent.payload)
-      expect(spy.getCall(1).args[0].payload).equal(domainEvent.payload)
+      expect(observerSpy.getCalls().length).equal(2)
+      expect(observerSpy.getCall(0).args[0].payload).equal(domainEvent.payload)
+      expect(observerSpy.getCall(1).args[0].payload).equal(domainEvent.payload)
       expect(DomainEventBus.getObservers().size).equal(1)
       expect(DomainEventBus.getObservers().get(givenEventName).length).equal(2)
       done()
     })
   })
-  describe('Given an observer with dispatcher registered', () => {
-    it('Should call dispatcher', (done) => {
+  describe('Given 2 events and 2 related observers', () => {
+    let event1ObserverSpy = sinon.spy()
+    let event2ObserverSpy = sinon.spy()
+    beforeEach(function () {
+      event1ObserverSpy.reset()
+      event2ObserverSpy.reset()
+    })
+    it('Should define a dispatcher as function when raising event 1', (done) => {
+      const givenEvent1Name = 'event-1'
+      const givenEvent2Name = 'event-2'
+      const event2DomainEvent = {
+        eventName: givenEvent2Name,
+        payload: 'event-2-payload'
+      }
+      const event1DomainEvent = {
+        eventName: givenEvent1Name,
+        payload: 'event-1-payload',
+        dispatcher: event2DomainEvent
+      }
+      DomainEventBus.clearAllObservers()
+      DomainEventBus.register({eventName: givenEvent1Name, observer: event1ObserverSpy})
+      DomainEventBus.register({eventName: givenEvent2Name, observer: event2ObserverSpy})
+      DomainEventBus.raise({domainEvent: event1DomainEvent})
+
+      expect(DomainEventBus.getObservers().size).equal(2)
+      expect(event1ObserverSpy.calledOnce).equal(true)
+      expect(event1ObserverSpy.lastCall.args[0].payload).equal(event1DomainEvent.payload)
+      expect(event1ObserverSpy.lastCall.args[0].dispatcher).is.a('function')
       done()
     })
   })

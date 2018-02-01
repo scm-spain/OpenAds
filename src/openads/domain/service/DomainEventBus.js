@@ -18,7 +18,12 @@ class DomainEventBus {
   }
 
   raise ({domainEvent}) {
-    this._observers.get(domainEvent.eventName).forEach(observer => observer({payload: domainEvent.payload, dispatcher: domainEvent.dispatcher}))
+    this._observers
+      .get(domainEvent.eventName)
+      .forEach(observer => observer({
+        payload: domainEvent.payload,
+        dispatcher: (domainEventToDispatch) => DomainEventBus.raise({domainEvent: domainEventToDispatch})
+      }))
   }
 
   getObservers () {
