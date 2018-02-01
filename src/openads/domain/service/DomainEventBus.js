@@ -22,7 +22,7 @@ class DomainEventBus {
       .get(domainEvent.eventName)
       .forEach(observer => observer({
         payload: domainEvent.payload,
-        dispatcher: (domainEvent.dispatcher) ? () => this.raise({domainEvent: domainEvent.dispatcher}) : undefined
+        dispatcher: (data) => this.raise({domainEvent: data})
       }))
   }
 

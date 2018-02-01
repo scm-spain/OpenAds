@@ -2,7 +2,6 @@ import {expect} from 'chai'
 import sinon from 'sinon'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import DomainEventBusWrapper from './helper/DomainEventBusWrapper'
-import observerMock from './helper/observerMock'
 
 describe('DomainEventBus test', () => {
   describe('Given a registered DomainEventBus', () => {
@@ -62,67 +61,42 @@ describe('DomainEventBus test', () => {
       done()
     })
   })
-  describe('Given 2 events and 2 related observers', () => {
-    let event1ObserverSpy = sinon.spy()
-    let event2ObserverSpy = sinon.spy()
-    beforeEach(function () {
-      event1ObserverSpy.reset()
-      event2ObserverSpy.reset()
-    })
-    it('Should define a dispatcher as function when raising event 1', (done) => {
-      const givenEvent1Name = 'event-1'
-      const givenEvent2Name = 'event-2'
-      const event2DomainEvent = {
-        eventName: givenEvent2Name,
-        payload: 'event-2-payload'
-      }
-      const event1DomainEvent = {
-        eventName: givenEvent1Name,
-        payload: 'event-1-payload',
-        dispatcher: event2DomainEvent
-      }
-      DomainEventBus.clearAllObservers()
-      DomainEventBus.register({eventName: givenEvent1Name, observer: event1ObserverSpy})
-      DomainEventBus.register({eventName: givenEvent2Name, observer: event2ObserverSpy})
-      DomainEventBus.raise({domainEvent: event1DomainEvent})
-
-      expect(DomainEventBus.getObservers().size).equal(2)
-      expect(event1ObserverSpy.calledOnce).equal(true)
-      expect(event1ObserverSpy.lastCall.args[0].payload).equal(event1DomainEvent.payload)
-      expect(event1ObserverSpy.lastCall.args[0].dispatcher).is.a('function')
-      done()
-    })
-  })
   describe('Given 1 event with 1 subscriber which has a dispatcher to raise a second event with another subscriber', () => {
     it('Should be raised event 2 by subscriber 1 when event 1 is raised', (done) => {
       const givenEvent1Name = 'event-1'
+      const event1DomainEvent = {
+        eventName: givenEvent1Name,
+        payload: 'event-1-payload'
+      }
       const givenEvent2Name = 'event-2'
       const event2DomainEvent = {
         eventName: givenEvent2Name,
         payload: 'event-2-payload'
       }
-      const event1DomainEvent = {
-        eventName: givenEvent1Name,
-        payload: 'event-1-payload',
-        dispatcher: event2DomainEvent
+      const observer1 = {
+        getObserverFunction: ({payload, dispatcher}) => {
+          dispatcher(event2DomainEvent)
+        }
       }
-      const spyMe = {
-        observer: observerMock
+      const observer2 = {
+        getObserverFunction: ({payload, dispatcher}) => {
+        }
       }
-      const spy = sinon.spy(spyMe, 'observer')
+      const spy1 = sinon.spy(observer1, 'getObserverFunction')
+      const spy2 = sinon.spy(observer2, 'getObserverFunction')
 
       DomainEventBus.clearAllObservers()
-      DomainEventBus.register({eventName: givenEvent1Name, observer: spyMe.observer})
-      DomainEventBus.register({eventName: givenEvent2Name, observer: spyMe.observer})
+      DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
+      DomainEventBus.register({eventName: givenEvent2Name, observer: observer2.getObserverFunction})
       DomainEventBus.raise({domainEvent: event1DomainEvent})
 
       expect(DomainEventBus.getObservers().size).equal(2)
-      expect(spy.called).equal(true)
-      expect(spy.calledTwice).equal(true)
-      expect(spy.getCall(0).args[0].payload).equal(event1DomainEvent.payload)
-      expect(spy.getCall(0).args[0].dispatcher).is.a('function')
-      expect(spy.getCall(1).args[0].payload).equal(event2DomainEvent.payload)
-      expect(spy.getCall(1).args[0].dispatcher).undefined
+      expect(spy1.calledOnce).equal(true)
+      expect(spy1.getCall(0).args[0].payload).equal(event1DomainEvent.payload)
+      expect(spy1.getCall(0).args[0].dispatcher).is.a('function')
+      expect(spy2.calledOnce).equal(true)
+      expect(spy2.getCall(0).args[0].payload).equal(event2DomainEvent.payload)
+      expect(spy2.getCall(0).args[0].dispatcher).is.a('function')
       done()
     })
   })
