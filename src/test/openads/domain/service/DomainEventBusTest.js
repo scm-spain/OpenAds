@@ -58,4 +58,9 @@ describe('DomainEventBus test', () => {
       done()
     })
   })
+  describe('Given an observer with dispatcher registered', () => {
+    it('Should call dispatcher', (done) => {
+      done()
+    })
+  })
 })
