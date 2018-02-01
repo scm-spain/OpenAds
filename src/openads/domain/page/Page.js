@@ -57,14 +57,9 @@ export default class Page {
   changeSegmentation ({segmentation}) {
     this._segmentation = segmentation
     DomainEventBus.raise({domainEvent: pageSegmentationChanged({
-      id: positionId,
-      domId,
-      name,
-      source,
-      placement,
-      segmentation,
-      sizes,
-      native
+      id: this._id,
+      segmentation: this._segmentation,
+      positions: this._positions
     })})
   }
   refreshPage () {}
