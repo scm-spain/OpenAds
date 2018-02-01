@@ -1,3 +1,4 @@
+/* eslint-disable no-console */
 const observer = ({payload, dispatcher}) => {
   console.log('observer called with payload:', payload)
   if (dispatcher) {
