@@ -20,10 +20,16 @@ class DomainEventBus {
   raise ({domainEvent}) {
     this._observers
       .get(domainEvent.eventName)
-      .forEach(observer => observer({
-        payload: domainEvent.payload,
-        dispatcher: (data) => this.raise({domainEvent: data})
-      }))
+      .forEach(observer => {
+        try {
+          observer({
+            payload: domainEvent.payload,
+            dispatcher: (data) => this.raise({domainEvent: data})
+          })
+        } catch (err) {
+          console.log('Error processing the observer: ', err)
+        }
+      })
   }
 
   getObservers () {

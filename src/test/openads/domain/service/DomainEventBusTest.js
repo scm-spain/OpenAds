@@ -100,4 +100,37 @@ describe('DomainEventBus test', () => {
       done()
     })
   })
+  describe('Given 1 event with 2 subscribers, one of them causing an error', () => {
+    it('Should execute the non failing subscriber smoothly', (done) => {
+      const givenEvent1Name = 'event-1'
+      const event1DomainEvent = {
+        eventName: givenEvent1Name,
+        payload: 'event-1-payload'
+      }
+      const observer1 = {
+        getObserverFunction: ({payload, dispatcher}) => {
+          // observer1 will fail
+          throw new Error('expected error')
+        }
+      }
+      const observer2 = {
+        getObserverFunction: ({payload, dispatcher}) => {
+          // observer2 will work
+        }
+      }
+      const spy1 = sinon.spy(observer1, 'getObserverFunction')
+      const spy2 = sinon.spy(observer2, 'getObserverFunction')
+
+      DomainEventBus.clearAllObservers()
+      DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
+      DomainEventBus.register({eventName: givenEvent1Name, observer: observer2.getObserverFunction})
+      DomainEventBus.raise({domainEvent: event1DomainEvent})
+
+      expect(DomainEventBus.getObservers().size).equal(1)
+      expect(DomainEventBus.getObservers().get(givenEvent1Name).length).equal(2)
+      expect(spy1.calledOnce).equal(true)
+      expect(spy2.calledOnce).equal(true)
+      done()
+    })
+  })
 })
