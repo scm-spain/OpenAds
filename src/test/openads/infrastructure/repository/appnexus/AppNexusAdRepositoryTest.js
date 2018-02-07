@@ -13,8 +13,7 @@ describe('AppNexus repository', function () {
         return this.appNexusConnectorMock
       },
       defineTag: ({data}) => this.appNexusConnectorMock,
-      loadTags: () => this.appNexusConnectorMock,
-      reset: () => this.appNexusConnectorMock
+      loadTags: () => this.appNexusConnectorMock
     }
     this.appNexusResultMapperMock = {
       mapResponseToDomain: ({appNexusResponse}) => {}
@@ -33,7 +32,6 @@ describe('AppNexus repository', function () {
     this.onEventSpy = sinon.spy(this.appNexusConnectorMock, 'onEvent')
     this.defineTagSpy = sinon.spy(this.appNexusConnectorMock, 'defineTag')
     this.loadTagsSpy = sinon.spy(this.appNexusConnectorMock, 'loadTags')
-    this.resetSpy = sinon.spy(this.appNexusConnectorMock, 'reset')
     this.mapResponseToDomainSpy = sinon.spy(this.appNexusResultMapperMock, 'mapResponseToDomain')
     this.mapDomainToRequestSpy = sinon.spy(this.appNexusRequestMapperMock, 'mapDomainToRequest')
   })
@@ -64,8 +62,6 @@ describe('AppNexus repository', function () {
         adRequest: givenAdRequest
       })
         .then(ad => {
-          expect(this.resetSpy.callCount, 'reset has not been called').to.equal(1)
-          expect(this.resetSpy.args[0][0]['targetId'], 'reset has not been called with correct targetId').to.equal(givenAdRequest.containerId)
           expect(this.onEventSpy.callCount, 'onEvent has not registered all events').to.equal(5)
           expect(this.onEventSpy.args[0][0]['event'], 'adAvailable not registered').to.equal('adAvailable')
           expect(this.onEventSpy.args[1][0]['event'], 'adBadRequest not registered').to.equal('adBadRequest')

@@ -7,8 +7,8 @@ export default class OpenAds {
     this._container = container
   }
 
-  createPage ({id, segmentation, positions}) {
-    return this._container.getInstance({key: 'CreatePageUseCase'}).createPage({id, segmentation, positions})
+  addPosition ({domId, name, source, placement, segmentation, sizes, native}) {
+    return this._container.getInstance({key: 'AddPositionUseCase'}).addPosition({domId, name, source, placement, segmentation, sizes, native})
   }
 
   registerHook ({eventName, position, callback}) {
