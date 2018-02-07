@@ -17,7 +17,7 @@ import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
 import AddPositionUseCase from '../../application/service/AddPositionUseCase'
 import InMemoryPositionRepository from '../repository/InMemoryPositionRepository'
-import PositionFactory from '../../domain/page/PositionFactory'
+import PositionFactory from '../../domain/position/PositionFactory'
 
 export default class Container {
   constructor ({config}) {

@@ -7,8 +7,8 @@ export default class OpenAds {
     this._container = container
   }
 
-  addPosition ({domId, name, source, placement, segmentation, sizes, native}) {
-    return this._container.getInstance({key: 'AddPositionUseCase'}).addPosition({domId, name, source, placement, segmentation, sizes, native})
+  addPosition ({id, name, source, placement, segmentation, sizes, native}) {
+    return this._container.getInstance({key: 'AddPositionUseCase'}).addPosition({id, name, source, placement, segmentation, sizes, native})
   }
 
   registerHook ({eventName, position, callback}) {

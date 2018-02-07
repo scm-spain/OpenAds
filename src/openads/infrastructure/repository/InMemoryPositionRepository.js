@@ -1,4 +1,4 @@
-import PositionRepository from '../../domain/page/PositionRepository'
+import PositionRepository from '../../domain/position/PositionRepository'
 
 export default class InMemoryPositionRepository extends PositionRepository {
   constructor () {
@@ -7,8 +7,12 @@ export default class InMemoryPositionRepository extends PositionRepository {
   }
 
   save ({position}) {
-    return Promise.resolve()
+    return this.find({id: position.id})
+      .then(position => {
+        if (position !== null) throw new Error('PositionAlreadyExists')
+      })
       .then(() => this._positions.set(position.id, position))
+      .then(() => position)
   }
 
   find ({id}) {
