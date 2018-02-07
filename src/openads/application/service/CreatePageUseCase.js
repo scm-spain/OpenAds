@@ -4,9 +4,9 @@ export default class CreatePageUseCase {
     this._pageFactory = pageFactory
   }
 
-  createPage ({id, segmentation, position}) {
+  createPage ({id, segmentation, positions}) {
     return Promise.resolve()
-      .then(() => this._pageFactory.create({id, segmentation, position}))
+      .then(() => this._pageFactory.create({id, segmentation, positions}))
       .then(page => this._pageRepository.save({page}))
   }
 }

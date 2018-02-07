@@ -61,4 +61,12 @@ export default class AppNexusConnector extends Connector {
   reset ({targetId}) {
     throw new Error('AppNexusConnector#reset must be implemented')
   }
+
+  /**
+   * Causes a new ad server call and refreshes ads on the page.
+   * @param {Array} targets
+   */
+  refresh ({targetIds}) {
+    throw new Error('AppNexusConnector#refresh must be implemented')
+  }
 }

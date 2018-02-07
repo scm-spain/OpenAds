@@ -52,6 +52,7 @@ export default class Page {
       sizes,
       native
     })})
+    return this
   }
 
   changeSegmentation ({segmentation}) {
@@ -61,6 +62,7 @@ export default class Page {
       segmentation: this._segmentation,
       positions: this._positions
     })})
+    return this
   }
   refreshPage () {}
 }

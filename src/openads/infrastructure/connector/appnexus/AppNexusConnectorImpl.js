@@ -67,4 +67,14 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     })
     return this
   }
+
+  refresh ({targetIds = []} = {}) {
+    this._logger.debug('Refresh ads on the page', '| targets:', targetIds)
+    if (targetIds.length === 0) {
+      this._appNexusClient.anq.push(() => this._appNexusClient.refresh())
+    } else {
+      this._appNexusClient.anq.push(() => this._appNexusClient.refresh(targetIds))
+    }
+    return this
+  }
 }
