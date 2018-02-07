@@ -15,12 +15,9 @@ import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
 import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
-import pageCreatedSubscriberFactory from '../appnexus/pageCreatedSubscriberFactory'
-import DomainEventBus from '../../domain/service/DomainEventBus'
-import {PAGE_CREATED} from '../../domain/page/pageCreated'
-import CreatePageUseCase from '../../application/service/CreatePageUseCase'
-import InMemoryPageRepository from '../page/InMemoryPageRepository'
-import PageFactory from '../../domain/page/PageFactory'
+import AddPositionUseCase from '../../application/service/AddPositionUseCase'
+import InMemoryPositionRepository from '../repository/InMemoryPositionRepository'
+import PositionFactory from '../../domain/position/PositionFactory'
 
 export default class Container {
   constructor ({config}) {
@@ -39,19 +36,19 @@ export default class Container {
     }
     return this._instances.get(key)
   }
-  _buildCreatePageUseCase () {
-    return new CreatePageUseCase({
-      pageRepository: this.getInstance({key: 'PageRepository'}),
-      pageFactory: this.getInstance({key: 'PageFactory'})
+  _buildAddPositionUseCase () {
+    return new AddPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      positionFactory: this.getInstance({key: 'PositionFactory'})
     })
   }
 
-  _buildPageRepository () {
-    return new InMemoryPageRepository()
+  _buildPositionRepository () {
+    return new InMemoryPositionRepository()
   }
 
-  _buildPageFactory () {
-    return new PageFactory()
+  _buildPositionFactory () {
+    return new PositionFactory()
   }
 
   _buildLogger () {
@@ -144,14 +141,7 @@ export default class Container {
     })
   }
 
-  _buildpageCreatedSubscriber () {
-    return pageCreatedSubscriberFactory(this.getInstance({key: 'AppNexusConnector'}))
-  }
-
   _buildEagerSingletonInstances () {
-    DomainEventBus.register({
-      eventName: PAGE_CREATED,
-      observer: this.getInstance({key: 'pageCreatedSubscriber'})
-    })
+
   }
 }

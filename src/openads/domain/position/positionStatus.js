@@ -1,0 +1,2 @@
+export const POSITION_VISIBLE = 'VISIBLE'
+export const POSITION_NOT_VISIBLE = 'NOT_VISIBLE'
