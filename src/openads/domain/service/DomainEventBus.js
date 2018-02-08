@@ -1,9 +1,9 @@
-export default class DomainEventBus {
+class DomainEventBus {
   constructor () {
     this._observers = new Map()
   }
 
-  static register ({eventName, observer}) {
+  register ({eventName, observer}) {
     if (!eventName) {
       throw new Error('Event Name is required')
     }
@@ -12,11 +12,34 @@ export default class DomainEventBus {
     }
     if (!this._observers.has(eventName)) {
       this._observers.set(eventName, [observer])
+    } else {
+      this._observers.get(eventName).push(observer)
     }
-    this._observers.get(eventName).push(observer)
   }
 
-  static raise ({domainEvent}) {
-    this._observers.get(domainEvent.eventName).forEach(observer => observer({payload: domainEvent.payload}))
+  raise ({domainEvent}) {
+    this._observers
+      .get(domainEvent.eventName)
+      .forEach(observer => {
+        try {
+          observer({
+            payload: domainEvent.payload,
+            dispatcher: (data) => this.raise({domainEvent: data})
+          })
+        } catch (err) {
+          console.log('Error processing the observer: ', err)
+        }
+      })
+  }
+
+  getObservers () {
+    return this._observers
+  }
+
+  clearAllObservers () {
+    this._observers.clear()
   }
 }
+
+const domainEventBus = new DomainEventBus()
+export default domainEventBus
