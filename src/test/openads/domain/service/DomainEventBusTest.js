@@ -21,6 +21,17 @@ describe('DomainEventBus test', () => {
         done()
       }
     })
+    it('Should return 0 when calling getNumberOfRegisteredEvents if there is no events registered', (done) => {
+      const result = DomainEventBus.getNumberOfRegisteredEvents()
+      expect(0).equal(result)
+      done()
+    })
+    it('Should return 0 when calling getNumberOfObserversRegisteredForAnEvent if there is no events registered', (done) => {
+      const givenEventName = 'nonExistingEvent'
+      const result = DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEventName})
+      expect(0).equal(result)
+      done()
+    })
   })
   describe('Given a registered DomainEventBus', () => {
     let observerSpy = sinon.spy()
@@ -39,7 +50,7 @@ describe('DomainEventBus test', () => {
 
       expect(observerSpy.calledOnce).equal(true)
       expect(observerSpy.lastCall.args[0].payload).equal(domainEvent.payload)
-      expect(DomainEventBus.getObservers().size).equal(1)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
 
       const domainEventBusTestHelper = new DomainEventBusWrapper()
       const givenEventName2 = 'givenEventName2'
@@ -52,12 +63,12 @@ describe('DomainEventBus test', () => {
 
       expect(observerSpy.calledTwice).equal(true)
       expect(observerSpy.lastCall.args[0].payload).equal(domainEvent2.payload)
-      expect(DomainEventBus.getObservers().size).equal(2)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(2)
       done()
     })
     it('Should clear all observers', (done) => {
       DomainEventBus.clearAllObservers()
-      expect(DomainEventBus.getObservers().size).equal(0)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(0)
       done()
     })
     it('Should execute all observers related to an event', (done) => {
@@ -74,8 +85,8 @@ describe('DomainEventBus test', () => {
       expect(observerSpy.getCalls().length).equal(2)
       expect(observerSpy.getCall(0).args[0].payload).equal(domainEvent.payload)
       expect(observerSpy.getCall(1).args[0].payload).equal(domainEvent.payload)
-      expect(DomainEventBus.getObservers().size).equal(1)
-      expect(DomainEventBus.getObservers().get(givenEventName).length).equal(2)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+      expect(DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEventName})).equal(2)
       done()
     })
   })
@@ -107,8 +118,7 @@ describe('DomainEventBus test', () => {
       DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
       DomainEventBus.register({eventName: givenEvent2Name, observer: observer2.getObserverFunction})
       DomainEventBus.raise({domainEvent: event1DomainEvent})
-
-      expect(DomainEventBus.getObservers().size).equal(2)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(2)
       expect(spy1.calledOnce).equal(true)
       expect(spy1.getCall(0).args[0].payload).equal(event1DomainEvent.payload)
       expect(spy1.getCall(0).args[0].dispatcher).is.a('function')
@@ -144,8 +154,8 @@ describe('DomainEventBus test', () => {
       DomainEventBus.register({eventName: givenEvent1Name, observer: observer2.getObserverFunction})
       DomainEventBus.raise({domainEvent: event1DomainEvent})
 
-      expect(DomainEventBus.getObservers().size).equal(1)
-      expect(DomainEventBus.getObservers().get(givenEvent1Name).length).equal(2)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+      expect(DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEvent1Name})).equal(2)
       expect(spy1.calledOnce).equal(true)
       expect(spy2.calledOnce).equal(true)
       done()

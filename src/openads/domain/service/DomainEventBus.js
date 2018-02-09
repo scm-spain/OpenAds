@@ -32,8 +32,16 @@ class DomainEventBus {
       })
   }
 
-  getObservers () {
-    return this._observers
+  getNumberOfRegisteredEvents () {
+    return this._observers.size
+  }
+
+  getNumberOfObserversRegisteredForAnEvent ({eventName}) {
+    let result = 0
+    if (this._observers.get(eventName)) {
+      result = this._observers.get(eventName).length
+    }
+    return result
   }
 
   clearAllObservers () {
