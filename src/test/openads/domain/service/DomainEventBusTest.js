@@ -1,3 +1,5 @@
+/* eslint-disable no-alert, no-console */
+
 import {expect} from 'chai'
 import sinon from 'sinon'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
@@ -129,7 +131,7 @@ describe('DomainEventBus test', () => {
     })
   })
   describe('Given 1 event with 2 subscribers, one of them causing an error', () => {
-    it('Should execute the non failing subscriber smoothly', (done) => {
+    it('Should execute the non failing subscriber smoothly and log the error', (done) => {
       const givenEvent1Name = 'event-1'
       const event1DomainEvent = {
         eventName: givenEvent1Name,
@@ -150,11 +152,16 @@ describe('DomainEventBus test', () => {
       const spy2 = sinon.spy(observer2, 'getObserverFunction')
 
       DomainEventBus.clearAllObservers()
+      const errorObserver = (payload) => { console.log('ERROR_EVENT TEST: ', payload) }
+      DomainEventBus.register({
+        eventName: 'ERROR_EVENT',
+        observer: errorObserver})
+
       DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
       DomainEventBus.register({eventName: givenEvent1Name, observer: observer2.getObserverFunction})
       DomainEventBus.raise({domainEvent: event1DomainEvent})
 
-      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+      expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(2)
       expect(DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEvent1Name})).equal(2)
       expect(spy1.calledOnce).equal(true)
       expect(spy2.calledOnce).equal(true)

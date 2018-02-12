@@ -27,7 +27,14 @@ class DomainEventBus {
             dispatcher: (data) => this.raise({domainEvent: data})
           })
         } catch (err) {
-          console.log('Error processing the observer: ', err)
+          const domainEvent = {
+            eventName: ERROR_EVENT,
+            payload: {
+              message: 'Error processing the observer.',
+              error: err
+            }
+          }
+          this.raise({domainEvent})
         }
       })
   }
@@ -48,6 +55,6 @@ class DomainEventBus {
     this._observers.clear()
   }
 }
-
+const ERROR_EVENT = 'ERROR_EVENT'
 const domainEventBus = new DomainEventBus()
 export default domainEventBus
