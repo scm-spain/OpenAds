@@ -9,6 +9,7 @@ import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
 import EventDispatcher from '../../domain/service/EventDispatcher'
+import DomainEventBus from '../../domain/service/DomainEventBus'
 import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
 import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
@@ -19,6 +20,7 @@ import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
 import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
+import {errorObserverFactory} from 'errorObserverFactory'
 
 export default class Container {
   constructor ({config}) {
@@ -170,7 +172,17 @@ export default class Container {
     })
   }
 
+  _buildErrorObserverFactory () {
+    const logger = this.getInstance({key: 'Logger'})
+    return errorObserverFactory(logger)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
+    const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    DomainEventBus.register({
+      eventName: ERROR_EVENT,
+      observer: errorObserver})
   }
 }
+const ERROR_EVENT = 'ERROR_EVENT'
