@@ -4,7 +4,7 @@ import {expect} from 'chai'
 import sinon from 'sinon'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import DomainEventBusWrapper from './helper/DomainEventBusWrapper'
-import {POSITION_ADDED, positionAdded} from '../../../../openads/domain/position/positionAdded'
+import {positionCreated} from '../../../../openads/domain/position/positionCreated'
 
 describe('DomainEventBus test', () => {
   describe('Given invalid register parameters', () => {
@@ -173,7 +173,7 @@ describe('DomainEventBus test', () => {
   describe('Given 1 event with no subscribers', () => {
     it('Should do nothing', (done) => {
       DomainEventBus.clearAllObservers()
-      DomainEventBus.raise({domainEvent: positionAdded({})})
+      DomainEventBus.raise({domainEvent: positionCreated({})})
       done()
     })
   })

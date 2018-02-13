@@ -1,5 +1,5 @@
 import {POSITION_NOT_VISIBLE} from './positionStatus'
-import {positionAdded} from './positionAdded'
+import {positionCreated} from './positionCreated'
 import DomainEventBus from '../service/DomainEventBus'
 
 export default class Position {
@@ -30,7 +30,7 @@ export default class Position {
     this._status = status
     this._ad = ad
 
-    DomainEventBus.raise({domainEvent: positionAdded({
+    DomainEventBus.raise({domainEvent: positionCreated({
       id: this._id,
       name: this._name,
       source: this._source,
