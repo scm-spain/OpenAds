@@ -4,6 +4,7 @@ import {expect} from 'chai'
 import sinon from 'sinon'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import DomainEventBusWrapper from './helper/DomainEventBusWrapper'
+import {POSITION_ADDED, positionAdded} from '../../../../openads/domain/position/positionAdded'
 
 describe('DomainEventBus test', () => {
   describe('Given invalid register parameters', () => {
@@ -165,6 +166,14 @@ describe('DomainEventBus test', () => {
       expect(DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEvent1Name})).equal(2)
       expect(spy1.calledOnce).equal(true)
       expect(spy2.calledOnce).equal(true)
+      done()
+    })
+  })
+
+  describe('Given 1 event with no subscribers', () => {
+    it('Should do nothing', (done) => {
+      DomainEventBus.clearAllObservers()
+      DomainEventBus.raise({domainEvent: positionAdded({})})
       done()
     })
   })

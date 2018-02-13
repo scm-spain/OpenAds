@@ -24,6 +24,7 @@ import AddPositionUseCase from '../../application/service/AddPositionUseCase'
 import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
 import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from 'errorObserverFactory'
+import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
 
 export default class Container {
   constructor ({config}) {
@@ -200,8 +201,8 @@ export default class Container {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     DomainEventBus.register({
-      eventName: ERROR_EVENT,
+      eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
   }
 }
-const ERROR_EVENT = 'ERROR_EVENT'
+

@@ -1,3 +1,5 @@
+import {observerErrorThrown} from './observerErrorThrown'
+
 class DomainEventBus {
   constructor () {
     this._observers = new Map()
@@ -18,25 +20,25 @@ class DomainEventBus {
   }
 
   raise ({domainEvent}) {
-    this._observers
-      .get(domainEvent.eventName)
-      .forEach(observer => {
-        try {
-          observer({
-            payload: domainEvent.payload,
-            dispatcher: (data) => this.raise({domainEvent: data})
-          })
-        } catch (err) {
-          const domainEvent = {
-            eventName: ERROR_EVENT,
-            payload: {
-              message: 'Error processing the observer.',
-              error: err
-            }
+    if (this._observers.has(domainEvent.eventName)) {
+      this._observers
+        .get(domainEvent.eventName)
+        .forEach(observer => {
+          try {
+            observer({
+              payload: domainEvent.payload,
+              dispatcher: (data) => this.raise({domainEvent: data})
+            })
+          } catch (err) {
+            this.raise({
+              domainEvent: observerErrorThrown({
+                message: 'Error processing the observer.',
+                error: err
+              })
+            })
           }
-          this.raise({domainEvent})
-        }
-      })
+        })
+    }
   }
 
   getNumberOfRegisteredEvents () {
@@ -44,17 +46,12 @@ class DomainEventBus {
   }
 
   getNumberOfObserversRegisteredForAnEvent ({eventName}) {
-    let result = 0
-    if (this._observers.get(eventName)) {
-      result = this._observers.get(eventName).length
-    }
-    return result
+    return (this._observers.has(eventName)) ? this._observers.get(eventName).length : 0
   }
 
   clearAllObservers () {
     this._observers.clear()
   }
 }
-const ERROR_EVENT = 'ERROR_EVENT'
 const domainEventBus = new DomainEventBus()
 export default domainEventBus

@@ -1,4 +1,7 @@
 import {POSITION_NOT_VISIBLE} from './positionStatus'
+import {positionAdded} from './positionAdded'
+import DomainEventBus from '../service/DomainEventBus'
+
 export default class Position {
   /**
    * Create a new Position
@@ -26,6 +29,17 @@ export default class Position {
     this._native = native
     this._status = status
     this._ad = ad
+
+    DomainEventBus.raise({domainEvent: positionAdded({
+      id: this._id,
+      name: this._name,
+      source: this._source,
+      placement: this._placement,
+      segmentation: this._segmentation,
+      sizes: this._sizes,
+      native: this._native,
+      status: this._status
+    })})
   }
 
   get id () {
