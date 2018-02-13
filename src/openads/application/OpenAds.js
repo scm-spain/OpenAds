@@ -32,6 +32,24 @@ export default class OpenAds {
     return this._container.getInstance({key: 'DisplayAdsUseCase'}).display({adRequest})
   }
 
+  /**
+   * Create a new Position on the page
+   * @param {string} id
+   * @param {string} name
+   * @param {string} source
+   * @param {string} placement
+   * @param {string} segmentation
+   * @param {Array<Array<>>}sizes
+   * @param {Object} native
+   * @param {Function} native.renderer - The function to be used when display use case is used in this position and the Ad is Native type
+   * @param {Object} native.fields - Fields requested to the ad server
+   * @param {string} native.domClickableId - DOM id where will be included the clickable action from native
+   * @returns {Promise<Position>}
+   */
+  addPosition ({id, name, source, placement, segmentation, sizes, native}) {
+    return this._container.getInstance({key: 'AddPositionUseCase'}).addPosition({id, name, source, placement, segmentation, sizes, native})
+  }
+
   registerHook ({eventName, position, callback}) {
     this._container.getInstance({key: 'EventDispatcher'}).addObserver({
       eventName,

@@ -19,6 +19,9 @@ import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
 import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
+import AddPositionUseCase from '../../application/service/AddPositionUseCase'
+import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
+import ProxyPositionFactory from '../position/ProxyPositionFactory'
 
 export default class Container {
   constructor ({config}) {
@@ -70,6 +73,22 @@ export default class Container {
     return new HTMLDOMDriver({dom: window.document})
   }
 
+  _buildAddPositionUseCase () {
+    return new AddPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      positionFactory: this.getInstance({key: 'PositionFactory'})
+    })
+  }
+
+  _buildPositionRepository () {
+    return new InMemoryPositionRepository()
+  }
+
+  _buildPositionFactory () {
+    return new ProxyPositionFactory({
+      proxyHandler: this.getInstance({key: 'ProxyHandler'})
+    })
+  }
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
