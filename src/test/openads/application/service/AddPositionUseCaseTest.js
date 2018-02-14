@@ -1,9 +1,6 @@
-
 import {expect} from 'chai'
 import sinon from 'sinon'
-import DisplayAdsUseCase from '../../../../openads/application/service/DisplayAdsUseCase'
 import AddPositionUseCase from '../../../../openads/application/service/AddPositionUseCase'
-import PositionFactory from '../../../../openads/domain/position/PositionFactory'
 import ProxyPositionFactory from '../../../../openads/infrastructure/position/ProxyPositionFactory'
 
 describe('Add Position use case', function () {
