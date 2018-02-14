@@ -16,7 +16,7 @@ describe('errorObserverFactory test', () => {
       const givenErrorEventMessage = 'ERROR_EVENT'
 
       const observer = errorObserverFactory(givenLogger)
-      observer(givenPayload)
+      observer({payload: givenPayload})
 
       expect(loggerSpy.calledOnce).equal(true)
       expect(loggerSpy.getCall(0).args[0]).equal(givenErrorEventMessage)
