@@ -1,0 +1,5 @@
+export const AD_AVAILABLE = 'adAvailable'
+export const AD_BAD_REQUEST = 'adBadRequest'
+export const AD_ERROR = 'adError'
+export const AD_NO_BID = 'adNoBid'
+export const AD_REQUEST_FAILURE = 'adRequestFailure'

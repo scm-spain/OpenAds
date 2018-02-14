@@ -9,6 +9,7 @@ import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
 import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
 import EventDispatcher from '../../domain/service/EventDispatcher'
+import DomainEventBus from '../../domain/service/DomainEventBus'
 import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
 import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
 import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
@@ -19,6 +20,11 @@ import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
 import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
+import AddPositionUseCase from '../../application/service/AddPositionUseCase'
+import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
+import ProxyPositionFactory from '../position/ProxyPositionFactory'
+import {errorObserverFactory} from 'errorObserverFactory'
+import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
 
 export default class Container {
   constructor ({config}) {
@@ -70,6 +76,22 @@ export default class Container {
     return new HTMLDOMDriver({dom: window.document})
   }
 
+  _buildAddPositionUseCase () {
+    return new AddPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      positionFactory: this.getInstance({key: 'PositionFactory'})
+    })
+  }
+
+  _buildPositionRepository () {
+    return new InMemoryPositionRepository()
+  }
+
+  _buildPositionFactory () {
+    return new ProxyPositionFactory({
+      proxyHandler: this.getInstance({key: 'ProxyHandler'})
+    })
+  }
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
@@ -170,7 +192,16 @@ export default class Container {
     })
   }
 
+  _buildErrorObserverFactory () {
+    const logger = this.getInstance({key: 'Logger'})
+    return errorObserverFactory(logger)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
+    const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    DomainEventBus.register({
+      eventName: OBSERVER_ERROR_THROWN,
+      observer: errorObserver})
   }
 }
