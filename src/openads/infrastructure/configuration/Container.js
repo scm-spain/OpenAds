@@ -25,6 +25,8 @@ import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
 import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from 'errorObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
+import proxyHandlerFactory from '../position/proxyHandlerFactory'
+import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
 
 export default class Container {
   constructor ({config}) {
@@ -91,6 +93,12 @@ export default class Container {
     return new ProxyPositionFactory({
       proxyHandler: this.getInstance({key: 'ProxyHandler'})
     })
+  }
+  _buildProxyHandler () {
+    return proxyHandlerFactory(this.getInstance({key: 'AppNexusConsumersRepository'}))
+  }
+  _buildAppNexusConsumersRepository () {
+    return new AppNexusConsumersRepository()
   }
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
