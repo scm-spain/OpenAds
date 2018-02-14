@@ -25,6 +25,7 @@ import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
 import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from 'errorObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
+import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
 
 export default class Container {
   constructor ({config}) {
@@ -197,6 +198,12 @@ export default class Container {
     return errorObserverFactory(logger)
   }
 
+  _buildDisplayPositionUseCase () {
+    return new DisplayPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'})
+    })
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
@@ -205,4 +212,3 @@ export default class Container {
       observer: errorObserver})
   }
 }
-
