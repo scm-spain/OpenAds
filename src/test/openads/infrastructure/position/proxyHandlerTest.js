@@ -163,6 +163,5 @@ describe('Position Proxy Handler', function () {
         })
         .catch(error => done(error))
     })
-
   })
 })
