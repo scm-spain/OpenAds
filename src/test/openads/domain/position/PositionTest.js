@@ -3,13 +3,9 @@ import {expect} from 'chai'
 import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import sinon from 'sinon'
-import {expect} from 'chai'
-import Position from '../../../../openads/domain/position/Position'
-import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import {POSITION_CREATED} from '../../../../openads/domain/position/positionCreated'
 
 describe('Position test', () => {
-
   describe('Ad', () => {
     it('Should return an error calling to Ad#show instead of a extending class implementation', () => {
       DomainEventBus.register({
@@ -28,7 +24,6 @@ describe('Position test', () => {
       expect(givenPosition.segmentation, 'Tricks for DOOM!!').to.be.equal('idkfa&iddqd')
     })
   })
-
   describe('changeStatus method', () => {
     describe('Given an invalid input status', () => {
       it('Should return a rejected promise', (done) => {

@@ -238,16 +238,15 @@ export default class Container {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
+    const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
+    const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
+
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
-
-    const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
     DomainEventBus.register({
       eventName: POSITION_DISPLAYED,
       observer: positionDisplayedObserver})
-
-    const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
     DomainEventBus.register({
       eventName: POSITION_ALREADY_DISPLAYED,
       observer: positionAlreadyDisplayedObserver})
