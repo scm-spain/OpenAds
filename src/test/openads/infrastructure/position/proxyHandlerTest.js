@@ -15,7 +15,7 @@ describe('Position Proxy Handler', function () {
         })
       }
       const proxyPositionFactory = new ProxyPositionFactory({
-        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)()
       })
       const givenPosition = proxyPositionFactory.create({
         id: '42',
@@ -37,7 +37,7 @@ describe('Position Proxy Handler', function () {
         })
       }
       const proxyPositionFactory = new ProxyPositionFactory({
-        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)()
       })
       const givenPosition = proxyPositionFactory.create({
         id: '42',
@@ -60,7 +60,7 @@ describe('Position Proxy Handler', function () {
         })
       }
       const proxyPositionFactory = new ProxyPositionFactory({
-        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)()
       })
       const givenPosition = proxyPositionFactory.create({
         id: '42',
@@ -81,7 +81,9 @@ describe('Position Proxy Handler', function () {
         find: ({id}) => undefined
       }
       const proxyPositionFactory = new ProxyPositionFactory({
-        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)({
+          timeout: 60
+        })
       })
       const givenPosition = proxyPositionFactory.create({
         id: '42',
@@ -110,7 +112,7 @@ describe('Position Proxy Handler', function () {
         })
       }
       const proxyPositionFactory = new ProxyPositionFactory({
-        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)()
       })
       const givenPosition = proxyPositionFactory.create({
         id: '42',
@@ -144,7 +146,10 @@ describe('Position Proxy Handler', function () {
         }
       })
       const proxyPositionFactory = new ProxyPositionFactory({
-        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)({
+          wait: 20,
+          timeout: 60
+        })
       })
       const givenPosition = proxyPositionFactory.create({
         id: '42',

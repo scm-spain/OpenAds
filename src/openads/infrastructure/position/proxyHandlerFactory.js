@@ -2,24 +2,23 @@ import {AD_AVAILABLE} from '../connector/appnexus/event/events'
 import AppNexusErrorException from '../connector/appnexus/AppNexusErrorException'
 
 const PROXY_PROPERTY = 'ad'
-const TIMEOUT = 20000
-const WAIT = 50
 const TIMEOUT_EXCEPTION = 'Something in appnexus consumer failed to set adResponse data'
-const APPNEXUS_ERROR = 'Appnexus error'
+const DEFAULT_TIMEOUT = 20000
+const DEFAULT_WAIT = 50
 
-const proxyHandlerFactory = repository => ({
+const proxyHandlerFactory = repository => ({wait = DEFAULT_WAIT, timeout = DEFAULT_TIMEOUT} = {}) => ({
   get: (target, name) => {
     if (name !== PROXY_PROPERTY) {
       return target[name]
     } else {
       return Promise.race([
-        resolveAdData(repository)(target)(name),
-        timeout()
+        resolveAdData(repository)(target)(name)(wait),
+        timeoutPromise(timeout)
       ])
     }
   }
 })
-let resolveAdData = repository => target => name => new Promise((resolve, reject) => {
+let resolveAdData = repository => target => name => wait => new Promise((resolve, reject) => {
   if (target[name] !== undefined) {
     resolve(target[name])
   } else {
@@ -31,7 +30,7 @@ let resolveAdData = repository => target => name => new Promise((resolve, reject
           clearInterval(stopper)
           resolveOrRejectByStatus(target)(name)(resolve)(reject)
         }
-      }, WAIT)
+      }, wait)
     } else {
       resolveOrRejectByStatus(target)(name)(resolve)(reject)
     }
@@ -44,18 +43,18 @@ const resolveOrRejectByStatus = target => name => resolve => reject => {
       break
     default:
       reject(new AppNexusErrorException({
+        position: target['id'],
         cause: target[name],
-        message: APPNEXUS_ERROR,
         status: target[name].status
       }))
       break
   }
 }
-let timeout = () => new Promise((resolve, reject) => {
+let timeoutPromise = (timeout) => new Promise((resolve, reject) => {
   let wait = setTimeout(() => {
     clearTimeout(wait)
     reject(new Error(TIMEOUT_EXCEPTION))
-  }, TIMEOUT)
+  }, timeout)
 })
 
 export default proxyHandlerFactory
