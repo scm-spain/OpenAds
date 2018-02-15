@@ -92,7 +92,7 @@ export default class OpenAds {
    * @param {string} position id
    * @return {Promise<Position>}
    */
-  displayPosition ({id}) {
+  displayPosition ({id} = {}) {
     return this._container.getInstance({key: 'DisplayPositionUseCase'}).displayPosition({id})
   }
 }

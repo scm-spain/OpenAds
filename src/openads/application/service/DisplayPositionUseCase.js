@@ -14,7 +14,7 @@ export default class DisplayPositionUseCase {
    * @param {string} position id
    * @return {Promise<Position>}
    */
-  displayPosition ({id}) {
+  displayPosition ({id} = {}) {
     return new Promise((resolve, reject) => {
       this._positionRepository.find({id})
         .then((foundPosition) => {

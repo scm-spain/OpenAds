@@ -12,6 +12,18 @@ describe('DisplayPositionUseCase test', () => {
       done()
     })
     describe('Given a non existing position', () => {
+      it('Should return a rejected promise when method is called without parameters', (done) => {
+        const positionRepositoryMock = {
+          find: () => Promise.resolve(null)
+        }
+        const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
+        displayPositionUseCase.displayPosition()
+          .then(() => done(new Error('Should be failing')))
+          .catch((err) => {
+            expect(err.message).equal('Position not found.')
+            done()
+          })
+      })
       it('Should return a rejected promise with an appropriate error', (done) => {
         const positionRepositoryMock = {
           find: () => Promise.resolve(null)
