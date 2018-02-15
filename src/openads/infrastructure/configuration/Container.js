@@ -25,6 +25,10 @@ import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
 import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from 'errorObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
+import proxyHandlerFactory from '../position/proxyHandlerFactory'
+import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
+import positionCreatedObserverFactory from '../position/positionCreatedObserver'
+import {POSITION_CREATED} from '../../domain/position/positionCreated'
 import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
 import positionDisplayedObserver from '../position/positionDisplayedObserver'
 import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
@@ -96,6 +100,12 @@ export default class Container {
     return new ProxyPositionFactory({
       proxyHandler: this.getInstance({key: 'ProxyHandler'})
     })
+  }
+  _buildProxyHandler () {
+    return proxyHandlerFactory(this.getInstance({key: 'AppNexusConsumersRepository'}))
+  }
+  _buildAppNexusConsumersRepository () {
+    return new AppNexusConsumersRepository()
   }
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
@@ -218,9 +228,16 @@ export default class Container {
     return positionAlreadyDisplayedObserver(appNexusConnector)
   }
 
+  _buildPositionCreatedObserverFactory () {
+    const connector = this.getInstance({key: 'AppNexusConnector'})
+    const appnexusConsumerRepository = this.getInstance({key: 'AppNexusConsumersRepository'})
+    return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
@@ -234,5 +251,9 @@ export default class Container {
     DomainEventBus.register({
       eventName: POSITION_ALREADY_DISPLAYED,
       observer: positionAlreadyDisplayedObserver})
+    DomainEventBus.register({
+      eventName: POSITION_CREATED,
+      observer: positionCreatedObserver
+    })
   }
 }

@@ -3,13 +3,14 @@ import sinon from 'sinon'
 import ProxyPositionFactory from '../../../../openads/infrastructure/position/ProxyPositionFactory'
 import proxyHandlerFactory from '../../../../openads/infrastructure/position/proxyHandlerFactory'
 import {POSITION_NOT_VISIBLE} from '../../../../openads/domain/position/positionStatus'
+import {AD_AVAILABLE, AD_ERROR} from '../../../../openads/infrastructure/connector/appnexus/event/events'
 
 describe('Position Proxy Handler', function () {
   describe('given a Domain Position wrapped in a Proxy', function () {
     it('should return a Promise for property ad', function () {
       const appNexusConsumersRepositoryMock = {
         find: ({id}) => ({
-          'status': 'bla',
+          'status': AD_AVAILABLE,
           'width': 200
         })
       }
@@ -31,7 +32,7 @@ describe('Position Proxy Handler', function () {
     it('shouldn\'t return a Promise for any property except ad', function () {
       const appNexusConsumersRepositoryMock = {
         find: ({id}) => ({
-          'status': 'bla',
+          'status': AD_AVAILABLE,
           'width': 200
         })
       }
@@ -54,7 +55,7 @@ describe('Position Proxy Handler', function () {
     it('should return a Promise for property ad with a given object from consumers repository', function () {
       const appNexusConsumersRepositoryMock = {
         find: ({id}) => ({
-          'status': 'bla',
+          'status': AD_AVAILABLE,
           'width': 200
         })
       }
@@ -72,7 +73,7 @@ describe('Position Proxy Handler', function () {
       })
       givenPosition.ad.then(adResponse => {
         expect(adResponse.width).to.be.equal(200)
-        expect(adResponse.status).to.be.equal('bla')
+        expect(adResponse.status).to.be.equal(AD_AVAILABLE)
       })
     })
     it('should reject a Promise due a timeout exception', function (done) {
@@ -99,6 +100,36 @@ describe('Position Proxy Handler', function () {
         })
     })
 
+    it('should reject a Promise due a status NOT equal to AD_AVAILABLE', function (done) {
+      const appNexusConsumersRepositoryMock = {
+        find: ({id}) => ({
+          'status': AD_ERROR,
+          'data': {
+            'width': 200
+          }
+        })
+      }
+      const proxyPositionFactory = new ProxyPositionFactory({
+        proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
+      })
+      const givenPosition = proxyPositionFactory.create({
+        id: '42',
+        name: 'Odin',
+        placement: 'islandia',
+        segmentation: 'godmode=true',
+        sizes: [[300, 300], [300, 200]],
+        native: {},
+        status: POSITION_NOT_VISIBLE
+      })
+      givenPosition.ad
+        .then(adResponse => done(new Error('Must fail by appnexus status response!')))
+        .catch(error => {
+          expect(error.status).to.be.equal(AD_ERROR)
+          expect(error.cause.data.width).to.be.equal(200)
+          done()
+        })
+    })
+
     it('should return a Promise just before the timeout limit', function (done) {
       const appNexusConsumersRepositoryMock = {
         find: ({id}) => undefined
@@ -107,8 +138,10 @@ describe('Position Proxy Handler', function () {
       findStub.onCall(0).returns(undefined)
       findStub.onCall(1).returns(undefined)
       findStub.onCall(2).returns({
-        'status': 'bla',
-        'width': 200
+        'status': AD_AVAILABLE,
+        'data': {
+          'width': 200
+        }
       })
       const proxyPositionFactory = new ProxyPositionFactory({
         proxyHandler: proxyHandlerFactory(appNexusConsumersRepositoryMock)
@@ -124,8 +157,8 @@ describe('Position Proxy Handler', function () {
       })
       givenPosition.ad
         .then(adResponse => {
-          expect(adResponse.width).to.be.equal(200)
-          expect(adResponse.status).to.be.equal('bla')
+          expect(adResponse.data.width).to.be.equal(200)
+          expect(adResponse.status).to.be.equal(AD_AVAILABLE)
           done()
         })
         .catch(error => done(error))

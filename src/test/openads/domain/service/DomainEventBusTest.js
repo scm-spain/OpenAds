@@ -28,11 +28,13 @@ describe('DomainEventBus test', () => {
       }
     })
     it('Should return 0 when calling getNumberOfRegisteredEvents if there is no events registered', (done) => {
+      DomainEventBus.clearAllObservers()
       const result = DomainEventBus.getNumberOfRegisteredEvents()
       expect(0).equal(result)
       done()
     })
     it('Should return 0 when calling getNumberOfObserversRegisteredForAnEvent if there is no events registered', (done) => {
+      DomainEventBus.clearAllObservers()
       const givenEventName = 'nonExistingEvent'
       const result = DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEventName})
       expect(0).equal(result)
