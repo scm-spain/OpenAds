@@ -27,6 +27,8 @@ import {errorObserverFactory} from 'errorObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
 import proxyHandlerFactory from '../position/proxyHandlerFactory'
 import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
+import positionCreatedObserverFactory from '../position/positionCreatedObserver'
+import {POSITION_CREATED} from '../../domain/position/positionCreated'
 
 export default class Container {
   constructor ({config}) {
@@ -205,11 +207,22 @@ export default class Container {
     return errorObserverFactory(logger)
   }
 
+  _buildPositionCreatedObserverFactory () {
+    const connector = this.getInstance({key: 'AppNexusConnector'})
+    const appnexusConsumerRepository = this.getInstance({key: 'AppNexusConsumersRepository'})
+    return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
+    DomainEventBus.register({
+      eventName: POSITION_CREATED,
+      observer: positionCreatedObserver
+    })
   }
 }
