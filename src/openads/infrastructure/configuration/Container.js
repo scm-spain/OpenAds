@@ -102,7 +102,10 @@ export default class Container {
     })
   }
   _buildProxyHandler () {
-    return proxyHandlerFactory(this.getInstance({key: 'AppNexusConsumersRepository'}))
+    return proxyHandlerFactory(this.getInstance({key: 'AppNexusConsumersRepository'}))({
+      wait: this._config.Sources.Pulling,
+      timeout: this._config.Sources.Timeout
+    })
   }
   _buildAppNexusConsumersRepository () {
     return new AppNexusConsumersRepository()
