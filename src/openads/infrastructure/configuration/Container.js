@@ -26,6 +26,10 @@ import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from 'errorObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
 import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
+import positionDisplayedObserver from '../position/positionDisplayedObserver'
+import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
+import positionAlreadyDisplayedObserver from '../position/positionAlreadyDisplayedObserver'
+import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
 
 export default class Container {
   constructor ({config}) {
@@ -204,11 +208,31 @@ export default class Container {
     })
   }
 
+  _buildPositionDisplayedObserver () {
+    const appNexusConnector = this.getInstance({key: 'AppNexusConnector'})
+    return positionDisplayedObserver(appNexusConnector)
+  }
+
+  _buildPositionAlreadyDisplayedObserver () {
+    const appNexusConnector = this.getInstance({key: 'AppNexusConnector'})
+    return positionAlreadyDisplayedObserver(appNexusConnector)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
+
+    const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
+    DomainEventBus.register({
+      eventName: POSITION_DISPLAYED,
+      observer: positionDisplayedObserver})
+
+    const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
+    DomainEventBus.register({
+      eventName: POSITION_ALREADY_DISPLAYED,
+      observer: positionAlreadyDisplayedObserver})
   }
 }
