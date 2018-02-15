@@ -87,7 +87,7 @@ export default class Position {
   /**
    * Changes the position status
    * @param {PositionStatus} newStatus
-   * @return {Promise<Position>}
+   * @return {Position}
    */
   changeStatus ({newStatus} = {}) {
     if (POSITION_VISIBLE === newStatus && POSITION_NOT_VISIBLE === this._status) {
@@ -115,8 +115,8 @@ export default class Position {
         status: this._status
       })})
     } else {
-      return Promise.reject(new Error('Invalid position status.'))
+      throw new Error('Invalid position status.')
     }
-    return Promise.resolve(this)
+    return this
   }
 }

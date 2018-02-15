@@ -5,12 +5,6 @@ import Position from '../../../../openads/domain/position/Position'
 
 describe('DisplayPositionUseCase test', () => {
   describe('display method test', () => {
-    it('Should return a promise', (done) => {
-      const positionRepositoryMock = {}
-      const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
-      expect(displayPositionUseCase.displayPosition({id: 1})).to.be.a('promise')
-      done()
-    })
     describe('Given a non existing position', () => {
       it('Should return a rejected promise when method is called without parameters', (done) => {
         const positionRepositoryMock = {
@@ -20,7 +14,7 @@ describe('DisplayPositionUseCase test', () => {
         displayPositionUseCase.displayPosition()
           .then(() => done(new Error('Should be failing')))
           .catch((err) => {
-            expect(err.message).equal('Position not found.')
+            expect(err.message).equal('PositionNotFound')
             done()
           })
       })
@@ -32,7 +26,7 @@ describe('DisplayPositionUseCase test', () => {
         displayPositionUseCase.displayPosition({id: 1})
           .then(() => done(new Error('Should be failing')))
           .catch((err) => {
-            expect(err.message).equal('Position not found.')
+            expect(err.message).equal('PositionNotFound')
             done()
           })
       })

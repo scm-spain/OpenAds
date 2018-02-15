@@ -15,16 +15,16 @@ export default class DisplayPositionUseCase {
    * @return {Promise<Position>}
    */
   displayPosition ({id} = {}) {
-    return new Promise((resolve, reject) => {
-      this._positionRepository.find({id})
-        .then((foundPosition) => {
-          if (foundPosition) {
-            foundPosition.changeStatus({newStatus: POSITION_VISIBLE})
-              .then((modifiedPosition) => resolve(this._positionRepository.save({position: modifiedPosition})))
-          } else {
-            reject(new Error('Position not found.'))
-          }
-        })
-    })
+    return this._positionRepository.find({id})
+      .then(this._resolveOptionalPosition)
+      .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
+      .then(modifiedPosition => this._positionRepository.save({position: modifiedPosition}))
+  }
+
+  _resolveOptionalPosition (optionalPosition) {
+    if (optionalPosition === null) {
+      throw new Error('PositionNotFound')
+    }
+    return optionalPosition
   }
 }

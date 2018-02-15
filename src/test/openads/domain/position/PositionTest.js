@@ -26,24 +26,22 @@ describe('Position test', () => {
   })
   describe('changeStatus method', () => {
     describe('Given an invalid input status', () => {
-      it('Should return a rejected promise', (done) => {
+      it('Should throw an error', (done) => {
         const position = new Position()
-        position.changeStatus()
-          .then(() => done(new Error('Should be failing')))
-          .catch((err) => {
-            expect(err.message).equals('Invalid position status.')
-            done()
-          })
+        try {
+          position.changeStatus()
+          done(new Error('Should be failing'))
+        } catch (err) {
+          done()
+        }
       })
     })
     describe('Given a valid input status', () => {
-      it('Should change the position status and return a promise containing the position with the changed status', (done) => {
+      it('Should change the position status and return the position with the changed status', (done) => {
         const position = new Position({status: POSITION_NOT_VISIBLE})
-        position.changeStatus({newStatus: POSITION_VISIBLE})
-          .then(() => {
-            expect(position.status).equal(POSITION_VISIBLE)
-            done()
-          })
+        const result = position.changeStatus({newStatus: POSITION_VISIBLE})
+        expect(result.status).equal(POSITION_VISIBLE)
+        done()
       })
       it('Should raise POSITION_DISPLAYED event when changing the position status from POSITION_NOT_VISIBLE to POSITION_VISIBLE', (done) => {
         const observer = {
@@ -54,15 +52,15 @@ describe('Position test', () => {
         const givenPosition = new Position({status: POSITION_NOT_VISIBLE})
         DomainEventBus.clearAllObservers()
         DomainEventBus.register({eventName: givenEventName, observer: observer.getObserverFunction})
+
         givenPosition.changeStatus({newStatus: POSITION_VISIBLE})
-          .then(() => {
-            expect(givenPosition.status).equal(POSITION_VISIBLE)
-            expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
-            expect(observerSpy.calledOnce).equal(true)
-            expect(observerSpy.lastCall.args[0].payload.id).undefined
-            expect(observerSpy.lastCall.args[0].payload.status).equal(POSITION_VISIBLE)
-            done()
-          })
+
+        expect(givenPosition.status).equal(POSITION_VISIBLE)
+        expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+        expect(observerSpy.calledOnce).equal(true)
+        expect(observerSpy.lastCall.args[0].payload.id).undefined
+        expect(observerSpy.lastCall.args[0].payload.status).equal(POSITION_VISIBLE)
+        done()
       })
       it('Should raise POSITION_ALREADY_DISPLAYED event when changing the position status from POSITION_VISIBLE to POSITION_VISIBLE', (done) => {
         const observer = {
@@ -73,15 +71,15 @@ describe('Position test', () => {
         const givenPosition = new Position({status: POSITION_VISIBLE})
         DomainEventBus.clearAllObservers()
         DomainEventBus.register({eventName: givenEventName, observer: observer.getObserverFunction})
+
         givenPosition.changeStatus({newStatus: POSITION_VISIBLE})
-          .then(() => {
-            expect(givenPosition.status).equal(POSITION_VISIBLE)
-            expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
-            expect(observerSpy.calledOnce).equal(true)
-            expect(observerSpy.lastCall.args[0].payload.id).undefined
-            expect(observerSpy.lastCall.args[0].payload.status).equal(POSITION_VISIBLE)
-            done()
-          })
+
+        expect(givenPosition.status).equal(POSITION_VISIBLE)
+        expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+        expect(observerSpy.calledOnce).equal(true)
+        expect(observerSpy.lastCall.args[0].payload.id).undefined
+        expect(observerSpy.lastCall.args[0].payload.status).equal(POSITION_VISIBLE)
+        done()
       })
     })
   })
