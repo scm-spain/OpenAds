@@ -20,7 +20,15 @@ import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
 import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
+import AddPositionUseCase from '../../application/service/AddPositionUseCase'
+import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
+import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from 'errorObserverFactory'
+import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
+import proxyHandlerFactory from '../position/proxyHandlerFactory'
+import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
+import positionCreatedObserverFactory from '../position/positionCreatedObserver'
+import {POSITION_CREATED} from '../../domain/position/positionCreated'
 
 export default class Container {
   constructor ({config}) {
@@ -72,6 +80,31 @@ export default class Container {
     return new HTMLDOMDriver({dom: window.document})
   }
 
+  _buildAddPositionUseCase () {
+    return new AddPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      positionFactory: this.getInstance({key: 'PositionFactory'})
+    })
+  }
+
+  _buildPositionRepository () {
+    return new InMemoryPositionRepository()
+  }
+
+  _buildPositionFactory () {
+    return new ProxyPositionFactory({
+      proxyHandler: this.getInstance({key: 'ProxyHandler'})
+    })
+  }
+  _buildProxyHandler () {
+    return proxyHandlerFactory(this.getInstance({key: 'AppNexusConsumersRepository'}))({
+      wait: this._config.Sources.Pulling,
+      timeout: this._config.Sources.Timeout
+    })
+  }
+  _buildAppNexusConsumersRepository () {
+    return new AppNexusConsumersRepository()
+  }
   _buildDisplayAdsUseCase () {
     return new DisplayAdsUseCase({
       adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
@@ -177,12 +210,22 @@ export default class Container {
     return errorObserverFactory(logger)
   }
 
+  _buildPositionCreatedObserverFactory () {
+    const connector = this.getInstance({key: 'AppNexusConnector'})
+    const appnexusConsumerRepository = this.getInstance({key: 'AppNexusConsumersRepository'})
+    return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
     DomainEventBus.register({
-      eventName: ERROR_EVENT,
+      eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
+    DomainEventBus.register({
+      eventName: POSITION_CREATED,
+      observer: positionCreatedObserver
+    })
   }
 }
-const ERROR_EVENT = 'ERROR_EVENT'
