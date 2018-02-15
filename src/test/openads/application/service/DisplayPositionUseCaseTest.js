@@ -14,7 +14,7 @@ describe('DisplayPositionUseCase test', () => {
         displayPositionUseCase.displayPosition()
           .then(() => done(new Error('Should be failing')))
           .catch((err) => {
-            expect(err.message).equal('PositionNotFound')
+            expect(err.message).equal('Position undefined not found.')
             done()
           })
       })
@@ -26,7 +26,7 @@ describe('DisplayPositionUseCase test', () => {
         displayPositionUseCase.displayPosition({id: 1})
           .then(() => done(new Error('Should be failing')))
           .catch((err) => {
-            expect(err.message).equal('PositionNotFound')
+            expect(err.message).equal('Position 1 not found.')
             done()
           })
       })

@@ -2,7 +2,7 @@ import {AD_AVAILABLE} from '../connector/appnexus/event/events'
 import AppNexusErrorException from '../connector/appnexus/AppNexusErrorException'
 
 const PROXY_PROPERTY = 'ad'
-const TIMEOUT = 20000
+const TIMEOUT = 200
 const WAIT = 50
 const TIMEOUT_EXCEPTION = 'Something in appnexus consumer failed to set adResponse data'
 const APPNEXUS_ERROR = 'Appnexus error'

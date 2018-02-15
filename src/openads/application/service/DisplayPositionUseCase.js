@@ -1,4 +1,5 @@
 import {POSITION_VISIBLE} from '../../domain/position/positionStatus'
+import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
 
 export default class DisplayPositionUseCase {
   /**
@@ -16,14 +17,14 @@ export default class DisplayPositionUseCase {
    */
   displayPosition ({id} = {}) {
     return this._positionRepository.find({id})
-      .then(this._resolveOptionalPosition)
+      .then(optionalPosition => this._resolveOptionalPosition({optionalPosition, id}))
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
       .then(modifiedPosition => this._positionRepository.save({position: modifiedPosition}))
   }
 
-  _resolveOptionalPosition (optionalPosition) {
+  _resolveOptionalPosition ({optionalPosition, id}) {
     if (optionalPosition === null) {
-      throw new Error('PositionNotFound')
+      throw new PositionNotFoundException({id: id})
     }
     return optionalPosition
   }
