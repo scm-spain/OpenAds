@@ -32,6 +32,9 @@ describe('Position test', () => {
           position.changeStatus()
           done(new Error('Should be failing'))
         } catch (err) {
+          expect(err.message).equal('Invalid Position Status: undefined')
+          expect(err.stack).not.undefined
+          expect(err.name).equal('InvalidPositionStatusException')
           done()
         }
       })

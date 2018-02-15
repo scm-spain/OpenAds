@@ -3,6 +3,7 @@ import {positionCreated} from './positionCreated'
 import {positionAlreadyDisplayed} from './positionAlreadyDisplayed'
 import {positionDisplayed} from './positionDisplayed'
 import DomainEventBus from '../service/DomainEventBus'
+import InvalidPositionStatusException from './InvalidPositionStatusException'
 
 export default class Position {
   /**
@@ -115,7 +116,7 @@ export default class Position {
         status: this._status
       })})
     } else {
-      throw new Error('Invalid position status.')
+      throw new InvalidPositionStatusException({status: newStatus})
     }
     return this
   }
