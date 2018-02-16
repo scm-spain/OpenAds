@@ -1,6 +1,8 @@
 export default class PositionNotFoundException extends Error {
   constructor ({id}) {
-    super(`Position ${id} not found.`)
+    super()
     this.name = 'PositionNotFoundException'
+    this.message = `Position ${id} not found.`
+    this.stack = (new Error()).stack
   }
 }
