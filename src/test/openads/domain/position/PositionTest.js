@@ -25,20 +25,6 @@ describe('Position test', () => {
     })
   })
   describe('changeStatus method', () => {
-    describe('Given an invalid input status', () => {
-      it('Should throw an error', (done) => {
-        const position = new Position()
-        try {
-          position.changeStatus()
-          done(new Error('Should be failing'))
-        } catch (err) {
-          expect(err.message).equal('Invalid Position Status: undefined')
-          expect(err.stack).not.undefined
-          expect(err.name).equal('InvalidPositionStatusException')
-          done()
-        }
-      })
-    })
     describe('Given a valid input status', () => {
       it('Should change the position status and return the position with the changed status', (done) => {
         const position = new Position({status: POSITION_NOT_VISIBLE})

@@ -15,7 +15,7 @@ export default class DisplayPositionUseCase {
    * @param {string} position id
    * @return {Promise<Position>}
    */
-  displayPosition ({id} = {}) {
+  displayPosition ({id}) {
     return this._positionRepository.find({id})
       .then(optionalPosition => this._resolveOptionalPosition({optionalPosition, id}))
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))

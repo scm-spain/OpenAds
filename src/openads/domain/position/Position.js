@@ -90,7 +90,7 @@ export default class Position {
    * @param {PositionStatus} newStatus
    * @return {Position}
    */
-  changeStatus ({newStatus} = {}) {
+  changeStatus ({newStatus}) {
     if (POSITION_VISIBLE === newStatus && POSITION_NOT_VISIBLE === this._status) {
       this._status = POSITION_VISIBLE
       DomainEventBus.raise({domainEvent: positionDisplayed({
