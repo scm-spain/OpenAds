@@ -1,6 +1,9 @@
-import {POSITION_NOT_VISIBLE} from './positionStatus'
+import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from './positionStatus'
 import {positionCreated} from './positionCreated'
+import {positionAlreadyDisplayed} from './positionAlreadyDisplayed'
+import {positionDisplayed} from './positionDisplayed'
 import DomainEventBus from '../service/DomainEventBus'
+import InvalidPositionStatusException from './InvalidPositionStatusException'
 
 export default class Position {
   /**
@@ -80,5 +83,41 @@ export default class Position {
 
   set ad (value) {
     this._ad = value
+  }
+
+  /**
+   * Changes the position status
+   * @param {PositionStatus} newStatus
+   * @return {Position}
+   */
+  changeStatus ({newStatus}) {
+    if (POSITION_VISIBLE === newStatus && POSITION_NOT_VISIBLE === this._status) {
+      this._status = POSITION_VISIBLE
+      DomainEventBus.raise({domainEvent: positionDisplayed({
+        id: this._id,
+        name: this._name,
+        source: this._source,
+        placement: this._placement,
+        segmentation: this._segmentation,
+        sizes: this._sizes,
+        native: this._native,
+        status: this._status
+      })})
+    } else if (POSITION_VISIBLE === newStatus && POSITION_VISIBLE === this._status) {
+      this._status = POSITION_VISIBLE
+      DomainEventBus.raise({domainEvent: positionAlreadyDisplayed({
+        id: this._id,
+        name: this._name,
+        source: this._source,
+        placement: this._placement,
+        segmentation: this._segmentation,
+        sizes: this._sizes,
+        native: this._native,
+        status: this._status
+      })})
+    } else {
+      throw new InvalidPositionStatusException({status: newStatus})
+    }
+    return this
   }
 }

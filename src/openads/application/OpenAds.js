@@ -86,4 +86,13 @@ export default class OpenAds {
   environment () {
     return this._container.config
   }
+
+  /**
+   * Displays a position in the page
+   * @param {string} position id
+   * @return {Promise<Position>}
+   */
+  displayPosition ({id} = {}) {
+    return this._container.getInstance({key: 'DisplayPositionUseCase'}).displayPosition({id})
+  }
 }

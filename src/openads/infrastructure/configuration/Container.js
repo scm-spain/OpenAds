@@ -29,6 +29,11 @@ import proxyHandlerFactory from '../position/proxyHandlerFactory'
 import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
 import positionCreatedObserverFactory from '../position/positionCreatedObserver'
 import {POSITION_CREATED} from '../../domain/position/positionCreated'
+import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
+import positionDisplayedObserver from '../position/positionDisplayedObserver'
+import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
+import positionAlreadyDisplayedObserver from '../position/positionAlreadyDisplayedObserver'
+import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
 
 export default class Container {
   constructor ({config}) {
@@ -210,6 +215,22 @@ export default class Container {
     return errorObserverFactory(logger)
   }
 
+  _buildDisplayPositionUseCase () {
+    return new DisplayPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'})
+    })
+  }
+
+  _buildPositionDisplayedObserver () {
+    const appNexusConnector = this.getInstance({key: 'AppNexusConnector'})
+    return positionDisplayedObserver(appNexusConnector)
+  }
+
+  _buildPositionAlreadyDisplayedObserver () {
+    const appNexusConnector = this.getInstance({key: 'AppNexusConnector'})
+    return positionAlreadyDisplayedObserver(appNexusConnector)
+  }
+
   _buildPositionCreatedObserverFactory () {
     const connector = this.getInstance({key: 'AppNexusConnector'})
     const appnexusConsumerRepository = this.getInstance({key: 'AppNexusConsumersRepository'})
@@ -220,9 +241,18 @@ export default class Container {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
+    const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
+    const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
+
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
+    DomainEventBus.register({
+      eventName: POSITION_DISPLAYED,
+      observer: positionDisplayedObserver})
+    DomainEventBus.register({
+      eventName: POSITION_ALREADY_DISPLAYED,
+      observer: positionAlreadyDisplayedObserver})
     DomainEventBus.register({
       eventName: POSITION_CREATED,
       observer: positionCreatedObserver
