@@ -29,6 +29,7 @@ import proxyHandlerFactory from '../position/proxyHandlerFactory'
 import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
 import positionCreatedObserverFactory from '../position/positionCreatedObserver'
 import {POSITION_CREATED} from '../../domain/position/positionCreated'
+import UpdatePositionUseCase from '../../application/service/UpdatePositionUseCase'
 
 export default class Container {
   constructor ({config}) {
@@ -84,6 +85,11 @@ export default class Container {
     return new AddPositionUseCase({
       positionRepository: this.getInstance({key: 'PositionRepository'}),
       positionFactory: this.getInstance({key: 'PositionFactory'})
+    })
+  }
+  _buildUpdatePositionUseCase () {
+    return new UpdatePositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'})
     })
   }
 

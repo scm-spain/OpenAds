@@ -21,6 +21,10 @@ export default class InMemoryPositionRepository extends PositionRepository {
       .then(() => position)
   }
 
+  update ({position}) {
+    return super.update({position})
+  }
+
   /**
    * Find a Position by id
    * @param {string} id

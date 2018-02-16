@@ -7,7 +7,9 @@ describe('Add Position use case', function () {
   describe('given a valid Position DTO', function () {
     it('should return a Promise', function () {
       const givenPositionDTO = {}
-      const positionRepositoryMock = {}
+      const positionRepositoryMock = {
+        save: ({position}) => Promise.resolve()
+      }
       const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
 
       const addPositionUseCase = new AddPositionUseCase({

@@ -10,6 +10,9 @@ export default class PositionRepository {
     throw new Error('PositionRepository#save must be implemented')
   }
 
+  update ({position}) {
+    throw new Error('PositionRepository#update must be implemented')
+  }
   /**
    * Given a position id will search it on persistence layer
    * @param {string} id

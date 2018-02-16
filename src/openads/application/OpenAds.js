@@ -50,6 +50,20 @@ export default class OpenAds {
     return this._container.getInstance({key: 'AddPositionUseCase'}).addPosition({id, name, source, placement, segmentation, sizes, native})
   }
 
+  /**
+   * Update a Position with given changes and refresh his Ad
+   * @param {string} id
+   * @param {object} position
+   * @param {string} position.name
+   * @param {string} position.placement
+   * @param {string} position.segmentation
+   * @param {Array} position.sizes
+   * @returns {Promise<Position>}
+   */
+  updatePosition ({id, position}) {
+    return this._container.getInstance({key: 'UpdatePositionUseCase'}).updatePosition({id, position})
+  }
+
   registerHook ({eventName, position, callback}) {
     this._container.getInstance({key: 'EventDispatcher'}).addObserver({
       eventName,
