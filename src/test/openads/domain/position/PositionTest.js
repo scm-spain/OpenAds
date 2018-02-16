@@ -1,6 +1,8 @@
-import {expect} from 'chai'
 import Position from '../../../../openads/domain/position/Position'
+import {expect} from 'chai'
+import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
+import sinon from 'sinon'
 import {POSITION_CREATED} from '../../../../openads/domain/position/positionCreated'
 import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
 
@@ -64,5 +66,53 @@ describe('Position', () => {
     })
     let updatedPosition = givenPosition.changeSegmentation()
     expect(updatedPosition.segmentation, 'Tricks for DOOM!!').to.be.equal('idkfa&iddqd')
+  })
+  describe('changeStatus method', () => {
+    describe('Given a valid input status', () => {
+      it('Should change the position status and return the position with the changed status', (done) => {
+        const position = new Position({status: POSITION_NOT_VISIBLE})
+        const result = position.changeStatus({newStatus: POSITION_VISIBLE})
+        expect(result.status).equal(POSITION_VISIBLE)
+        done()
+      })
+      it('Should raise POSITION_DISPLAYED event when changing the position status from POSITION_NOT_VISIBLE to POSITION_VISIBLE', (done) => {
+        const observer = {
+          getObserverFunction: ({payload, dispatcher}) => { }
+        }
+        const observerSpy = sinon.spy(observer, 'getObserverFunction')
+        const givenEventName = 'POSITION_DISPLAYED'
+        const givenPosition = new Position({status: POSITION_NOT_VISIBLE})
+        DomainEventBus.clearAllObservers()
+        DomainEventBus.register({eventName: givenEventName, observer: observer.getObserverFunction})
+
+        givenPosition.changeStatus({newStatus: POSITION_VISIBLE})
+
+        expect(givenPosition.status).equal(POSITION_VISIBLE)
+        expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+        expect(observerSpy.calledOnce).equal(true)
+        expect(observerSpy.lastCall.args[0].payload.id).undefined
+        expect(observerSpy.lastCall.args[0].payload.status).equal(POSITION_VISIBLE)
+        done()
+      })
+      it('Should raise POSITION_ALREADY_DISPLAYED event when changing the position status from POSITION_VISIBLE to POSITION_VISIBLE', (done) => {
+        const observer = {
+          getObserverFunction: ({payload, dispatcher}) => { }
+        }
+        const observerSpy = sinon.spy(observer, 'getObserverFunction')
+        const givenEventName = 'POSITION_ALREADY_DISPLAYED'
+        const givenPosition = new Position({status: POSITION_VISIBLE})
+        DomainEventBus.clearAllObservers()
+        DomainEventBus.register({eventName: givenEventName, observer: observer.getObserverFunction})
+
+        givenPosition.changeStatus({newStatus: POSITION_VISIBLE})
+
+        expect(givenPosition.status).equal(POSITION_VISIBLE)
+        expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
+        expect(observerSpy.calledOnce).equal(true)
+        expect(observerSpy.lastCall.args[0].payload.id).undefined
+        expect(observerSpy.lastCall.args[0].payload.status).equal(POSITION_VISIBLE)
+        done()
+      })
+    })
   })
 })

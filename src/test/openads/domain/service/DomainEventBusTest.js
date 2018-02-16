@@ -7,6 +7,9 @@ import DomainEventBusWrapper from './helper/DomainEventBusWrapper'
 import {positionCreated} from '../../../../openads/domain/position/positionCreated'
 
 describe('DomainEventBus test', () => {
+  beforeEach(() => {
+    DomainEventBus.clearAllObservers()
+  })
   describe('Given invalid register parameters', () => {
     it('Should fail if eventName is not present', (done) => {
       try {
@@ -49,7 +52,7 @@ describe('DomainEventBus test', () => {
         eventName: givenEventName,
         payload: 'domainEvent payload'
       }
-      DomainEventBus.clearAllObservers()
+
       DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
       DomainEventBus.raise({domainEvent})
 
@@ -72,7 +75,6 @@ describe('DomainEventBus test', () => {
       done()
     })
     it('Should clear all observers', (done) => {
-      DomainEventBus.clearAllObservers()
       expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(0)
       done()
     })
@@ -83,7 +85,6 @@ describe('DomainEventBus test', () => {
         payload: '1'
       }
 
-      DomainEventBus.clearAllObservers()
       DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
       DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
       DomainEventBus.raise({domainEvent: domainEvent})
@@ -119,7 +120,6 @@ describe('DomainEventBus test', () => {
       const spy1 = sinon.spy(observer1, 'getObserverFunction')
       const spy2 = sinon.spy(observer2, 'getObserverFunction')
 
-      DomainEventBus.clearAllObservers()
       DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
       DomainEventBus.register({eventName: givenEvent2Name, observer: observer2.getObserverFunction})
       DomainEventBus.raise({domainEvent: event1DomainEvent})
@@ -154,7 +154,6 @@ describe('DomainEventBus test', () => {
       const spy1 = sinon.spy(observer1, 'getObserverFunction')
       const spy2 = sinon.spy(observer2, 'getObserverFunction')
 
-      DomainEventBus.clearAllObservers()
       const errorObserver = (payload) => { console.log('ERROR_EVENT TEST: ', payload) }
       DomainEventBus.register({
         eventName: 'ERROR_EVENT',
@@ -174,7 +173,6 @@ describe('DomainEventBus test', () => {
 
   describe('Given 1 event with no subscribers', () => {
     it('Should do nothing', (done) => {
-      DomainEventBus.clearAllObservers()
       DomainEventBus.raise({domainEvent: positionCreated({})})
       done()
     })

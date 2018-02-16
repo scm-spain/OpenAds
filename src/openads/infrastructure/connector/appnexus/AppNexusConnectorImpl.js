@@ -68,4 +68,10 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     })
     return this
   }
+
+  refresh (...target) {
+    this._logger.debug('Refresh AppNexus Tag', '| target:', target)
+    this._appNexusClient.anq.push(() => this._appNexusClient.refresh(target))
+    return this
+  }
 }
