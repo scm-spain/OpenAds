@@ -21,8 +21,15 @@ export default class InMemoryPositionRepository extends PositionRepository {
       .then(() => position)
   }
 
+  /**
+   * Updates or creates given Position into memory
+   * @param {Position} position
+   * @returns {Promise<Position>}
+   */
   update ({position}) {
-    return super.update({position})
+    return Promise.resolve()
+      .then(() => this._positions.set(position.id, position))
+      .then(() => position)
   }
 
   /**

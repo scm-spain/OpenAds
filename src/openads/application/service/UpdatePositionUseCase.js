@@ -1,3 +1,5 @@
+import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
+
 export default class UpdatePositionUseCase {
   /**
    * Update a Position with given changes and refresh his Ad
@@ -18,7 +20,14 @@ export default class UpdatePositionUseCase {
    */
   updatePosition ({id, position}) {
     return this._positionRepository.find({id})
+      .then(optionalPosition => this._resolveOptionalPosition({optionalPosition, id}))
       .then(position => position.changeSegmentation({...position}))
       .then(positionUpdated => this._positionRepository.update({position: positionUpdated}))
+  }
+  _resolveOptionalPosition ({optionalPosition, id}) {
+    if (optionalPosition === null) {
+      throw new PositionNotFoundException({id: id})
+    }
+    return optionalPosition
   }
 }
