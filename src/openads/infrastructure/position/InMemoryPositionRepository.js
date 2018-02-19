@@ -2,9 +2,9 @@ import PositionRepository from '../../domain/position/PositionRepository'
 import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
 
 export default class InMemoryPositionRepository extends PositionRepository {
-  constructor () {
+  constructor ({positions = [[]]} = {}) {
     super()
-    this._positions = new Map()
+    this._positions = new Map(positions)
   }
 
   /**
@@ -14,8 +14,8 @@ export default class InMemoryPositionRepository extends PositionRepository {
    */
   save ({position}) {
     return this.find({id: position.id})
-      .then(position => {
-        if (position !== null) throw new PositionAlreadyExists({id: position.id})
+      .then(optionalPosition => {
+        if (optionalPosition) throw new PositionAlreadyExists({id: position.id})
       })
       .then(() => this._positions.set(position.id, position))
       .then(() => position)
@@ -28,7 +28,6 @@ export default class InMemoryPositionRepository extends PositionRepository {
    */
   find ({id}) {
     return Promise.resolve()
-      .then(() => this._positions.has(id))
-      .then(exists => exists ? this._positions.get(id) : null)
+      .then(() => this._positions.has(id) && this._positions.get(id))
   }
 }
