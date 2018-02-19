@@ -8,7 +8,7 @@ const positionCreatedObserverFactory = appnexusConnector => appNexusConsumersRep
       invCode: payload.placement,
       sizes: payload.sizes,
       keywords: payload.segmentation,
-      native: payload.native ? payload.native.fields : undefined
+      native: payload.native && payload.native.fields
     })
     .onEvent({
       event: AD_AVAILABLE,
