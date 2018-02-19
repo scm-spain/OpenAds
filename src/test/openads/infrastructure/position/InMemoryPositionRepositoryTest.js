@@ -1,5 +1,4 @@
 import {expect} from 'chai'
-import sinon from 'sinon'
 import InMemoryPositionRepository from '../../../../openads/infrastructure/position/InMemoryPositionRepository'
 import ProxyPositionFactory from '../../../../openads/infrastructure/position/ProxyPositionFactory'
 import {POSITION_NOT_VISIBLE} from '../../../../openads/domain/position/positionStatus'
