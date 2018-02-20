@@ -22,16 +22,18 @@ export default class RefreshPositionUseCase {
    */
   refreshPosition ({id, position}) {
     return this._positionRepository.find({id})
-      .then(optionalPosition => this._resolveOptionalPosition({optionalPosition, id}))
+      .then(optionalPosition => ({id, position: optionalPosition}))
+      .then(this._filterPositionExists)
       .then(this._filterPositionVisible)
       .then(positionToBeUpdated => positionToBeUpdated.changeSegmentation({...position}))
-      .then(positionUpdated => this._positionRepository.update({position: positionUpdated}))
+      .then(positionUpdated => this._positionRepository.saveOrUpdate({position: positionUpdated}))
   }
-  _resolveOptionalPosition ({optionalPosition, id}) {
-    if (!optionalPosition) {
-      throw new PositionNotFoundException({id: id})
+
+  _filterPositionExists (optionalPositionWithId) {
+    if (!optionalPositionWithId.position) {
+      throw new PositionNotFoundException({id: optionalPositionWithId.id})
     }
-    return optionalPosition
+    return optionalPositionWithId.position
   }
 
   _filterPositionVisible (position) {
