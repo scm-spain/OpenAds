@@ -239,13 +239,13 @@ export default class Container {
     return positionAlreadyDisplayedObserver(appNexusConnector)
   }
 
-  _buildPositionCreatedObserverFactory () {
+  _buildPositionCreatedObserver () {
     const connector = this.getInstance({key: 'AppNexusConnector'})
     const appnexusConsumerRepository = this.getInstance({key: 'AppNexusConsumersRepository'})
     return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
   }
 
-  _buildPositionSegmentationChangedObserverFactory () {
+  _buildPositionSegmentationChangedObserver () {
     const connector = this.getInstance({key: 'AppNexusConnector'})
     return positionSegmentationChangedObserverFactory(connector)
   }
@@ -253,7 +253,7 @@ export default class Container {
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
-    const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
+    const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserver'})
     const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
     const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
     const positionSegmentationChangedObserver = this.getInstance({key: 'PositionSegmentationChangedObserver'})
