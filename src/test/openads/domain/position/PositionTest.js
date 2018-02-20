@@ -7,6 +7,9 @@ import {POSITION_CREATED} from '../../../../openads/domain/position/positionCrea
 import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
 
 describe('Position', () => {
+  beforeEach(() => {
+    DomainEventBus.clearAllObservers()
+  })
   it('Should create a Domain Position and raise an event', () => {
     DomainEventBus.register({
       eventName: POSITION_CREATED,
@@ -48,11 +51,14 @@ describe('Position', () => {
   })
 
   it('Shouldn\'t update any field of the position', () => {
+    const observerSpy = sinon.spy()
+
     DomainEventBus.register({
       eventName: POSITION_SEGMENTATION_CHANGED,
       observer: ({payload, dispatcher}) => {
         expect(payload.id).to.be.equal('top1')
         expect(payload.segmentation).to.be.equal('idkfa&iddqd')
+        observerSpy()
       }
     })
     let givenPosition = new Position({
@@ -66,6 +72,7 @@ describe('Position', () => {
     })
     let updatedPosition = givenPosition.changeSegmentation()
     expect(updatedPosition.segmentation, 'Tricks for DOOM!!').to.be.equal('idkfa&iddqd')
+    expect(observerSpy.calledOnce, 'observer should be called once').to.be.true
   })
   describe('changeStatus method', () => {
     describe('Given a valid input status', () => {
@@ -101,7 +108,7 @@ describe('Position', () => {
         const observerSpy = sinon.spy(observer, 'getObserverFunction')
         const givenEventName = 'POSITION_ALREADY_DISPLAYED'
         const givenPosition = new Position({status: POSITION_VISIBLE})
-        DomainEventBus.clearAllObservers()
+
         DomainEventBus.register({eventName: givenEventName, observer: observer.getObserverFunction})
 
         givenPosition.changeStatus({newStatus: POSITION_VISIBLE})

@@ -29,12 +29,14 @@ import proxyHandlerFactory from '../position/proxyHandlerFactory'
 import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
 import positionCreatedObserverFactory from '../position/positionCreatedObserver'
 import {POSITION_CREATED} from '../../domain/position/positionCreated'
-import UpdatePositionUseCase from '../../application/service/UpdatePositionUseCase'
+import RefreshPositionUseCase from '../../application/service/RefreshPositionUseCase'
 import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
 import positionDisplayedObserver from '../position/positionDisplayedObserver'
 import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
 import positionAlreadyDisplayedObserver from '../position/positionAlreadyDisplayedObserver'
 import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
+import {POSITION_SEGMENTATION_CHANGED} from '../../domain/position/positionSegmentationChanged'
+import positionSegmentationChangedObserverFactory from '../position/positionSegmentationChangedObserver'
 
 export default class Container {
   constructor ({config}) {
@@ -92,8 +94,8 @@ export default class Container {
       positionFactory: this.getInstance({key: 'PositionFactory'})
     })
   }
-  _buildUpdatePositionUseCase () {
-    return new UpdatePositionUseCase({
+  _buildRefreshPositionUseCase () {
+    return new RefreshPositionUseCase({
       positionRepository: this.getInstance({key: 'PositionRepository'})
     })
   }
@@ -243,12 +245,18 @@ export default class Container {
     return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
   }
 
+  _buildPositionSegmentationChangedObserverFactory () {
+    const connector = this.getInstance({key: 'AppNexusConnector'})
+    return positionSegmentationChangedObserverFactory(connector)
+  }
+
   _buildEagerSingletonInstances () {
     this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserverFactory'})
     const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
     const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
+    const positionSegmentationChangedObserver = this.getInstance({key: 'PositionSegmentationChangedObserver'})
 
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
@@ -262,6 +270,10 @@ export default class Container {
     DomainEventBus.register({
       eventName: POSITION_CREATED,
       observer: positionCreatedObserver
+    })
+    DomainEventBus.register({
+      eventName: POSITION_SEGMENTATION_CHANGED,
+      observer: positionSegmentationChangedObserver
     })
   }
 }

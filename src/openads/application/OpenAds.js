@@ -60,8 +60,8 @@ export default class OpenAds {
    * @param {Array} position.sizes
    * @returns {Promise<Position>}
    */
-  updatePosition ({id, position}) {
-    return this._container.getInstance({key: 'UpdatePositionUseCase'}).updatePosition({id, position})
+  refreshPosition ({id, position}) {
+    return this._container.getInstance({key: 'RefreshPositionUseCase'}).refreshPosition({id, position})
   }
 
   registerHook ({eventName, position, callback}) {

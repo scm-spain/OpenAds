@@ -76,7 +76,7 @@ describe('InMemory Position Repository', function () {
         .catch(error => done(error))
     })
 
-    it('should not find position and return Promise with null value', function (done) {
+    it('should not find position and return Promise with false value', function (done) {
       const inMemoryPositionRepository = new InMemoryPositionRepository({
         positions: [
           ['42', {
