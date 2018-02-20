@@ -1,5 +1,4 @@
 import PositionRepository from '../../domain/position/PositionRepository'
-import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
 
 export default class InMemoryPositionRepository extends PositionRepository {
   constructor ({positions = [[]]} = {}) {
