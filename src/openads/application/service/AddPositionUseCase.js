@@ -1,3 +1,5 @@
+import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
+
 export default class AddPositionUseCase {
   /**
    * @constructor
@@ -23,8 +25,15 @@ export default class AddPositionUseCase {
    * @returns {Promise<Position>}
    */
   addPosition ({id, name, source, placement, segmentation, sizes, native}) {
-    return Promise.resolve()
+    return this._positionRepository.find({id})
+      .then(this._filterPositionAlreadyExists)
       .then(() => this._positionFactory.create({id, name, source, placement, segmentation, sizes, native}))
-      .then(position => this._positionRepository.save({position}))
+      .then(position => this._positionRepository.saveOrUpdate({position}))
+  }
+  _filterPositionAlreadyExists (optionalPosition) {
+    if (optionalPosition) {
+      throw new PositionAlreadyExists({id: optionalPosition.id})
+    }
+    return optionalPosition
   }
 }

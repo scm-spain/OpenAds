@@ -3,15 +3,12 @@
  */
 export default class PositionRepository {
   /**
-   * Given a domain position will store it in persistence layer
+   * Given a domain position will store it or update it in persistence layer
    * @param {Position} page
+   * @returns {Promise<Position>}
    */
-  save ({position}) {
+  saveOrUpdate ({position}) {
     throw new Error('PositionRepository#save must be implemented')
-  }
-
-  update ({position}) {
-    throw new Error('PositionRepository#update must be implemented')
   }
   /**
    * Given a position id will search it on persistence layer

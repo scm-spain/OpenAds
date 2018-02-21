@@ -28,7 +28,7 @@ describe('Refresh Position use case', function () {
       })
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(givenPosition),
-        update: ({position}) => Promise.resolve(position)
+        saveOrUpdate: ({position}) => Promise.resolve(position)
       }
       const refreshPositionUseCase = new RefreshPositionUseCase({
         positionRepository: positionRepositoryMock
@@ -90,7 +90,7 @@ describe('Refresh Position use case', function () {
       })
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(givenPosition),
-        update: ({position}) => Promise.resolve(position)
+        saveOrUpdate: ({position}) => Promise.resolve(position)
       }
       const refreshPositionUseCase = new RefreshPositionUseCase({
         positionRepository: positionRepositoryMock

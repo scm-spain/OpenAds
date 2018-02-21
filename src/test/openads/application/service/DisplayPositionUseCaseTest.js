@@ -8,7 +8,7 @@ describe('DisplayPositionUseCase test', () => {
     describe('Given a non existing position', () => {
       it('Should return a rejected promise with an appropriate error', (done) => {
         const positionRepositoryMock = {
-          find: () => Promise.resolve(null)
+          find: () => Promise.resolve(false)
         }
         const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
         displayPositionUseCase.displayPosition({id: 1})
@@ -28,7 +28,7 @@ describe('DisplayPositionUseCase test', () => {
         })
         const positionRepositoryMock = {
           find: () => Promise.resolve(givenPosition),
-          save: ({position}) => Promise.resolve(position)
+          saveOrUpdate: ({position}) => Promise.resolve(position)
         }
         const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
         displayPositionUseCase.displayPosition({id: givenIdPosition})
