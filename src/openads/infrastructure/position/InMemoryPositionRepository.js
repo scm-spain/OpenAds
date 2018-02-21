@@ -1,5 +1,4 @@
 import PositionRepository from '../../domain/position/PositionRepository'
-import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
 
 export default class InMemoryPositionRepository extends PositionRepository {
   constructor ({positions = [[]]} = {}) {
@@ -12,15 +11,11 @@ export default class InMemoryPositionRepository extends PositionRepository {
    * @param {Position} position
    * @returns {Promise<Position>}
    */
-  save ({position}) {
-    return this.find({id: position.id})
-      .then(optionalPosition => {
-        if (optionalPosition) throw new PositionAlreadyExists({id: position.id})
-      })
+  saveOrUpdate ({position}) {
+    return Promise.resolve()
       .then(() => this._positions.set(position.id, position))
       .then(() => position)
   }
-
   /**
    * Find a Position by id
    * @param {string} id

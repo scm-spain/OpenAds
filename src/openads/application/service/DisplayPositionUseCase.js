@@ -17,15 +17,16 @@ export default class DisplayPositionUseCase {
    */
   displayPosition ({id}) {
     return this._positionRepository.find({id})
-      .then(optionalPosition => this._resolveOptionalPosition({optionalPosition, id}))
+      .then(optionalPosition => ({id, position: optionalPosition}))
+      .then(this._filterPositionExists)
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
-      .then(modifiedPosition => this._positionRepository.save({position: modifiedPosition}))
+      .then(modifiedPosition => this._positionRepository.saveOrUpdate({position: modifiedPosition}))
   }
 
-  _resolveOptionalPosition ({optionalPosition, id}) {
-    if (optionalPosition === null) {
-      throw new PositionNotFoundException({id: id})
+  _filterPositionExists (optionalPositionWithId) {
+    if (!optionalPositionWithId.position) {
+      throw new PositionNotFoundException({id: optionalPositionWithId.id})
     }
-    return optionalPosition
+    return optionalPositionWithId.position
   }
 }

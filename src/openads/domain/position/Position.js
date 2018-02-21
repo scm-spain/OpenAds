@@ -3,6 +3,7 @@ import {positionCreated} from './positionCreated'
 import {positionAlreadyDisplayed} from './positionAlreadyDisplayed'
 import {positionDisplayed} from './positionDisplayed'
 import DomainEventBus from '../service/DomainEventBus'
+import {positionSegmentationChanged} from './positionSegmentationChanged'
 import InvalidPositionStatusException from './InvalidPositionStatusException'
 
 export default class Position {
@@ -33,16 +34,18 @@ export default class Position {
     this._status = status
     this._ad = ad
 
-    DomainEventBus.raise({domainEvent: positionCreated({
-      id: this._id,
-      name: this._name,
-      source: this._source,
-      placement: this._placement,
-      segmentation: this._segmentation,
-      sizes: this._sizes,
-      native: this._native,
-      status: this._status
-    })})
+    DomainEventBus.raise({
+      domainEvent: positionCreated({
+        id: this._id,
+        name: this._name,
+        source: this._source,
+        placement: this._placement,
+        segmentation: this._segmentation,
+        sizes: this._sizes,
+        native: this._native,
+        status: this._status
+      })
+    })
   }
 
   get id () {
@@ -118,6 +121,37 @@ export default class Position {
     } else {
       throw new InvalidPositionStatusException({status: newStatus})
     }
+    return this
+  }
+
+  /**
+   * Update Position with given changes
+   * @param {{name: *, placement: *}} position
+   * @param {string} position.name
+   * @param {string} position.placement
+   * @param {string} position.segmentation
+   * @param {Array} position.sizes
+   * @returns {Position}
+   */
+  changeSegmentation ({ name = this._name, placement = this._placement, segmentation = this._segmentation, sizes = this._sizes } = {}) {
+    this._ad = undefined
+    this._name = name
+    this._placement = placement
+    this._segmentation = segmentation
+    this._sizes = sizes
+
+    DomainEventBus.raise({
+      domainEvent: positionSegmentationChanged({
+        id: this._id,
+        name: this._name,
+        source: this._source,
+        placement: this._placement,
+        segmentation: this._segmentation,
+        sizes: this._sizes,
+        native: this._native,
+        status: this._status
+      })
+    })
     return this
   }
 }

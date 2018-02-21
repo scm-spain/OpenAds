@@ -18,7 +18,7 @@ describe('InMemory Position Repository', function () {
         status: POSITION_NOT_VISIBLE
       })
       const inMemoryPositionRepository = new InMemoryPositionRepository()
-      expect(inMemoryPositionRepository.save({position: givenPosition})).to.be.a('promise')
+      expect(inMemoryPositionRepository.saveOrUpdate({position: givenPosition})).to.be.a('promise')
     })
 
     it('should save it and return a Promise', function () {
@@ -34,7 +34,7 @@ describe('InMemory Position Repository', function () {
         status: POSITION_NOT_VISIBLE
       })
       const inMemoryPositionRepository = new InMemoryPositionRepository()
-      inMemoryPositionRepository.save({position: givenPosition})
+      inMemoryPositionRepository.saveOrUpdate({position: givenPosition})
         .then(position => expect(position.id, 'position not saved').to.equal(givenPosition.id))
     })
   })
@@ -76,7 +76,7 @@ describe('InMemory Position Repository', function () {
         .catch(error => done(error))
     })
 
-    it('should not find position and return Promise with null value', function (done) {
+    it('should not find position and return Promise with false value', function (done) {
       const inMemoryPositionRepository = new InMemoryPositionRepository({
         positions: [
           ['42', {
@@ -109,8 +109,19 @@ describe('InMemory Position Repository', function () {
         })
         .catch(error => done(error))
     })
+    it('should update one Position and return Promise', function (done) {
+      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const givenPosition = positionFactory.create({
+        id: '42',
+        name: 'updatedName',
+        source: 'appnexus',
+        placement: 'updatedPlacement',
+        segmentation: 'updatedSegmentation',
+        sizes: [],
+        native: {},
+        status: POSITION_NOT_VISIBLE
+      })
 
-    it('should return a PositionAlreadyExists error', function (done) {
       const inMemoryPositionRepository = new InMemoryPositionRepository({
         positions: [
           ['42', {
@@ -136,24 +147,15 @@ describe('InMemory Position Repository', function () {
         ]
       })
 
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
-      const givenPosition = positionFactory.create({
-        id: '42',
-        name: 'lala',
-        source: 'appnexus',
-        placement: 'blabla',
-        segmentation: 'adsasd',
-        sizes: [],
-        native: {},
-        status: POSITION_NOT_VISIBLE
-      })
-
-      inMemoryPositionRepository.save({position: givenPosition})
-        .then(position => done(new Error('should throw an error')))
-        .catch(error => {
-          expect(error.name, 'Error type is not PositionAlreadyExists').to.equal('PositionAlreadyExists')
+      inMemoryPositionRepository.saveOrUpdate({position: givenPosition})
+        .then(positionUpdated => {
+          expect(positionUpdated.id, 'position not updated').to.equal(givenPosition.id)
+          expect(positionUpdated.name, 'position name not updated').to.equal(givenPosition.name)
+          expect(positionUpdated.placement, 'position placement not updated').to.equal(givenPosition.placement)
+          expect(positionUpdated.segmentation, 'position segmentation not updated').to.equal(givenPosition.segmentation)
           done()
         })
+        .catch(error => done(error))
     })
   })
 })
