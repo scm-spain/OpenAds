@@ -3,6 +3,7 @@ import PositionNotFoundException from '../../domain/position/PositionNotFoundExc
 import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 import PositionAdIsNativeError from '../../domain/position/PositionAdIsNativeError'
+import {NATIVE} from '../../domain/value-objects/AdTypes'
 
 export default class DisplayPositionUseCase {
   /**
@@ -45,7 +46,7 @@ export default class DisplayPositionUseCase {
   _filterPositionAdIsNative (position) {
     return position.ad
       .then(adResponse => adResponse.data.adType)
-      .then(adType => adType === 'native')
+      .then(adType => adType === NATIVE)
       .then(isNative => isNative ? Promise.reject(new PositionAdIsNativeError({id: position.id})) : position)
   }
 }
