@@ -53,5 +53,4 @@ export default class OpenAds {
   environment () {
     return this._container.config
   }
-
 }
