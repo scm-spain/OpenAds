@@ -24,7 +24,7 @@ export default class DisplayPositionUseCase {
       .then(optionalPosition => ({id, position: optionalPosition}))
       .then(this._filterPositionExists)
       .then(this._filterPositionAdAvailable)
-      .then(this._filterPositionAdIsNative)
+      .then(this._filterPositionAdNoNative)
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
       .then(modifiedPosition => this._positionRepository.saveOrUpdate({position: modifiedPosition}))
   }
@@ -43,7 +43,7 @@ export default class DisplayPositionUseCase {
       .then(available => available ? position : Promise.reject(new PositionAdNotAvailableError({id: position.id})))
   }
 
-  _filterPositionAdIsNative (position) {
+  _filterPositionAdNoNative (position) {
     return position.ad
       .then(adResponse => adResponse.data.adType)
       .then(adType => adType === NATIVE)
