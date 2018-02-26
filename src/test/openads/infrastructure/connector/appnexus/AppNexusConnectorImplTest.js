@@ -290,9 +290,9 @@ describe('AppNexusConnectorImpl implementation', function () {
       })
 
       const givenPageOpts = {member: 1111, keywords: {p1: 'pv1'}}
-      const givenDefineTag = {member: 2222, targetId: 'Ad1', invCode: 'inv1', sizes: [[1,1]], keywords: {p2: 'pv2'}, native: {}}
+      const givenDefineTag = {member: 2222, targetId: 'Ad1', invCode: 'inv1', sizes: [[1, 1]], keywords: {p2: 'pv2'}, native: {}}
       const givenShowTag = {target: 'Ad1'}
-      const givenModifyTag = {targetId: 'Ad1', data: {member: 2223, invCode: 'inv2', sizes: [[1,1]], keywords: {p3: 'pv3'}, native: {}}}
+      const givenModifyTag = {targetId: 'Ad1', data: {member: 2223, invCode: 'inv2', sizes: [[1, 1]], keywords: {p3: 'pv3'}, native: {}}}
       const givenRefresh = ['Ad1', 'Ad2']
       appNexusConnectorImpl
         .setPageOpts(givenPageOpts)
