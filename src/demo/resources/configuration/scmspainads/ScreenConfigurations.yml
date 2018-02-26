@@ -1,0 +1,8 @@
+SCMSpainAds:
+  # Define DesktopLaptop, Tablet, MobileLarge, Mobile to MAX accepted with for device (included)
+  ScreenConfigurations:
+    # DesktopLarge
+    DesktopLaptop: 1300
+    Tablet: 969
+    MobileLarge: 727
+    Mobile: 0

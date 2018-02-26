@@ -1,0 +1,4 @@
+SCMSpainAds:
+  OpenAds:
+    LogLevel:
+      Level: debug

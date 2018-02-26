@@ -1,0 +1,161 @@
+SCMSpainAds:
+  PageNames:
+    cochesnet/accesorios/ficha:
+      section: accesorios
+      page: detail
+    cochesnet/accesorios/home:
+      section: accesorios
+      page: list
+    cochesnet/accesorios/listado:
+      section: accesorios
+      page: list
+    cochesnet/caravanas/ficha:
+      section: caravanas
+      page: detail
+    cochesnet/caravanas/home:
+      section: caravanas
+      page: list
+    cochesnet/caravanas/listado:
+      section: caravanas
+      page: list
+    cochesnet/carfactory/vo:
+      section: carfactory
+      page: vo
+    cochesnet/clasicos/ficha:
+      section: clasicos
+      page: detail
+    cochesnet/clasicos/home:
+      section: clasicos
+      page: list
+    cochesnet/clasicos/listado:
+      section: clasicos
+      page: list
+    cochesnet/ev/vo/fevrenting:
+      section: ev
+      page: vofevrenting
+    cochesnet/ev/vo:
+      section: ev
+      page: vo
+    cochesnet/fichastecnicas/comparativa:
+      section: fichastecnicas
+      page: comparativa
+    cochesnet/fichastecnicas/ficha:
+      section: fichastecnicas
+      page: detail
+    cochesnet/fichastecnicas/listado:
+      section: fichastecnicas
+      page: list
+    cochesnet/fichastecnicas/home:
+      section: fichastecnicas
+      page: list
+    cochesnet/foros/ficha:
+      section: foros
+      page: detail
+    cochesnet/foros/home:
+      section: foros
+      page: home
+    cochesnet/home:
+      section: home
+      page: home
+    homepage:
+      section: home
+      page: home
+    cochesnet/industriales/ficha:
+      section: industriales
+      page: detail
+    cochesnet/industriales/listado:
+      section: industriales
+      page: list
+    cochesnet/industriales/home:
+      section: industriales
+      page: list
+    cochesnet/km0/home:
+      section: km0
+      page: list
+    cochesnet/km0/listado:
+      section: km0
+      page: list
+    cochesnet/noticias/ficha:
+      section: noticias
+      page: detail
+    cochesnet/noticias/fotos:
+      section: noticias
+      page: fotos
+    cochesnet/noticias/home:
+      section: noticias
+      page: home
+    cochesnet/nuevos/ficha:
+      section: nuevos
+      page: detail
+    cochesnet/nuevos/home:
+      section: nuevos
+      page: list
+    cochesnet/nuevos/listado:
+      section: nuevos
+      page: list
+    cochesnet/ocasion/ficha:
+      section: ocasion
+      page: detail
+    cochesnet/ocasion/listado:
+      section: ocasion
+      page: list
+    cochesnet/ocasion/home:
+      section: ocasion
+      page: list
+    cochesnet/sincarnet/ficha:
+      section: sincarnet
+      page: detail
+    cochesnet/sincarnet/home:
+      section: sincarnet
+      page: list
+    cochesnet/sincarnet/listado:
+      section: sincarnet
+      page: list
+    cochesnet/tasacion/home:
+      section: otros
+      page: otros
+    cochesnet/tasacion/ficha:
+      section: otros
+      page: otros
+    cochesnet/ofertas/home:
+      section: otros
+      page: otros
+    cochesnet/ofertas/ficha:
+      section: otros
+      page: otros
+    cochesnet/talleres/home:
+      section: otros
+      page: otros
+    cochesnet/wdyl:
+      section: otros
+      page: otros
+    cochesnet/tramites/itv:
+      section: otros
+      page: otros
+    cochesnet/tramites:
+      section: otros
+      page: otros
+    cochesnet/estadisticas:
+      section: otros
+      page: otros
+    cochesnet/marca/home:
+      section: otros
+      page: otros
+    cochesnet/marca/hibridos:
+      section: otros
+      page: otros
+    cochesnet/noticias/mantenimiento:
+      section: otros
+      page: otros
+    cochesnet/noticias/boletin:
+      section: otros
+      page: otros
+    cochesnet/km0/ficha:
+      section: km0
+      page: detail
+    foro/list:
+      section: foros
+      page: home
+    foro/discussion:
+      section: foros
+      page: home
