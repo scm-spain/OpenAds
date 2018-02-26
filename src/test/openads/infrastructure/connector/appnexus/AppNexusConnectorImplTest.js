@@ -289,23 +289,32 @@ describe('AppNexusConnectorImpl implementation', function () {
         logger: loggerMock
       })
 
+      const givenPageOpts = {member: 1111, keywords: {p1: 'pv1'}}
+      const givenDefineTag = {member: 2222, targetId: 'Ad1', invCode: 'inv1', sizes: [[1,1]], keywords: {p2: 'pv2'}, native: {}}
+      const givenShowTag = {target: 'Ad1'}
+      const givenModifyTag = {targetId: 'Ad1', data: {member: 2223, invCode: 'inv2', sizes: [[1,1]], keywords: {p3: 'pv3'}, native: {}}}
+      const givenRefresh = ['Ad1', 'Ad2']
       appNexusConnectorImpl
-        .setPageOpts({})
-        .defineTag({})
-        .loadTags({})
-        .showTag({})
-        .modifyTag({})
-        .refresh('1', '2', '3')
+        .setPageOpts(givenPageOpts)
+        .defineTag(givenDefineTag)
+        .loadTags()
+        .showTag(givenShowTag)
+        .modifyTag(givenModifyTag)
+        .refresh(givenRefresh)
 
+      expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(6)
       expect(setPageOptsSpy.called).to.be.true
       expect(defineTagSpy.called).to.be.true
       expect(loadTagsSpy.called).to.be.true
       expect(showTagSpy.called).to.be.true
-      expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(6)
       expect(modifyTagSpy.called).to.be.true
-      expect(refreshSpy.callCount).equal(1)
-      expect(refreshSpy.lastCall.args.length).equal(1)
-      expect(refreshSpy.lastCall.args[0].length).equal(3)
+      expect(refreshSpy.called).to.be.true
+      expect(setPageOptsSpy.lastCall.args[0]).to.deep.equal(givenPageOpts)
+      expect(defineTagSpy.lastCall.args[0]).to.deep.equal(givenDefineTag)
+      expect(showTagSpy.lastCall.args[0]).to.deep.equal(givenShowTag.target)
+      expect(modifyTagSpy.lastCall.args[0]).to.deep.equal(givenModifyTag.targetId)
+      expect(modifyTagSpy.lastCall.args[1]).to.deep.equal(givenModifyTag.data)
+      expect(refreshSpy.lastCall.args[0]).to.deep.equal(givenRefresh)
     })
   })
 })

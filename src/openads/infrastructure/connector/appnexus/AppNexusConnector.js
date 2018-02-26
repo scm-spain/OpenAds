@@ -69,7 +69,7 @@ export default class AppNexusConnector extends Connector {
    * Refreshes ads on the page.
    * @param target : an array of ids
    */
-  refresh (...target) {
+  refresh (target) {
     throw new Error('AppNexusConnector#refresh must be implemented')
   }
 
