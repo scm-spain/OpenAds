@@ -152,7 +152,6 @@ export default class Container {
   }
 
   _buildEagerSingletonInstances () {
-    this.getInstance({key: 'EventDispatcher'})
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserver'})
     const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
