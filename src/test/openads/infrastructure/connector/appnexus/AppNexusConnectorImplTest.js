@@ -267,13 +267,15 @@ describe('AppNexusConnectorImpl implementation', function () {
         defineTag: () => null,
         loadTags: () => null,
         showTag: () => null,
-        refresh: () => null
+        refresh: () => null,
+        modifyTag: () => null
       }
       const setPageOptsSpy = sinon.spy(appNexusClientMock, 'setPageOpts')
       const defineTagSpy = sinon.spy(appNexusClientMock, 'defineTag')
       const loadTagsSpy = sinon.spy(appNexusClientMock, 'loadTags')
       const showTagSpy = sinon.spy(appNexusClientMock, 'showTag')
       const loggerSpy = sinon.spy()
+      const modifyTagSpy = sinon.spy(appNexusClientMock, 'modifyTag')
       const refreshSpy = sinon.spy(appNexusClientMock, 'refresh')
 
       const loggerMock = {
@@ -292,13 +294,15 @@ describe('AppNexusConnectorImpl implementation', function () {
         .defineTag({})
         .loadTags({})
         .showTag({})
+        .modifyTag({})
         .refresh('1', '2', '3')
 
       expect(setPageOptsSpy.called).to.be.true
       expect(defineTagSpy.called).to.be.true
       expect(loadTagsSpy.called).to.be.true
       expect(showTagSpy.called).to.be.true
-      expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(5)
+      expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(6)
+      expect(modifyTagSpy.called).to.be.true
       expect(refreshSpy.callCount).equal(1)
       expect(refreshSpy.lastCall.args.length).equal(1)
       expect(refreshSpy.lastCall.args[0].length).equal(3)
