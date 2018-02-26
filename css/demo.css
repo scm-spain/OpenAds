@@ -1,0 +1,107 @@
+.ad-DemoWrapper {
+    position: relative;
+    margin:0 auto;
+    text-align: center;
+    z-index: 9999;
+}
+
+.ad-DemoButton {
+    background-color: #E84C3D;
+    color: #ffffff;
+    border: none;
+    position: absolute;
+    border-radius: 0 0 6px 6px;
+    outline: 0;
+    padding: 3px 6px;
+    cursor: pointer;
+    z-index: 2;
+}
+
+#ad-Demo {
+    background-color: #E84C3D;
+    color: white;
+    font-size: 16px;
+    text-align: center;
+    overflow: hidden;
+    border-radius: 0 0 10px 10px;
+}
+
+.ad-DemoWrapper a {
+    padding: 8px;
+    color: #ffffff;
+    display: inline-block;
+    text-decoration: none;
+    font-weight:normal;
+}
+
+.ad-DemoWrapper a:hover {
+    text-shadow: 1px 1px 1px #000000;
+}
+
+@media screen and (max-width: 667px) {
+
+    #ad-Demo {
+        column-count: 2;
+    }
+
+    .ad-DemoWrapper a {
+        padding: 4px;
+        font-size: 14px;
+    }
+}
+
+@media screen and (max-width: 480px) {
+    .ad-DemoWrapper a {
+        font-size: 13px;
+    }
+}
+/* DEMO NOVEDADES */
+
+
+.mt-AdL {
+    position: relative;
+}
+
+.ad-AdlContainer {
+    position: absolute;
+    top: 0;
+}
+
+.ad-Grid-item {
+    display: inline-block;
+    width: 100%;
+}
+
+@media screen and (min-width: 616px) {
+    .ad-Grid {
+        column-count: 2;
+        display: block;
+        position: relative;
+        column-gap: 0;
+    }
+}
+
+@media screen and (min-width: 986px) {
+    .ad-Grid {
+        column-count: 3;
+        display: block;
+        position: relative;
+        column-gap: 0;
+    }
+
+    .ad-Grid-article {
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 33.3333%;
+    }
+
+    .ad-Grid-item:nth-child(16) {
+        margin-top: 216px;
+    }
+}
+@media screen and (min-width: 986px) {
+    .ad-DemoWrapper.mt-AdL {
+        padding-right: 0;
+    }
+}
