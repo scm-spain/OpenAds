@@ -1650,7 +1650,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 var openAds = _index2.default.init({ config: {
     Sources: {
       AppNexus: {
-        Member: 3397
+        Member: 3296
       }
     }
   } });
@@ -1658,7 +1658,7 @@ var openAds = _index2.default.init({ config: {
 _promise2.default.all([openAds.addPosition({
   id: 'PubTop1',
   name: 'Top1',
-  source: 'appnexus',
+  source: 'AppNexus',
   placement: 'es-cn-wde-ocasion-list-top_1',
   segmentation: {
     'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
@@ -1673,7 +1673,7 @@ _promise2.default.all([openAds.addPosition({
 }), openAds.addPosition({
   id: 'PubTop2',
   name: 'Top2',
-  source: 'appnexus',
+  source: 'AppNexus',
   placement: 'es-cn-wde-ocasion-list-top_2',
   segmentation: {
     'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
