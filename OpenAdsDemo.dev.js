@@ -1993,7 +1993,6 @@ var Container = function () {
   }, {
     key: '_buildEagerSingletonInstances',
     value: function _buildEagerSingletonInstances() {
-      this.getInstance({ key: 'EventDispatcher' });
       var errorObserver = this.getInstance({ key: 'ErrorObserverFactory' });
       var positionCreatedObserver = this.getInstance({ key: 'PositionCreatedObserver' });
       var positionDisplayedObserver = this.getInstance({ key: 'PositionDisplayedObserver' });
@@ -3466,16 +3465,26 @@ var AppNexusConnectorImpl = function (_AppNexusConnector) {
     }
   }, {
     key: 'refresh',
-    value: function refresh() {
+    value: function refresh(target) {
       var _this8 = this;
-
-      for (var _len = arguments.length, target = Array(_len), _key = 0; _key < _len; _key++) {
-        target[_key] = arguments[_key];
-      }
 
       this._logger.debug('Refresh AppNexus Tag', '| target:', target);
       this._appNexusClient.anq.push(function () {
         return _this8._appNexusClient.refresh(target);
+      });
+      return this;
+    }
+  }, {
+    key: 'modifyTag',
+    value: function modifyTag(_ref6) {
+      var _this9 = this;
+
+      var targetId = _ref6.targetId,
+          data = _ref6.data;
+
+      this._logger.debug('Modify AppNexus Tag', '| targetId:', targetId, '| data:', data);
+      this._appNexusClient.anq.push(function () {
+        return _this9._appNexusClient.modifyTag(targetId, data);
       });
       return this;
     }
@@ -3583,17 +3592,23 @@ var AppNexusConnector = function (_Connector) {
 
     /**
      * Method to define tags.
+     * @param member
+     * @param targetId
      * @param invCode
      * @param sizes
-     * @param targetId
+     * @param keywords
+     * @param native
      */
 
   }, {
     key: 'defineTag',
     value: function defineTag(_ref3) {
-      var invCode = _ref3.invCode,
+      var member = _ref3.member,
+          targetId = _ref3.targetId,
+          invCode = _ref3.invCode,
           sizes = _ref3.sizes,
-          targetId = _ref3.targetId;
+          keywords = _ref3.keywords,
+          native = _ref3.native;
 
       throw new Error('AppNexusConnector#defineTag must be implemented');
     }
@@ -3638,8 +3653,28 @@ var AppNexusConnector = function (_Connector) {
 
   }, {
     key: 'refresh',
-    value: function refresh() {
+    value: function refresh(target) {
       throw new Error('AppNexusConnector#refresh must be implemented');
+    }
+
+    /**
+     * Updates tag information.
+     * @param targetId : an array of ids
+     * @param data : the data to update
+     * @param data.member
+     * @param data.invCode
+     * @param data.sizes
+     * @param data.keywords
+     * @param data.native
+     */
+
+  }, {
+    key: 'modifyTag',
+    value: function modifyTag(_ref5) {
+      var targetId = _ref5.targetId,
+          data = _ref5.data;
+
+      throw new Error('AppNexusConnector#modifyTag must be implemented');
     }
   }]);
   return AppNexusConnector;
@@ -6574,10 +6609,13 @@ var positionSegmentationChangedObserverFactory = function positionSegmentationCh
   return function (_ref) {
     var payload = _ref.payload,
         dispatcher = _ref.dispatcher;
-    return appnexusConnector.modifyTag(payload.id, {
-      invCode: payload.placement,
-      sizes: payload.sizes,
-      keywords: payload.segmentation
+    return appnexusConnector.modifyTag({
+      targetId: payload.id,
+      data: {
+        invCode: payload.placement,
+        sizes: payload.sizes,
+        keywords: payload.segmentation
+      }
     }).refresh([payload.id]);
   };
 };
