@@ -1623,7 +1623,11 @@ openAds.addPosition({
   },
   sizes: [[300, 250], [320, 250]]
 }).then(function (top1) {
-  return openAds.displayPosition({ id: top1.id });
+  return top1.ad;
+}).then(function (adResponse) {
+  return openAds.displayPosition({ id: 'ad1' });
+}).catch(function (error) {
+  return console.log(error);
 });
 
 openAds.addPosition({
@@ -1642,7 +1646,11 @@ openAds.addPosition({
   },
   sizes: [[728, 90], [1, 1], [728, 161]]
 }).then(function (top2) {
-  return openAds.displayPosition({ id: top2.id });
+  return top2.ad;
+}).then(function (top2) {
+  return openAds.displayPosition({ id: 'ad2' });
+}).catch(function (error) {
+  return console.log(error);
 });
 
 /***/ }),
