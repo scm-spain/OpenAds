@@ -1669,7 +1669,7 @@ _promise2.default.all([openAds.addPosition({
     'aa-sch-page_type': 'list',
     'es-sch-adformat': 'top1'
   },
-  sizes: [[970, 90], [980, 90], [728, 90], [980, 250]]
+  sizes: [[970, 90], [728, 90]]
 }), openAds.addPosition({
   id: 'PubTop2',
   name: 'Top2',
