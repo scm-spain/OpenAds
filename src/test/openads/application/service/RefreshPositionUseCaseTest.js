@@ -26,9 +26,15 @@ describe('Refresh Position use case', function () {
         native: {},
         status: POSITION_VISIBLE
       })
+
+      const positionProxy = position => new Proxy(position, {
+        get: (target, name) => {
+          return name === 'ad' ? Promise.resolve({}) : target[name]
+        }
+      })
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(givenPosition),
-        saveOrUpdate: ({position}) => Promise.resolve(position)
+        saveOrUpdate: ({position}) => Promise.resolve(positionProxy(position))
       }
       const refreshPositionUseCase = new RefreshPositionUseCase({
         positionRepository: positionRepositoryMock

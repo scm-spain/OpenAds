@@ -4,6 +4,7 @@ import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 import PositionAdIsNativeError from '../../domain/position/PositionAdIsNativeError'
 import {NATIVE} from '../../domain/value-objects/AdTypes'
+import PositionResponse from './dto/PositionResponse'
 
 export default class DisplayPositionUseCase {
   /**
@@ -27,6 +28,7 @@ export default class DisplayPositionUseCase {
       .then(this._filterPositionAdNoNative)
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
       .then(modifiedPosition => this._positionRepository.saveOrUpdate({position: modifiedPosition}))
+      .then(savedPosition => savedPosition.ad.then(ad => PositionResponse.createFromPosition({position: savedPosition, ad})))
   }
 
   _filterPositionExists (optionalPositionWithId) {

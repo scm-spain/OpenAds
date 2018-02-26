@@ -1,6 +1,7 @@
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
 import {POSITION_NOT_VISIBLE} from '../../domain/position/positionStatus'
 import PositionNotVisibleException from '../../domain/position/PositionNotVisibleException'
+import PositionResponse from './dto/PositionResponse'
 
 export default class RefreshPositionUseCase {
   /**
@@ -27,6 +28,7 @@ export default class RefreshPositionUseCase {
       .then(this._filterPositionVisible)
       .then(positionToBeUpdated => positionToBeUpdated.changeSegmentation({...position}))
       .then(positionUpdated => this._positionRepository.saveOrUpdate({position: positionUpdated}))
+      .then(savedPosition => savedPosition.ad.then(ad => PositionResponse.createFromPosition({position: savedPosition, ad})))
   }
 
   _filterPositionExists (optionalPositionWithId) {

@@ -22,11 +22,14 @@ describe('Add Position use case', function () {
 
     it('should call to position factory and position repository once', function (done) {
       const givenPositionRequest = {}
+      const positionProxy = position => new Proxy(position, {
+        get: (target, name) => {
+          return name === 'ad' ? Promise.resolve({}) : target[name]
+        }
+      })
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
-        saveOrUpdate: ({position}) => Promise.resolve({
-          show: () => null
-        })
+        saveOrUpdate: ({position}) => Promise.resolve(positionProxy(position))
       }
       const positionRepositoryFindSpy = sinon.spy(positionRepositoryMock, 'find')
       const positionRepositorySaveOrUpdateSpy = sinon.spy(positionRepositoryMock, 'saveOrUpdate')
