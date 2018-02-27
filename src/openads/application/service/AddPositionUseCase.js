@@ -1,15 +1,18 @@
 import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
-import PositionResponse from './dto/PositionResponse'
+import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
+import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
 
 export default class AddPositionUseCase {
   /**
    * @constructor
    * @param {PositionRepository} positionRepository
    * @param {PositionFactory} positionFactory
+   * @param {AdRepository} adRepository
    */
-  constructor ({positionRepository, positionFactory}) {
+  constructor ({positionRepository, positionFactory, adRepository}) {
     this._positionRepository = positionRepository
     this._positionFactory = positionFactory
+    this._adRepository = adRepository
   }
   /**
    * Create a new Position on the page
@@ -29,8 +32,16 @@ export default class AddPositionUseCase {
     return this._positionRepository.find({id})
       .then(this._filterPositionAlreadyExists)
       .then(() => this._positionFactory.create({id, name, source, placement, segmentation, sizes, native}))
-      .then(position => this._positionRepository.saveOrUpdate({position}))
-      .then(savedPosition => savedPosition.ad.then(ad => PositionResponse.createFromPosition({position: savedPosition, ad})))
+      // .then(this._setAdToPosition) // todo why this line fails ¿? the line below is working fine insted
+      .then(createdPosition => this._setAdToPosition({position: createdPosition}))
+      .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
+      .then(this._filterPositionAdIsAvailable)
+  }
+
+  _setAdToPosition ({position}) {
+    return this._adRepository.find({id: position.id})
+      .catch(error => ({data: error.cause, status: error.status}))
+      .then(ad => position.updateAd(ad))
   }
 
   _filterPositionAlreadyExists (optionalPosition) {
@@ -38,5 +49,12 @@ export default class AddPositionUseCase {
       throw new PositionAlreadyExists({id: optionalPosition.id})
     }
     return optionalPosition
+  }
+
+  _filterPositionAdIsAvailable (position) {
+    if (position.ad.status !== AD_AVAILABLE) {
+      throw new PositionAdNotAvailableError({position})
+    }
+    return position
   }
 }

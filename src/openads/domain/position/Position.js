@@ -84,8 +84,9 @@ export default class Position {
     return this._ad
   }
 
-  set ad (value) {
+  updateAd (value) {
     this._ad = value
+    return this
   }
 
   /**

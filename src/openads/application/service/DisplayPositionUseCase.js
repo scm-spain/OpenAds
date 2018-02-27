@@ -4,7 +4,6 @@ import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 import PositionAdIsNativeError from '../../domain/position/PositionAdIsNativeError'
 import {NATIVE} from '../../domain/value-objects/AdTypes'
-import PositionResponse from './dto/PositionResponse'
 
 export default class DisplayPositionUseCase {
   /**
@@ -28,7 +27,6 @@ export default class DisplayPositionUseCase {
       .then(this._filterPositionAdNoNative)
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
       .then(modifiedPosition => this._positionRepository.saveOrUpdate({position: modifiedPosition}))
-      .then(savedPosition => savedPosition.ad.then(ad => PositionResponse.createFromPosition({position: savedPosition, ad})))
   }
 
   _filterPositionExists (optionalPositionWithId) {
@@ -39,15 +37,13 @@ export default class DisplayPositionUseCase {
   }
 
   _filterPositionAdAvailable (position) {
-    return position.ad
-      .then(adResponse => adResponse.status)
+    return Promise.resolve(position.ad && position.ad.status)
       .then(status => AD_AVAILABLE === status)
-      .then(available => available ? position : Promise.reject(new PositionAdNotAvailableError({id: position.id})))
+      .then(available => available ? position : Promise.reject(new PositionAdNotAvailableError({position})))
   }
 
   _filterPositionAdNoNative (position) {
-    return position.ad
-      .then(adResponse => adResponse.data.adType)
+    return Promise.resolve(position.ad && position.ad.data && position.ad.data.adType)
       .then(adType => adType === NATIVE)
       .then(isNative => isNative ? Promise.reject(new PositionAdIsNativeError({id: position.id})) : position)
   }
