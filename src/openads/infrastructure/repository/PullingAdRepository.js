@@ -28,8 +28,7 @@ export default class PullingAdRepository extends AdRepository {
   }
 
   _waitForData ({id}) {
-    return Promise.resolve(id)
-      .then(this._positions.get)
+    return Promise.resolve(this._positions.get(id))
       .then(optionalPosition => optionalPosition || this._intervalPull(id))
   }
 

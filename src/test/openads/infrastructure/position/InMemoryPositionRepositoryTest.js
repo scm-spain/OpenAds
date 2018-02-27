@@ -1,12 +1,12 @@
 import {expect} from 'chai'
 import InMemoryPositionRepository from '../../../../openads/infrastructure/position/InMemoryPositionRepository'
-import ProxyPositionFactory from '../../../../openads/infrastructure/position/ProxyPositionFactory'
 import {POSITION_NOT_VISIBLE} from '../../../../openads/domain/position/positionStatus'
+import DefaultPositionFactory from '../../../../openads/infrastructure/position/DefaultPositionFactory'
 
 describe('InMemory Position Repository', function () {
   describe('Given a Domain position', function () {
     it('should return a Promise', function () {
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'lala',
@@ -22,7 +22,7 @@ describe('InMemory Position Repository', function () {
     })
 
     it('should save it and return a Promise', function () {
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'lala',
@@ -110,7 +110,7 @@ describe('InMemory Position Repository', function () {
         .catch(error => done(error))
     })
     it('should update one Position and return Promise', function (done) {
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'updatedName',

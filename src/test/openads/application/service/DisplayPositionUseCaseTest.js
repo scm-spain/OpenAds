@@ -32,7 +32,7 @@ describe('DisplayPositionUseCase test', () => {
         const givenPosition = new Position({
           id: givenIdPosition,
           status: POSITION_NOT_VISIBLE,
-          ad: Promise.resolve(givenAd)
+          ad: givenAd
         })
         const positionRepositoryMock = {
           find: () => Promise.resolve(givenPosition),
@@ -43,7 +43,7 @@ describe('DisplayPositionUseCase test', () => {
           .then((position) => {
             expect(position.status).equal(POSITION_VISIBLE)
             done()
-          })
+          }).catch(e => done(e))
       })
       it('Should reject when the position has an AD with status not equal to AD_AVAILABLE', (done) => {
         const givenIdPosition = 1
@@ -53,7 +53,7 @@ describe('DisplayPositionUseCase test', () => {
         const givenPosition = new Position({
           id: givenIdPosition,
           status: POSITION_NOT_VISIBLE,
-          ad: Promise.resolve(givenAd)
+          ad: givenAd
         })
         const positionRepositoryMock = {
           find: () => Promise.resolve(givenPosition),
@@ -80,7 +80,7 @@ describe('DisplayPositionUseCase test', () => {
         const givenPosition = new Position({
           id: givenIdPosition,
           status: POSITION_NOT_VISIBLE,
-          ad: Promise.resolve(givenAd)
+          ad: givenAd
         })
         const positionRepositoryMock = {
           find: () => Promise.resolve(givenPosition),

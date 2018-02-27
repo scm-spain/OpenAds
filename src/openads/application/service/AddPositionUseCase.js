@@ -33,12 +33,12 @@ export default class AddPositionUseCase {
       .then(this._filterPositionAlreadyExists)
       .then(() => this._positionFactory.create({id, name, source, placement, segmentation, sizes, native}))
       // .then(this._setAdToPosition) // todo why this line fails ¿? the line below is working fine insted
-      .then(createdPosition => this._setAdToPosition({position: createdPosition}))
+      .then(createdPosition => this._setAdToPosition(createdPosition))
       .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
-      .then(this._filterPositionAdIsAvailable)
+      .then(savedPosition => this._filterPositionAdIsAvailable(savedPosition))
   }
 
-  _setAdToPosition ({position}) {
+  _setAdToPosition (position) {
     return this._adRepository.find({id: position.id})
       .catch(error => ({data: error.cause, status: error.status}))
       .then(ad => position.updateAd(ad))

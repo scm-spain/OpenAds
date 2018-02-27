@@ -83,7 +83,7 @@ describe('Refresh Position use case', function () {
       const givenPositionChanges = {
         segmentation: 'newSegmentation'
       }
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'Name',
