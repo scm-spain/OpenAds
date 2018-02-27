@@ -59,10 +59,7 @@ if (distMinified) {
 module.exports = [
   {
     entry: {
-      'OpenAdsDemo': './src/demo/index.js',
-      'QueryString': './src/demo/resources/ui/js/QueryString.js',
-      'EventLauncher': './src/demo/resources/ui/js/EventLauncher.js',
-      'PageDemo': './src/demo/resources/ui/js/PageDemo.js'
+      'OpenAdsDemo': './src/demo/index.js'
     },
     output: {
       path: path.resolve(path.join(__dirname, '/../../../', 'dist')),

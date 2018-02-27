@@ -9,26 +9,29 @@ const openAds = OpenAds.init({config: {
 }})
 
 openAds.addPosition({
-  id: 'PubTop1',
-  name: 'Top1',
-  source: 'appnexus',
-  placement: 'es-cn-wde-ocasion-list-top_1',
+  id: 'ad1',
+  name: 'ad number one',
+  source: 'AppNexus',
+  placement: 'es-cn-wph-ocasion-list-x_65',
   segmentation: {
     'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
     'es-sch-event_name': 'list',
     'aa-sch-country_code': 'es',
-    'aa-sch-supply_type': 'wde',
+    'aa-sch-supply_type': 'wph',
     'es-sch-section': 'ocasion',
     'aa-sch-page_type': 'list',
-    'es-sch-adformat': 'top1'
+    'es-sch-adformat': 'x65'
   },
-  sizes: [[970, 90], [980, 90], [728, 90], [980, 250]]
+  sizes: [[300, 250], [320, 250]]
 })
+  .then(top1 => top1.ad)
+  .then(adResponse => openAds.displayPosition({id: 'ad1'}))
+  .catch(error => console.log(error))
 
 openAds.addPosition({
-  id: 'PubTop2',
-  name: 'Top2',
-  source: 'appnexus',
+  id: 'ad2',
+  name: 'ad number two',
+  source: 'AppNexus',
   placement: 'es-cn-wde-ocasion-list-top_2',
   segmentation: {
     'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
@@ -41,6 +44,6 @@ openAds.addPosition({
   },
   sizes: [[728, 90], [1, 1], [728, 161]]
 })
-
-openAds.displayPosition({id: 'PubTop1'})
-openAds.displayPosition({id: 'PubTop2'})
+  .then(top2 => top2.ad)
+  .then(top2 => openAds.displayPosition({id: 'ad2'}))
+  .catch(error => console.log(error))
