@@ -34,7 +34,7 @@ export default class AddPositionUseCase {
       .then(() => this._positionFactory.create({id, name, source, placement, segmentation, sizes, native}))
       .then(createdPosition => this._setAdToPosition(createdPosition))
       .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
-      .then(savedPosition => this._filterPositionAdIsAvailable(savedPosition))
+      .then(this._filterPositionAdIsAvailable)
   }
 
   _setAdToPosition (position) {
