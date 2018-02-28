@@ -45,7 +45,7 @@ export default class RefreshPositionUseCase {
 
   _filterPositionVisible (position) {
     if (POSITION_NOT_VISIBLE === position.status) {
-      throw new PositionNotVisibleException({id: position.id})
+      throw new PositionNotVisibleException({position})
     }
     return position
   }

@@ -120,7 +120,7 @@ export default class Position {
         status: this._status
       })})
     } else {
-      throw new InvalidPositionStatusException({status: newStatus})
+      throw new InvalidPositionStatusException({position: this, status: newStatus})
     }
     return this
   }

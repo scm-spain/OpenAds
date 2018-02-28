@@ -45,6 +45,6 @@ export default class DisplayPositionUseCase {
   _filterPositionAdNoNative (position) {
     return Promise.resolve(position.ad && position.ad.data && position.ad.data.adType)
       .then(adType => adType === NATIVE)
-      .then(isNative => isNative ? Promise.reject(new PositionAdIsNativeError({id: position.id})) : position)
+      .then(isNative => isNative ? Promise.reject(new PositionAdIsNativeError({position})) : position)
   }
 }
