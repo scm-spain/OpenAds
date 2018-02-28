@@ -1,6 +1,6 @@
 import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
-import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE, AD_ERROR} from '../../infrastructure/connector/appnexus/event/events'
 
 export default class AddPositionUseCase {
   /**
@@ -32,7 +32,6 @@ export default class AddPositionUseCase {
     return this._positionRepository.find({id})
       .then(this._filterPositionAlreadyExists)
       .then(() => this._positionFactory.create({id, name, source, placement, segmentation, sizes, native}))
-      // .then(this._setAdToPosition) // todo why this line fails ¿? the line below is working fine insted
       .then(createdPosition => this._setAdToPosition(createdPosition))
       .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
       .then(savedPosition => this._filterPositionAdIsAvailable(savedPosition))
@@ -40,13 +39,16 @@ export default class AddPositionUseCase {
 
   _setAdToPosition (position) {
     return this._adRepository.find({id: position.id})
-      .catch(error => ({data: error.cause, status: error.status}))
+      .catch(error => ({
+        data: error.stack || error.message,
+        status: error.status || AD_ERROR
+      }))
       .then(ad => position.updateAd(ad))
   }
 
   _filterPositionAlreadyExists (optionalPosition) {
     if (optionalPosition) {
-      throw new PositionAlreadyExists({id: optionalPosition.id})
+      throw new PositionAlreadyExists({position: optionalPosition})
     }
     return optionalPosition
   }
