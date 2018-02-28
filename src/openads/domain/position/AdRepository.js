@@ -12,6 +12,15 @@ export default class AdRepository {
   }
 
   /**
+   * Returns true only if the value for the id is already stored
+   * @param {string} id
+   * @returns {boolean}
+   */
+  has ({id}) {
+    throw new Error('AdRepository#has must be implemented')
+  }
+
+  /**
    * Removes the value stored from ad server by position id
    * @param {string} id
    * @returns {V | undefined}

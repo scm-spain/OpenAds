@@ -1,13 +1,13 @@
 import AdRepository from '../../domain/position/AdRepository'
 
-const TIMEOUT_EXCEPTION = 'Something in appnexus consumer failed to set adResponse data'
+const TIMEOUT_EXCEPTION = 'Timeout retrieving the Ad from the server'
 const DEFAULT_TIMEOUT = 20000
 const DEFAULT_WAIT = 50
 
 export default class PullingAdRepository extends AdRepository {
-  constructor ({wait = DEFAULT_WAIT, timeout = DEFAULT_TIMEOUT} = {}) {
+  constructor ({wait = DEFAULT_WAIT, timeout = DEFAULT_TIMEOUT, positions = [[]]} = {}) {
     super()
-    this._positions = new Map()
+    this._positions = new Map(positions)
     this._wait = wait
     this._timeout = timeout
   }
@@ -17,6 +17,10 @@ export default class PullingAdRepository extends AdRepository {
       this._waitForData({id}),
       this._timeoutPromise()
     ])
+  }
+
+  has ({id}) {
+    return this._positions.has(id)
   }
 
   save ({id, adResponse}) {
