@@ -28,10 +28,6 @@ var webpackPlugins = [
   new CopyWebpackPlugin([{
     from: 'src/demo/resources/ui/css',
     to: 'css'
-  }]),
-  new CopyWebpackPlugin([{
-    from: 'src/demo/resources/ui/fonts',
-    to: 'fonts'
   }])
 ]
 

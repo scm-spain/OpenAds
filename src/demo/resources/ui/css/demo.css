@@ -1,3 +1,105 @@
+* {
+    margin: 0;
+    padding: 0;
+}
+
+*, *:after, *:before {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+body {
+    font-family: 'Signika', sans-serif;
+    font-size: 16px;
+    font-size: 1.6rem;
+    color: #333333;
+    overflow-x: hidden;
+    background-color: #f0ffff;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: normal;
+    line-height: inherit;
+}
+
+b, strong {
+    font-weight: bold;
+}
+
+a {
+    color: #333333;
+    text-decoration: none;
+    border-bottom: 1px solid #333333;
+}
+
+a:hover {
+    border-bottom: 0;
+}
+
+p {
+    margin-bottom: 8px;
+}
+
+.main {
+    margin: 0 auto;
+    width: 100%;
+    max-width: 1280px;
+    background-color: #fff;
+    padding: 16px;
+}
+
+pre {
+    text-align: center;
+}
+
+code {
+    display: inline-block;
+    text-align: left;
+    padding: 1em;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .ad-DemoWrapper {
     position: relative;
     margin:0 auto;
