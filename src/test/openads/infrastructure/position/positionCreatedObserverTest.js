@@ -31,7 +31,7 @@ describe('Position Created Event', function () {
       expect(appnexusConectorOnEventSpy.callCount, 'onEvent should be called five times').to.be.equal(5)
       expect(appnexusConectorLoadTagsSpy.calledOnce, 'loadTags should be called five times').to.be.true
     })
-    it('should send the native.fields as appnexus native tag data in defineTags', function () {
+    it('should send the native data as appnexus native tag data in defineTags', function () {
       const appNexusConsumersRepositoryMock = {}
       this.appnexusConnectorMock = {
         member: 42,
@@ -49,18 +49,16 @@ describe('Position Created Event', function () {
         sizes: [],
         keywords: 'iddqd&idkfa',
         native: {
-          fields: {
-            title: {
-              required: true,
-              max_length: 1000
-            }
+          title: {
+            required: true,
+            max_length: 1000
           }
         }
       }
       positionCreatedObserver({payload})
 
       expect(appnexusConectorDefineTagSpy.calledOnce, 'defineTag should be called once').to.be.true
-      expect(appnexusConectorDefineTagSpy.args[0][0].native, 'defineTag be called with filled native data').to.deep.equal(payload.native.fields)
+      expect(appnexusConectorDefineTagSpy.args[0][0].native, 'defineTag be called with filled native data').to.deep.equal(payload.native)
     })
   })
 })
