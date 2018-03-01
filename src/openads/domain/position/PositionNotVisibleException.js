@@ -1,8 +1,9 @@
 export default class PositionNotVisibleException extends Error {
-  constructor ({id}) {
+  constructor ({position}) {
     super()
     this.name = 'PositionNotVisibleException'
-    this.message = `Position ${id} not visible.`
+    this.message = `Position ${position && position.id} not visible.`
     this.stack = (new Error()).stack
+    this.position = position
   }
 }

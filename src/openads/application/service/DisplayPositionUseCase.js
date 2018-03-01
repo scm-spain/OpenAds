@@ -37,16 +37,14 @@ export default class DisplayPositionUseCase {
   }
 
   _filterPositionAdAvailable (position) {
-    return position.ad
-      .then(adResponse => adResponse.status)
+    return Promise.resolve(position.ad && position.ad.status)
       .then(status => AD_AVAILABLE === status)
-      .then(available => available ? position : Promise.reject(new PositionAdNotAvailableError({id: position.id})))
+      .then(available => available ? position : Promise.reject(new PositionAdNotAvailableError({position})))
   }
 
   _filterPositionAdNoNative (position) {
-    return position.ad
-      .then(adResponse => adResponse.data.adType)
+    return Promise.resolve(position.ad && position.ad.data && position.ad.data.adType)
       .then(adType => adType === NATIVE)
-      .then(isNative => isNative ? Promise.reject(new PositionAdIsNativeError({id: position.id})) : position)
+      .then(isNative => isNative ? Promise.reject(new PositionAdIsNativeError({position})) : position)
   }
 }

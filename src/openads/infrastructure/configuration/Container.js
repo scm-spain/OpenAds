@@ -9,11 +9,8 @@ import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
 import AddPositionUseCase from '../../application/service/AddPositionUseCase'
 import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
-import ProxyPositionFactory from '../position/ProxyPositionFactory'
 import {errorObserverFactory} from './errorObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
-import proxyHandlerFactory from '../position/proxyHandlerFactory'
-import AppNexusConsumersRepository from '../repository/appnexus/AppNexusConsumersRepository'
 import positionCreatedObserverFactory from '../position/positionCreatedObserver'
 import {POSITION_CREATED} from '../../domain/position/positionCreated'
 import RefreshPositionUseCase from '../../application/service/RefreshPositionUseCase'
@@ -24,6 +21,8 @@ import positionAlreadyDisplayedObserver from '../position/positionAlreadyDisplay
 import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
 import {POSITION_SEGMENTATION_CHANGED} from '../../domain/position/positionSegmentationChanged'
 import positionSegmentationChangedObserverFactory from '../position/positionSegmentationChangedObserver'
+import DefaultPositionFactory from '../position/DefaultPositionFactory'
+import PullingAdRepository from '../repository/PullingAdRepository'
 
 export default class Container {
   constructor ({config}) {
@@ -78,12 +77,22 @@ export default class Container {
   _buildAddPositionUseCase () {
     return new AddPositionUseCase({
       positionRepository: this.getInstance({key: 'PositionRepository'}),
-      positionFactory: this.getInstance({key: 'PositionFactory'})
+      positionFactory: this.getInstance({key: 'PositionFactory'}),
+      adRepository: this.getInstance({key: 'AdRepository'})
     })
   }
+
   _buildRefreshPositionUseCase () {
     return new RefreshPositionUseCase({
-      positionRepository: this.getInstance({key: 'PositionRepository'})
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      adRepository: this.getInstance({key: 'AdRepository'})
+    })
+  }
+
+  _buildAdRepository () {
+    return new PullingAdRepository({
+      wait: this._config.Sources.Pulling,
+      timeout: this._config.Sources.Timeout
     })
   }
 
@@ -92,18 +101,7 @@ export default class Container {
   }
 
   _buildPositionFactory () {
-    return new ProxyPositionFactory({
-      proxyHandler: this.getInstance({key: 'ProxyHandler'})
-    })
-  }
-  _buildProxyHandler () {
-    return proxyHandlerFactory(this.getInstance({key: 'AppNexusConsumersRepository'}))({
-      wait: this._config.Sources.Pulling,
-      timeout: this._config.Sources.Timeout
-    })
-  }
-  _buildAppNexusConsumersRepository () {
-    return new AppNexusConsumersRepository()
+    return new DefaultPositionFactory()
   }
 
   _buildAppNexusConnector () {
@@ -142,7 +140,7 @@ export default class Container {
 
   _buildPositionCreatedObserver () {
     const connector = this.getInstance({key: 'AppNexusConnector'})
-    const appnexusConsumerRepository = this.getInstance({key: 'AppNexusConsumersRepository'})
+    const appnexusConsumerRepository = this.getInstance({key: 'AdRepository'})
     return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
   }
 

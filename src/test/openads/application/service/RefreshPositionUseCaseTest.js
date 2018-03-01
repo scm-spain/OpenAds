@@ -1,10 +1,11 @@
 import {expect} from 'chai'
 import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
-import ProxyPositionFactory from '../../../../openads/infrastructure/position/ProxyPositionFactory'
 import RefreshPositionUseCase from '../../../../openads/application/service/RefreshPositionUseCase'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
 import sinon from 'sinon'
+import DefaultPositionFactory from '../../../../openads/infrastructure/position/DefaultPositionFactory'
+import {AD_AVAILABLE} from '../../../../openads/infrastructure/connector/appnexus/event/events'
 
 describe('Refresh Position use case', function () {
   describe('given a Position DTO of changes', function () {
@@ -15,7 +16,7 @@ describe('Refresh Position use case', function () {
       const givenPositionChanges = {
         segmentation: 'newSegmentation'
       }
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'Name',
@@ -30,8 +31,13 @@ describe('Refresh Position use case', function () {
         find: ({id}) => Promise.resolve(givenPosition),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
+      const adRepositoryMock = {
+        find: ({id}) => Promise.resolve({data: {}, status: AD_AVAILABLE}),
+        remove: () => null
+      }
       const refreshPositionUseCase = new RefreshPositionUseCase({
-        positionRepository: positionRepositoryMock
+        positionRepository: positionRepositoryMock,
+        adRepository: adRepositoryMock
       })
       const observerSpy = sinon.spy()
       DomainEventBus.register({
@@ -77,7 +83,7 @@ describe('Refresh Position use case', function () {
       const givenPositionChanges = {
         segmentation: 'newSegmentation'
       }
-      const positionFactory = new ProxyPositionFactory({proxyHandler: {}})
+      const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'Name',
