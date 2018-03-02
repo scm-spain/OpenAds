@@ -1,6 +1,4 @@
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
-import {POSITION_NOT_VISIBLE} from '../../domain/position/positionStatus'
-import PositionNotVisibleException from '../../domain/position/PositionNotVisibleException'
 import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 
