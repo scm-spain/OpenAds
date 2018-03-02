@@ -1,5 +1,5 @@
 import {expect} from 'chai'
-import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
+import {POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
 import RefreshPositionUseCase from '../../../../openads/application/service/RefreshPositionUseCase'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
@@ -76,39 +76,6 @@ describe('Refresh Position use case', function () {
         .then(positionUpdated => done(new Error('Shouldnt find the position')))
         .catch(error => {
           expect(error.name, 'error type wrong').to.equal('PositionNotFoundException')
-          done()
-        })
-    })
-    it('should reject the Promise with a PositionNotVisibleException', function (done) {
-      const givenPositionChanges = {
-        segmentation: 'newSegmentation'
-      }
-      const positionFactory = new DefaultPositionFactory()
-      const givenPosition = positionFactory.create({
-        id: '42',
-        name: 'Name',
-        source: 'appnexus',
-        placement: 'Placement',
-        segmentation: 'Segmentation',
-        sizes: [],
-        native: {},
-        status: POSITION_NOT_VISIBLE
-      })
-      const positionRepositoryMock = {
-        find: ({id}) => Promise.resolve(givenPosition),
-        saveOrUpdate: ({position}) => Promise.resolve(position)
-      }
-      const refreshPositionUseCase = new RefreshPositionUseCase({
-        positionRepository: positionRepositoryMock
-      })
-      DomainEventBus.register({
-        eventName: POSITION_SEGMENTATION_CHANGED,
-        observer: ({payload, dispatcher}) => done(new Error('Observer shouldnt be called'))
-      })
-      refreshPositionUseCase.refreshPosition({id: '42', position: givenPositionChanges})
-        .then(positionUpdated => done(new Error('shouldnt be rejected!')))
-        .catch(error => {
-          expect(error.name, 'error is not of the right type').to.equal('PositionNotVisibleException')
           done()
         })
     })
