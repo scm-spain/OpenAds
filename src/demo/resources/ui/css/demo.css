@@ -46,7 +46,7 @@ p {
 .main {
     margin: 0 auto;
     width: 100%;
-    max-width: 1280px;
+    max-width: 1024px;
     background-color: #fff;
     padding: 16px;
 }
@@ -61,84 +61,113 @@ code {
     padding: 1em;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-.ad-DemoWrapper {
-    position: relative;
-    margin:0 auto;
-    text-align: center;
-    z-index: 9999;
+.main section {
+    height: 4000px;
 }
 
-.ad-DemoButton {
-    background-color: #E84C3D;
+.is-inview {
+    background-color: black;
     color: #ffffff;
-    border: none;
-    position: absolute;
-    border-radius: 0 0 6px 6px;
-    outline: 0;
-    padding: 3px 6px;
-    cursor: pointer;
-    z-index: 2;
 }
 
-#ad-Demo {
-    background-color: #E84C3D;
-    color: white;
-    font-size: 16px;
-    text-align: center;
-    overflow: hidden;
-    border-radius: 0 0 10px 10px;
+.nav {
+    position: fixed;
+    left: 0;
+    padding: 16px;
+    background-color: #fff;
 }
 
-.ad-DemoWrapper a {
-    padding: 8px;
-    color: #ffffff;
+.nav ul {
+    list-style: none;
+}
+
+.nav ul  a {
     display: inline-block;
     text-decoration: none;
-    font-weight:normal;
+}
+.ad-DemoButton {
+    display: none;
 }
 
-.ad-DemoWrapper a:hover {
-    text-shadow: 1px 1px 1px #000000;
+
+@media screen and (max-width: 1024px) {
+    .nav {
+        width: 100%;
+        max-width: 1280px;
+        margin: 0 auto;
+        left: inherit;
+        text-align: center;
+    }
+
+    .ad-DemoButton {
+        background-color: #E84C3D;
+        color: #ffffff;
+        border: none;
+        position: absolute;
+        border-radius: 0 0 6px 6px;
+        outline: 0;
+        padding: 3px 6px;
+        cursor: pointer;
+        z-index: 2;
+        display: block;
+    }
+
+    #ad-Demo {
+        background-color: #E84C3D;
+        color: white;
+        font-size: 16px;
+        text-align: center;
+        overflow: hidden;
+        border-radius: 0 0 10px 10px;
+    }
+
+    .ad-DemoWrapper a {
+        padding: 8px;
+        color: #ffffff;
+        display: inline-block;
+        text-decoration: none;
+        font-weight:normal;
+    }
+
+    .ad-DemoWrapper a:hover {
+        text-shadow: 1px 1px 1px #000000;
+    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @media screen and (max-width: 667px) {
 

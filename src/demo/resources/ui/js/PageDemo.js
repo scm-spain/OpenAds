@@ -30,3 +30,12 @@ function slideToggle () {
 }
 
 document.querySelectorAll('.ad-DemoButton').forEach(e => { e.onclick = slideToggle })
+
+var spy = new ScrollSpy('#js-scrollspy', {
+  nav: '.js-scrollspy-nav li > a',
+  className: 'is-inview',
+  callback: function () {
+  }
+});
+
+hljs.initHighlightingOnLoad();
