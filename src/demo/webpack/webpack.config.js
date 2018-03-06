@@ -28,6 +28,14 @@ var webpackPlugins = [
   new CopyWebpackPlugin([{
     from: 'src/demo/resources/ui/css',
     to: 'css'
+  }]),
+  new CopyWebpackPlugin([{
+    from: 'src/demo/resources/ui/js',
+    to: 'js'
+  }]),
+  new CopyWebpackPlugin([{
+    from: 'src/demo/resources/ui/lib',
+    to: 'lib'
   }])
 ]
 

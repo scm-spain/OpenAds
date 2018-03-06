@@ -16,30 +16,43 @@
     <title>OpenAds Local Environment Tester</title>
     <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css"/>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css">
-    <link rel="stylesheet" href="css/demo.css?3"/>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css"/>
+    <link rel="stylesheet" href="css/demo.css?10"/>
+    <script type="text/javascript" src="lib/highlight.min.js"></script>
+    <script type="text/javascript" src="lib/scrollspy.js"></script>
 </head>
 
 
-<body>
-<main class="main">
-    <div class="canvas">
-        <p>Codigo de inicializacion de OpenAds</p>
-        <pre><code>import OpenAds from '../openads/infrastructure/bootstrap/index'
+<body div id="js-scrollspy">
 
-const openAds = OpenAds.init({config: {
-  Sources: {
-    AppNexus: {
-      Member: 3397
-    }
-  }
-}})
-}</code></pre>
+    <nav class="js-scrollspy-nav nav">
+        <ul id="ad-Demo">
+            <li><a href="#one">one</a></li>
+            <li><a href="#two">two</a></li>
+            <li><a href="#three">three</a></li>
+            <li><a href="#four">four</a></li>
+        </ul>
+        <button class="ad-DemoButton">DEMO</button>
+    </nav>
+    <main class="js-scrollspy-content main">
+        <div class="canvas">
+            <section id="one">
+                <p>Codigo de inicializacion de OpenAds</p>
+                <pre><code>import OpenAds from '../openads/infrastructure/bootstrap/index'
 
-    <p>Codigo de inicializacion de la publicidad 1</p>
+    const openAds = OpenAds.init({config: {
+      Sources: {
+        AppNexus: {
+          Member: 3397
+        }
+      }
+    }})
+    }</code></pre>
+            </section>
+            <section id="two">
+                <p>Codigo de inicializacion de la publicidad 1</p>
 
-        <pre><code>openAds.addPosition({
+                <pre id="two"><code>openAds.addPosition({
   id: 'ad1',
   name: 'ad number one',
   source: 'AppNexus',
@@ -58,10 +71,18 @@ const openAds = OpenAds.init({config: {
   .then(top1 => top1.ad)
   .then(adResponse => openAds.displayPosition({id: 'ad1'}))
   .catch(error => console.log(error))</code></pre>
-    <div id="ad1"></div>
-    <div id="ad2"></div>
-    </div>
-</main>
-<script>hljs.initHighlightingOnLoad();</script>
+                <div id="ad1"></div>
+                <div id="ad2"></div>
+            </section>
+            <section id="three">
+                <p>Hola 3</p>
+            </section>
+            <section id="four">
+                <p>Hola 4</p>
+            </section>
+        </div>
+    </main>
+</div>
+<script type="text/javascript" src="js/PageDemo.js?2"></script>
 </body>
 </html>
