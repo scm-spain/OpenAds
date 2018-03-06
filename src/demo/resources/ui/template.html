@@ -27,17 +27,18 @@
 
     <nav class="js-scrollspy-nav nav">
         <ul id="ad-Demo">
-            <li><a href="#one">one</a></li>
-            <li><a href="#two">two</a></li>
-            <li><a href="#three">three</a></li>
-            <li><a href="#four">four</a></li>
+            <li><a href="#one">Initialize</a></li>
+            <li><a href="#two">Create Positions</a></li>
+            <li><a href="#three">Display Positions</a></li>
+            <li><a href="#four">Refresh Positions</a></li>
+            <li><a href="#five">Error handling</a></li>
         </ul>
         <button class="ad-DemoButton">DEMO</button>
     </nav>
     <main class="js-scrollspy-content main">
         <div class="canvas">
             <section id="one">
-                <p>Codigo de inicializacion de OpenAds</p>
+                <p>Initialize</p>
                 <pre><code>import OpenAds from '../openads/infrastructure/bootstrap/index'
 
     const openAds = OpenAds.init({config: {
@@ -50,9 +51,9 @@
     }</code></pre>
             </section>
             <section id="two">
-                <p>Codigo de inicializacion de la publicidad 1</p>
+                <p>Create Positions</p>
 
-                <pre id="two"><code>openAds.addPosition({
+                <pre id="two"><code>const positionOne = openAds.addPosition({
   id: 'ad1',
   name: 'ad number one',
   source: 'AppNexus',
@@ -68,17 +69,59 @@
   },
   sizes: [[300, 250], [320, 250]]
 })
-  .then(top1 => top1.ad)
-  .then(adResponse => openAds.displayPosition({id: 'ad1'}))
-  .catch(error => console.log(error))</code></pre>
+
+const positionTwo = openAds.addPosition({
+  id: 'ad2',
+  name: 'ad number two',
+  source: 'AppNexus',
+  placement: 'es-cn-wde-ocasion-list-top_2',
+  segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wde',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'top2'
+  },
+  sizes: [[728, 90], [1, 1], [728, 161]]
+})
+  </code></pre>
                 <div id="ad1"></div>
                 <div id="ad2"></div>
             </section>
             <section id="three">
-                <p>Hola 3</p>
+                <p>Display Positions</p>
+                <pre id="three">
+                    <code>openAds.addPosition({
+  id: 'ad1',
+  name: 'ad number one',
+  source: 'AppNexus',
+  placement: 'es-cn-wph-ocasion-list-x_65',
+  segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wph',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'x65'
+  },
+  sizes: [[300, 250], [320, 250]]
+})
+  .then(position => openAds.displayPosition({id: position.id}))
+                    </code>
+                </pre>
+
+
+
             </section>
             <section id="four">
-                <p>Hola 4</p>
+                <p>Refresh Positions</p>
+            </section>
+
+            <section id="five">
+                <p>Error handling</p>
             </section>
         </div>
     </main>

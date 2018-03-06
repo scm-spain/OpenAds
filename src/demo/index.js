@@ -24,9 +24,7 @@ openAds.addPosition({
   },
   sizes: [[300, 250], [320, 250]]
 })
-  .then(top1 => top1.ad)
-  .then(adResponse => openAds.displayPosition({id: 'ad1'}))
-  .catch(error => console.log(error))
+  .then(position => openAds.displayPosition({id: position.id}))
 
 openAds.addPosition({
   id: 'ad2',
@@ -44,6 +42,4 @@ openAds.addPosition({
   },
   sizes: [[728, 90], [1, 1], [728, 161]]
 })
-  .then(top2 => top2.ad)
-  .then(top2 => openAds.displayPosition({id: 'ad2'}))
-  .catch(error => console.log(error))
+  .then(position => openAds.displayPosition({id: position.id}))
