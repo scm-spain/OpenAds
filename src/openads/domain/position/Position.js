@@ -15,10 +15,7 @@ export default class Position {
    * @param {string} placement
    * @param {string} segmentation
    * @param {Array<Array<>>}sizes
-   * @param {Object} native
-   * @param {Function} native.renderer - The function to be used when display use case is used in this position and the Ad is Native type
-   * @param {Object} native.fields - Fields requested to the ad server
-   * @param {string} native.domClickableId - DOM id where will be included the clickable action from native
+   * @param {Object} native - Fields requested to the ad server
    * @param {Ad} ad - ValueObject width data from the ad loaded in this position
    * @param {string} status - Status of the position
    * @returns {Position}
@@ -84,8 +81,9 @@ export default class Position {
     return this._ad
   }
 
-  set ad (value) {
+  updateAd (value) {
     this._ad = value
+    return this
   }
 
   /**
@@ -119,7 +117,7 @@ export default class Position {
         status: this._status
       })})
     } else {
-      throw new InvalidPositionStatusException({status: newStatus})
+      throw new InvalidPositionStatusException({position: this, status: newStatus})
     }
     return this
   }

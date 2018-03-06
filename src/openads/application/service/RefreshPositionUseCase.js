@@ -1,14 +1,16 @@
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
-import {POSITION_NOT_VISIBLE} from '../../domain/position/positionStatus'
-import PositionNotVisibleException from '../../domain/position/PositionNotVisibleException'
+import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
+import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 
 export default class RefreshPositionUseCase {
   /**
    * Update a Position with given changes and refresh his Ad
    * @param {PositionRepository} positionRepository
+   * @param {AdRepository} adRepository
    */
-  constructor ({positionRepository}) {
+  constructor ({positionRepository, adRepository}) {
     this._positionRepository = positionRepository
+    this._adRepository = adRepository
   }
   /**
    * Update a Position with given changes and refresh his Ad
@@ -24,9 +26,11 @@ export default class RefreshPositionUseCase {
     return this._positionRepository.find({id})
       .then(optionalPosition => ({id, position: optionalPosition}))
       .then(this._filterPositionExists)
-      .then(this._filterPositionVisible)
+      .then(position => this._setAdFetchWorkInProgress(position))
       .then(positionToBeUpdated => positionToBeUpdated.changeSegmentation({...position}))
-      .then(positionUpdated => this._positionRepository.saveOrUpdate({position: positionUpdated}))
+      .then(changedPosition => this._setAdToPosition(changedPosition))
+      .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
+      .then(this._filterPositionAdIsAvailable)
   }
 
   _filterPositionExists (optionalPositionWithId) {
@@ -35,10 +39,20 @@ export default class RefreshPositionUseCase {
     }
     return optionalPositionWithId.position
   }
+  _setAdFetchWorkInProgress (position) {
+    this._adRepository.remove({id: position.id})
+    return position
+  }
 
-  _filterPositionVisible (position) {
-    if (POSITION_NOT_VISIBLE === position.status) {
-      throw new PositionNotVisibleException({id: position.id})
+  _setAdToPosition (position) {
+    return this._adRepository.find({id: position.id})
+      .catch(error => ({data: error.cause, status: error.status}))
+      .then(ad => position.updateAd(ad))
+  }
+
+  _filterPositionAdIsAvailable (position) {
+    if (position.ad.status !== AD_AVAILABLE) {
+      throw new PositionAdNotAvailableError({position})
     }
     return position
   }
