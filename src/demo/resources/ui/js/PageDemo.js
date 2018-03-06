@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 let open = true
 let initHeight = 0
 let intval = null
@@ -31,7 +33,7 @@ function slideToggle () {
 
 document.querySelectorAll('.ad-DemoButton').forEach(e => { e.onclick = slideToggle })
 
-var spy = new ScrollSpy('#js-scrollspy', {
+new ScrollSpy('#js-scrollspy', {
   nav: '.js-scrollspy-nav li > a',
   className: 'is-inview',
   callback: function () {
