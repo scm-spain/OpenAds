@@ -37,7 +37,7 @@
     <main class="js-scrollspy-content main">
         <div class="canvas">
             <section id="one">
-                <p>Initialize</p>
+                <p class="subtitle">Initialize</p>
                 <pre><code>import OpenAds from '../openads/infrastructure/bootstrap/index'
 
     const openAds = OpenAds.init({config: {
@@ -50,7 +50,7 @@
     }</code></pre>
             </section>
             <section id="two">
-                <p>Create Positions</p>
+                <p class="subtitle">Create Positions</p>
 
                 <pre id="two"><code>const positionOne = openAds.addPosition({
   id: 'ad1',
@@ -86,11 +86,9 @@ const positionTwo = openAds.addPosition({
   sizes: [[728, 90], [1, 1], [728, 161]]
 })
   </code></pre>
-                <div id="ad1"></div>
-                <div id="ad2"></div>
             </section>
             <section id="three">
-                <p>Display Positions</p>
+                <p class="subtitle">Display Positions</p>
                 <pre id="three">
                     <code>openAds.addPosition({
   id: 'ad1',
@@ -112,11 +110,12 @@ const positionTwo = openAds.addPosition({
                     </code>
                 </pre>
 
-
+                <div id="ad1"></div>
+                <div id="ad2"></div>
 
             </section>
             <section id="four">
-                <p>Refresh Positions</p>
+                <p class="subtitle">Refresh Positions</p>
                 <pre id="four">
                 <code>
 openAds.addPosition({
@@ -145,8 +144,10 @@ openAds.addPosition({
 )
                 </code>
                 </pre>
-
+                <p class="ad-explanation">This Position initialy were not available so after handle the error was refreshed with new segmentation</p>
                 <div id="ad_refresh"></div>
+                <p class="ad-explanation">This Position is refreshed every five seconds</p>
+                <div id="ad3"></div>
             </section>
 
         </div>

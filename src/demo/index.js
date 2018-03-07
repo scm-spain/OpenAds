@@ -75,3 +75,23 @@ openAds.addPosition({
     })
       .then(position => openAds.displayPosition({id: position.id}))
   )
+
+openAds.addPosition({
+  id: 'ad3',
+  name: 'ad number two',
+  source: 'AppNexus',
+  placement: 'es-cn-wde-ocasion-list-top_2',
+  segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wde',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'top2'
+  },
+  sizes: [[728, 90], [1, 1], [728, 161]]
+})
+  .then(position => openAds.displayPosition({id: position.id}))
+
+setInterval(() => openAds.refreshPosition({id: 'ad3'}), 5000)

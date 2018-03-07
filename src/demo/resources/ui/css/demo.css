@@ -62,7 +62,7 @@ code {
 }
 
 .main section {
-    height: 4000px;
+    margin-bottom: 20rem;
 }
 
 .is-inview {
@@ -87,6 +87,14 @@ code {
 }
 .ad-DemoButton {
     display: none;
+}
+
+.subtitle {
+    margin-bottom: 1.2rem;
+}
+
+.ad-explanation {
+    margin-top: 2rem;
 }
 
 
