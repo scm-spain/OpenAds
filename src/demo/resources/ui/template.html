@@ -90,23 +90,9 @@ const positionTwo = openAds.addPosition({
             <section id="three">
                 <p class="subtitle">Display Positions</p>
                 <pre id="three">
-                    <code>openAds.addPosition({
-  id: 'ad1',
-  name: 'ad number one',
-  source: 'AppNexus',
-  placement: 'es-cn-wph-ocasion-list-x_65',
-  segmentation: {
-    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-    'es-sch-event_name': 'list',
-    'aa-sch-country_code': 'es',
-    'aa-sch-supply_type': 'wph',
-    'es-sch-section': 'ocasion',
-    'aa-sch-page_type': 'list',
-    'es-sch-adformat': 'x65'
-  },
-  sizes: [[300, 250], [320, 250]]
-})
-  .then(position => openAds.displayPosition({id: position.id}))
+                    <code>
+  positionOne.then(position => openAds.displayPosition({id: position.id}))
+  positionTwo.then(position => openAds.displayPosition({id: position.id}))
                     </code>
                 </pre>
 
@@ -146,6 +132,29 @@ openAds.addPosition({
                 </pre>
                 <p class="ad-explanation">This Position initialy were not available so after handle the error was refreshed with new segmentation</p>
                 <div id="ad_refresh"></div>
+                <pre>
+                <code>
+openAds.addPosition({
+    id: 'ad3',
+    name: 'ad number two',
+    source: 'AppNexus',
+    placement: 'es-cn-wde-ocasion-list-top_2',
+    segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wde',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'top2'
+    },
+    sizes: [[728, 90], [1, 1], [728, 161]]
+})
+.then(position => openAds.displayPosition({id: position.id}))
+
+setInterval(() => openAds.refreshPosition({id: 'ad3'}), 5000)
+                </code>
+                    </pre>
                 <p class="ad-explanation">This Position is refreshed every five seconds</p>
                 <div id="ad3"></div>
             </section>
