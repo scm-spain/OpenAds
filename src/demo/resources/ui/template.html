@@ -31,7 +31,6 @@
             <li><a href="#two">Create Positions</a></li>
             <li><a href="#three">Display Positions</a></li>
             <li><a href="#four">Refresh Positions</a></li>
-            <li><a href="#five">Error handling</a></li>
         </ul>
         <button class="ad-DemoButton">DEMO</button>
     </nav>
@@ -118,11 +117,38 @@ const positionTwo = openAds.addPosition({
             </section>
             <section id="four">
                 <p>Refresh Positions</p>
+                <pre id="four">
+                <code>
+openAds.addPosition({
+    id: 'ad1_with_error',
+    name: 'ad_error',
+    source: 'AppNexus',
+    placement: 'placement_not_found',
+    segmentation: {
+    'es-sch-ads_name_page': 'segmentation/not/found'
+    },
+    sizes: [[300, 250], [320, 250]]
+})
+.then(position => openAds.displayPosition({id: position.id}))
+.catch(error =>
+    openAds.refreshPosition({
+    id: error.position.id,
+    position: {
+        name: 'new name',
+        placement: 'new-placement-to-update',
+        segmentation: {
+        'es-sch-ads_name_page': 'new/segmentation/to/page',
+        }
+    }
+})
+.then(position => openAds.displayPosition({id: position.id}))
+)
+                </code>
+                </pre>
+
+                <div id="ad_refresh"></div>
             </section>
 
-            <section id="five">
-                <p>Error handling</p>
-            </section>
         </div>
     </main>
 </div>

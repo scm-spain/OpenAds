@@ -91,9 +91,10 @@ Keep in mind this two scenarios when you refresh an existent position:
 
 # Native support
 
-OpenAds supports Native Ads, but delegates to the client the HTML generation so when you add a Position you will
-receive a Position as usual but the ad inside will be of type Native so if you try to do a display of a position that have a Native ad
-you will get an error of type **PositionAdIsNativeError**.
+OpenAds supports Native Ads, but delegates the presentation to the client so when you add a Position you will
+receive a Position as usual but the ad inside will be of type Native.
+
+If you try to do a display of a position that have a Native ad you will get an error of type **PositionAdIsNativeError**.
 
 To request what **fields** you want to receive with the Native ad you can provide that configuration when you add the Position through the native field 
 ```ecmascript 6
@@ -138,8 +139,49 @@ openAds.addPosition({
 
 # Error handling
 
+If the ad server generates some error when you are trying to add a Position, refreshing it or displaying it,
+OpenAds will throw a rejected Promise with an Error of type PositionAdNotAvailableError with the detailed error.
 
+```ecmascript 6
+class PositionAdNotAvailableError extends Error {
+  constructor ({position}) {
+    super()
+    this.name = 'PositionAdNotAvailableError'
+    this.message = `Position ${position && position.id} AD not available.`
+    this.stack = (new Error()).stack
+    this.position = position
+  }
+}
+```
+So for example if you add a Position and there is no bid for that segmentation you can easily catch the error
+and chain it with a refresh with new segmentation data.
 
+```ecmascript 6
+openAds.addPosition({
+  id: 'ad1_with_error',
+  name: 'ad_error',
+  source: 'AppNexus',
+  placement: 'placement_not_found',
+  segmentation: {
+    'es-sch-ads_name_page': 'segmentation/not/found'    
+  },
+  sizes: [[300, 250], [320, 250]]
+})
+  .then(position => openAds.displayPosition({id: position.id}))
+  .catch(error => 
+      openAds.refreshPosition({
+        id: error.position.id,
+        position: {
+          name: 'new name',
+          placement: 'new-placement-to-update',
+          segmentation: {
+              'es-sch-ads_name_page': 'new/segmentation/to/page',        
+          }
+        }
+      })
+      .then(position => openAds.displayPosition({id: position.id}))
+  )      
+```
 
 # Logging
 
