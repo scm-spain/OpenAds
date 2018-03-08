@@ -1,6 +1,0 @@
-SCMSpainAds:
-  SiteConfiguration:
-    CountryCode: es
-    SiteCode: cn
-  RoadBlock:
-    BannerWidth: 980
