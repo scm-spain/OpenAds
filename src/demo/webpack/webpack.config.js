@@ -36,6 +36,10 @@ var webpackPlugins = [
   new CopyWebpackPlugin([{
     from: 'src/demo/resources/ui/lib',
     to: 'lib'
+  }]),
+  new CopyWebpackPlugin([{
+    from: 'src/demo/resources/ui/img',
+    to: 'img'
   }])
 ]
 

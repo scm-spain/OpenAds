@@ -17,7 +17,7 @@ body {
     font-size: 1.6rem;
     color: #333333;
     overflow-x: hidden;
-    background-color: #f0ffff;
+    background-color: #9cccec;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -43,16 +43,58 @@ p {
     margin-bottom: 8px;
 }
 
-.main {
+.head {
+    background: url(../img/img-head.jpg) center center no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+h1 {
+    margin: 0;
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    font-size: 100px;
+    font-size: 10rem;
+    text-shadow: 0 0 16px #000000;
+    font-family: 'Signika', sans-serif;
+    line-height: 16vh;
+    position: relative;
+    padding: 0 16px;
+}
+
+h2 {
+    width: 100%;
+    color: #ffffff;
+    text-align: center;
+    font-size: 60px;
+    font-size: 6rem;
+    text-shadow: 0 0 16px #000000;
+    font-family: 'Signika', sans-serif;
+    position: relative;
+    padding: 40px 16px;
+}
+
+h3 {
+    margin: 16px 0;
+    font-size: 20px;
+}
+
+.container {
     margin: 0 auto;
     width: 100%;
     max-width: 1024px;
-    background-color: #fff;
     padding: 16px;
+}
+
+.main {
+    background-color: #fff;
+    padding-bottom: 32px;
 }
 
 pre {
     text-align: center;
+    margin: 16px 0;
 }
 
 code {
@@ -61,20 +103,11 @@ code {
     padding: 1em;
 }
 
-.main section {
-    margin-bottom: 20rem;
-}
-
-.is-inview {
-    background-color: black;
-    color: #ffffff;
-}
-
 .nav {
     position: fixed;
     left: 0;
-    padding: 16px;
-    background-color: #fff;
+    padding: 4px 0;
+    background-color: #5ca4dc;
 }
 
 .nav ul {
@@ -82,33 +115,38 @@ code {
 }
 
 .nav ul  a {
-    display: inline-block;
+    display: block;
     text-decoration: none;
+    background: #5ca4dc;
+    padding: 4px 16px;
+    border: 0;
+    transition: all 0.3s linear;
 }
+
+.nav ul a:hover,  .nav ul a.is-inview {
+    color: #ffffff;
+    background: #17476d;
+    transition: all 0.3s linear;
+
+}
+
 .ad-DemoButton {
     display: none;
 }
 
-.subtitle {
-    margin-bottom: 1.2rem;
-}
 
-.ad-explanation {
-    margin-top: 2rem;
-}
-
-
-@media screen and (max-width: 1024px) {
+@media screen and (max-width: 1400px) {
     .nav {
         width: 100%;
-        max-width: 1280px;
         margin: 0 auto;
         left: inherit;
         text-align: center;
+        top: 0;
+        padding: 0;
     }
 
     .ad-DemoButton {
-        background-color: #E84C3D;
+        background-color: #17476d;
         color: #ffffff;
         border: none;
         position: absolute;
@@ -118,10 +156,14 @@ code {
         cursor: pointer;
         z-index: 2;
         display: block;
+        left: 50%;
+        width: 100px;
+        text-align: center;
+        margin-left: -50px;
     }
 
     #ad-Demo {
-        background-color: #E84C3D;
+        background-color: ##17476d;
         color: white;
         font-size: 16px;
         text-align: center;
@@ -142,6 +184,68 @@ code {
     }
 }
 
+
+.alpha {
+    background-color: rgba(0, 0, 0, 0.7);
+    position: absolute;
+    width: 100%;
+    height: 100%;
+}
+
+.foot {
+    background: url(../img/img-foot.jpg) center center no-repeat;
+    background-size: cover;
+    position: relative;
+}
+
+.footer {
+    font-size: 14px;
+    font-size: 1.4rem;
+    color: #ffffff;
+    position: relative;
+}
+
+.footer a {
+    text-decoration: none;
+    border-bottom: none;
+    color: #ffffff;
+}
+
+.footer li {
+    list-style: none;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.footer li:after {
+    content: '|';
+    display: inline-block;
+    padding: 0 8px;
+}
+
+.footer li:last-child:after, .footer li:first-child:after {
+    display: none;
+}
+
+.footer-webs {
+    padding-left: 170px;
+    margin-bottom: 32px;
+    position: relative;
+    vertical-align: middle;
+    padding-top: 16px;
+}
+
+.footer-webs li:first-child {
+    position: absolute;
+    top: 0;
+    left: 0;
+}
+
+.schibsted-logo {
+    max-width: 150px;
+    width: 100%;
+    height: auto;
+}
 
 
 
