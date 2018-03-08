@@ -17,14 +17,18 @@
     <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet">
     <link rel="stylesheet" href="css/normalize.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css"/>
-    <link rel="stylesheet" href="css/demo.css?10"/>
+    <link rel="stylesheet" href="css/demo.css?20"/>
     <script type="text/javascript" src="lib/highlight.min.js"></script>
     <script type="text/javascript" src="lib/scrollspy.js"></script>
 </head>
 
 
 <body div id="js-scrollspy">
-
+    <header class="head">
+        <div class="alpha"></div>
+        <h1>OpenAds</h1>
+        <h2>Demo</h2>
+    </header>
     <nav class="js-scrollspy-nav nav">
         <ul id="ad-Demo">
             <li><a href="#one">Initialize</a></li>
@@ -32,12 +36,12 @@
             <li><a href="#three">Display Positions</a></li>
             <li><a href="#four">Refresh Positions</a></li>
         </ul>
-        <button class="ad-DemoButton">DEMO</button>
+        <button class="ad-DemoButton">MENU</button>
     </nav>
-    <main class="js-scrollspy-content main">
+    <main class="js-scrollspy-content main container">
         <div class="canvas">
             <section id="one">
-                <p class="subtitle">Initialize</p>
+                <h3>Initialize</h3>
                 <pre><code>import OpenAds from '../openads/infrastructure/bootstrap/index'
 
     const openAds = OpenAds.init({config: {
@@ -50,9 +54,8 @@
     }</code></pre>
             </section>
             <section id="two">
-                <p class="subtitle">Create Positions</p>
-
-                <pre id="two"><code>const positionOne = openAds.addPosition({
+                <h3>Create Positions</h3>
+                <pre><code>const positionOne = openAds.addPosition({
   id: 'ad1',
   name: 'ad number one',
   source: 'AppNexus',
@@ -88,22 +91,19 @@ const positionTwo = openAds.addPosition({
   </code></pre>
             </section>
             <section id="three">
-                <p class="subtitle">Display Positions</p>
-                <pre id="three">
-                    <code>
+                <h3>Display Positions</h3>
+                <pre><code>
   positionOne.then(position => openAds.displayPosition({id: position.id}))
   positionTwo.then(position => openAds.displayPosition({id: position.id}))
-                    </code>
-                </pre>
+                    </code></pre>
 
                 <div id="ad1"></div>
                 <div id="ad2"></div>
 
             </section>
             <section id="four">
-                <p class="subtitle">Refresh Positions</p>
-                <pre id="four">
-                <code>
+                <h3>Refresh Positions</h3>
+                <pre><code>
 openAds.addPosition({
     id: 'ad1_with_error',
     name: 'ad_error',
@@ -128,12 +128,10 @@ openAds.addPosition({
 })
 .then(position => openAds.displayPosition({id: position.id}))
 )
-                </code>
-                </pre>
-                <p class="ad-explanation">This Position initially were not available so after handle the error was refreshed with new segmentation</p>
+                </code></pre>
+                <p>This Position initially were not available so after handle the error was refreshed with new segmentation</p>
                 <div id="ad_refresh"></div>
-                <pre>
-                <code>
+                <pre><code>
 openAds.addPosition({
     id: 'ad3',
     name: 'ad number two',
@@ -153,15 +151,35 @@ openAds.addPosition({
 .then(position => openAds.displayPosition({id: position.id}))
 
 setInterval(() => openAds.refreshPosition({id: 'ad3'}), 5000)
-                </code>
-                    </pre>
-                <p class="ad-explanation">This Position is refreshed every five seconds</p>
+                </code></pre>
+                <p>This Position is refreshed every five seconds</p>
                 <div id="ad3"></div>
             </section>
 
         </div>
     </main>
-</div>
+    <footer class="foot">
+        <div class="alpha"></div>
+        <div class="container footer">
+            <ul class="footer-webs">
+                <li>
+                    <a href="http://www.schibsted.es/" target="_blank" title="Schibsted Spain">
+                        <img class="schibsted-logo" src="img/schibsted-white.png">
+                    </a>
+                </li>
+                <li><a href="http://www.fotocasa.es/" target="_blank">fotocasa.es</a></li>
+                <li><a href="http://www.inmogeo.com/" target="_blank">inmogeo.com</a></li>
+                <li><a href="http://www.vibbo.com/" target="_blank">vibbo.com</a></li>
+                <li><a href="https://www.infojobs.net/" target="_blank">Infojobs.net</a></li>
+                <li><a href="http://www.coches.net/" target="_blank">coches.net</a></li>
+                <li><a href="http://www.milanuncios.com/" target="_blank">milanuncios.com</a></li>
+                <li><a href="http://www.scm-re.com/" target="_blank">inmobiliaria en Europa</a></li>
+            </ul>
+            <ul>
+                <li>© 2018 Schibsted Classified Media Spain S.L.</li>
+            </ul>
+        </div>
+    </footer>
 <script type="text/javascript" src="js/PageDemo.js?2"></script>
 </body>
 </html>
