@@ -2,17 +2,18 @@
 
 [![Build status](https://travis-ci.org/scm-spain/OpenAds.svg?branch=master)](https://travis-ci.org/scm-spain/OpenAds) [![codecov](https://codecov.io/gh/scm-spain/OpenAds/branch/master/graph/badge.svg)](https://codecov.io/gh/scm-spain/OpenAds)
 
-Powerful advertising abstraction library to deliver ads in a web environment providing you a common domain for different sources.
+:rocket: Powerful advertising abstraction library to deliver ads in a web environment providing you a common domain for different sources.
 
 OpenAds introduce a domain about Positions where ads are loaded inside so you don't have to worry about what connector
 are you using to show ads you just only need to know a simple use cases and initial configurations.
 
 # Features
 
-* Abstraction of different ad sources like AppNexus, Google, adhoc adServer.
-* Friendly configuration and simple use cases
-* Promise based
-* Written using best practises and new technologies to achieve performance and maintainability
+* :dolls: Abstraction of different ad sources like AppNexus, Google, adhoc adServer.
+* :gift: Friendly configuration and simple use cases
+* :incoming_envelope: Promise based
+* :mag_right: Written using best practises and new technologies to achieve performance and maintainability
+* :money_with_wings: Increase your revenues
 
 
 # Installation
@@ -206,7 +207,7 @@ const openAds = OpenAds.init({config: {
 }})
 ```
 
-While navigating in a browser, adding openads_debug keyword to the URL query string will enable the debug mode automatically.
+While navigating in a browser, adding **openads_debug** keyword to the URL query string will enable the debug mode automatically.
 
 For example:
 ```
