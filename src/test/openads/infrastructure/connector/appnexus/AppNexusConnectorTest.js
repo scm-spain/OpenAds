@@ -57,4 +57,12 @@ describe('AppNexusConnector', () => {
       done()
     }
   })
+  it('Should return an error calling to AppNexusConnector#refresh instead of a extending class implementation', (done) => {
+    try {
+      givenAppNexusConnector.refresh({})
+      done(new Error('Should throw an error'))
+    } catch (err) {
+      done()
+    }
+  })
 })

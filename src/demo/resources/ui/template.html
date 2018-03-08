@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html xml:lang="es" lang="es">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <meta content="true" name="HandheldFriendly">
+    <meta content="width" name="MobileOptimized">
+    <meta content="width=device-width" name="viewport">
+    <meta content="width=768, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta content="telephone=no" name="format-detection">
+    <title>OpenAds Local Environment Tester</title>
+    <link href="https://fonts.googleapis.com/css?family=Signika" rel="stylesheet">
+    <link rel="stylesheet" href="css/normalize.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/darcula.min.css"/>
+    <link rel="stylesheet" href="css/demo.css?20"/>
+    <script type="text/javascript" src="lib/highlight.min.js"></script>
+    <script type="text/javascript" src="lib/scrollspy.js"></script>
+</head>
+
+
+<body div id="js-scrollspy">
+    <header class="head">
+        <div class="alpha"></div>
+        <h1>OpenAds</h1>
+        <h2>Demo</h2>
+    </header>
+    <nav class="js-scrollspy-nav nav">
+        <ul id="ad-Demo">
+            <li><a href="#one">Initialize</a></li>
+            <li><a href="#two">Create Positions</a></li>
+            <li><a href="#three">Display Positions</a></li>
+            <li><a href="#four">Refresh Positions</a></li>
+        </ul>
+        <button class="ad-DemoButton">MENU</button>
+    </nav>
+    <main class="js-scrollspy-content main container">
+        <div class="canvas">
+            <section id="one">
+                <h3>Initialize</h3>
+                <pre><code>import OpenAds from '../openads/infrastructure/bootstrap/index'
+
+    const openAds = OpenAds.init({config: {
+      Sources: {
+        AppNexus: {
+          Member: 3397
+        }
+      }
+    }})
+    }</code></pre>
+            </section>
+            <section id="two">
+                <h3>Create Positions</h3>
+                <pre><code>const positionOne = openAds.addPosition({
+  id: 'ad1',
+  name: 'ad number one',
+  source: 'AppNexus',
+  placement: 'es-cn-wph-ocasion-list-x_65',
+  segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wph',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'x65'
+  },
+  sizes: [[300, 250], [320, 250]]
+})
+
+const positionTwo = openAds.addPosition({
+  id: 'ad2',
+  name: 'ad number two',
+  source: 'AppNexus',
+  placement: 'es-cn-wde-ocasion-list-top_2',
+  segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wde',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'top2'
+  },
+  sizes: [[728, 90], [1, 1], [728, 161]]
+})
+  </code></pre>
+            </section>
+            <section id="three">
+                <h3>Display Positions</h3>
+                <pre><code>
+  positionOne.then(position => openAds.displayPosition({id: position.id}))
+  positionTwo.then(position => openAds.displayPosition({id: position.id}))
+                    </code></pre>
+
+                <div id="ad1"></div>
+                <div id="ad2"></div>
+
+            </section>
+            <section id="four">
+                <h3>Refresh Positions</h3>
+                <pre><code>
+openAds.addPosition({
+    id: 'ad1_with_error',
+    name: 'ad_error',
+    source: 'AppNexus',
+    placement: 'placement_not_found',
+    segmentation: {
+    'es-sch-ads_name_page': 'segmentation/not/found'
+    },
+    sizes: [[300, 250], [320, 250]]
+})
+.then(position => openAds.displayPosition({id: position.id}))
+.catch(error =>
+    openAds.refreshPosition({
+    id: error.position.id,
+    position: {
+        name: 'new name',
+        placement: 'new-placement-to-update',
+        segmentation: {
+        'es-sch-ads_name_page': 'new/segmentation/to/page',
+        }
+    }
+})
+.then(position => openAds.displayPosition({id: position.id}))
+)
+                </code></pre>
+                <p>This Position initially were not available so after handle the error was refreshed with new segmentation</p>
+                <div id="ad_refresh"></div>
+                <pre><code>
+openAds.addPosition({
+    id: 'ad3',
+    name: 'ad number two',
+    source: 'AppNexus',
+    placement: 'es-cn-wde-ocasion-list-top_2',
+    segmentation: {
+    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+    'es-sch-event_name': 'list',
+    'aa-sch-country_code': 'es',
+    'aa-sch-supply_type': 'wde',
+    'es-sch-section': 'ocasion',
+    'aa-sch-page_type': 'list',
+    'es-sch-adformat': 'top2'
+    },
+    sizes: [[728, 90], [1, 1], [728, 161]]
+})
+.then(position => openAds.displayPosition({id: position.id}))
+
+setInterval(() => openAds.refreshPosition({id: 'ad3'}), 5000)
+                </code></pre>
+                <p>This Position is refreshed every five seconds</p>
+                <div id="ad3"></div>
+            </section>
+
+        </div>
+    </main>
+    <footer class="foot">
+        <div class="alpha"></div>
+        <div class="container footer">
+            <ul class="footer-webs">
+                <li>
+                    <a href="http://www.schibsted.es/" target="_blank" title="Schibsted Spain">
+                        <img class="schibsted-logo" src="img/schibsted-white.png">
+                    </a>
+                </li>
+                <li><a href="http://www.fotocasa.es/" target="_blank">fotocasa.es</a></li>
+                <li><a href="http://www.inmogeo.com/" target="_blank">inmogeo.com</a></li>
+                <li><a href="http://www.vibbo.com/" target="_blank">vibbo.com</a></li>
+                <li><a href="https://www.infojobs.net/" target="_blank">Infojobs.net</a></li>
+                <li><a href="http://www.coches.net/" target="_blank">coches.net</a></li>
+                <li><a href="http://www.milanuncios.com/" target="_blank">milanuncios.com</a></li>
+                <li><a href="http://www.scm-re.com/" target="_blank">inmobiliaria en Europa</a></li>
+            </ul>
+            <ul>
+                <li>© 2018 Schibsted Classified Media Spain S.L.</li>
+            </ul>
+        </div>
+    </footer>
+<script type="text/javascript" src="js/PageDemo.js?2"></script>
+</body>
+</html>

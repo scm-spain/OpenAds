@@ -1,24 +1,28 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
-import DisplayAdsUseCase from '../../application/service/DisplayAdsUseCase'
 import AppNexusConnectorImpl from '../connector/appnexus/AppNexusConnectorImpl'
-import AdChainedRepository from '../repository/AdChainedRepository'
-import AppNexusAdRepository from '../repository/appnexus/AppNexusAdRepository'
-import AppNexusResultMapper from '../service/appnexus/AppNexusResultMapper'
-import BannerFactory from '../../domain/ad/banner/BannerFactory'
-import AppNexusBannerRenderer from '../service/appnexus/AppNexusBannerRenderer'
-import FindAdUseCase from '../../application/service/FindAdUseCase'
 import AppNexusClient from '../connector/appnexus/AppNexusClient'
-import EventDispatcher from '../../domain/service/EventDispatcher'
-import ResetConnectorsUseCase from '../../application/service/ResetConnectorsUseCase'
-import NativeRendererFactory from '../../domain/ad/native/NativeRendererFactory'
-import NativeRendererProcessor from '../../domain/service/NativeRendererProcessor'
-import NativeFactory from '../../domain/ad/native/NativeFactory'
-import AppNexusRequestMapper from '../service/appnexus/AppNexusRequestMapper'
+import DomainEventBus from '../../domain/service/DomainEventBus'
 import LogLevel from 'loglevel'
 import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
 import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
 import LogLevelConfigurator from '../logger/LogLevelConfigurator'
+import AddPositionUseCase from '../../application/service/AddPositionUseCase'
+import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
+import {errorObserverFactory} from './errorObserverFactory'
+import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
+import positionCreatedObserverFactory from '../position/positionCreatedObserver'
+import {POSITION_CREATED} from '../../domain/position/positionCreated'
+import RefreshPositionUseCase from '../../application/service/RefreshPositionUseCase'
+import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
+import positionDisplayedObserver from '../position/positionDisplayedObserver'
+import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
+import positionAlreadyDisplayedObserver from '../position/positionAlreadyDisplayedObserver'
+import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
+import {POSITION_SEGMENTATION_CHANGED} from '../../domain/position/positionSegmentationChanged'
+import positionSegmentationChangedObserverFactory from '../position/positionSegmentationChangedObserver'
+import DefaultPositionFactory from '../position/DefaultPositionFactory'
+import PullingAdRepository from '../repository/PullingAdRepository'
 
 export default class Container {
   constructor ({config}) {
@@ -70,44 +74,34 @@ export default class Container {
     return new HTMLDOMDriver({dom: window.document})
   }
 
-  _buildDisplayAdsUseCase () {
-    return new DisplayAdsUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
-      logger: this.getInstance({key: 'Logger'})
+  _buildAddPositionUseCase () {
+    return new AddPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      positionFactory: this.getInstance({key: 'PositionFactory'}),
+      adRepository: this.getInstance({key: 'AdRepository'})
     })
   }
 
-  _buildFindAdsUseCase () {
-    return new FindAdUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
-      logger: this.getInstance({key: 'Logger'})
+  _buildRefreshPositionUseCase () {
+    return new RefreshPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'}),
+      adRepository: this.getInstance({key: 'AdRepository'})
     })
   }
 
-  _buildResetConnectorsUseCase () {
-    return new ResetConnectorsUseCase({
-      adChainedRepository: this.getInstance({key: 'AdChainedRepository'}),
-      logger: this.getInstance({key: 'Logger'})
+  _buildAdRepository () {
+    return new PullingAdRepository({
+      wait: this._config.Sources.Pulling,
+      timeout: this._config.Sources.Timeout
     })
   }
 
-  _buildEventDispatcher () {
-    return new EventDispatcher({
-      logger: this.getInstance({key: 'Logger'})
-    })
+  _buildPositionRepository () {
+    return new InMemoryPositionRepository()
   }
 
-  _buildNativeRendererProcessor () {
-    return new NativeRendererProcessor({
-      nativeRendererFactory: this.getInstance({key: 'NativeRendererFactory'}),
-      logger: this.getInstance({key: 'Logger'})
-    })
-  }
-
-  _buildNativeRendererFactory () {
-    return new NativeRendererFactory({
-      domDriver: this.getInstance({key: 'DOMDriver'})
-    })
+  _buildPositionFactory () {
+    return new DefaultPositionFactory()
   }
 
   _buildAppNexusConnector () {
@@ -123,54 +117,61 @@ export default class Container {
     return AppNexusClient.build()
   }
 
-  _buildAppNexusRepository () {
-    return new AppNexusAdRepository({
-      appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
-      appNexusResultMapper: this.getInstance({key: 'AppNexusResultMapper'}),
-      appNexusRequestMapper: this.getInstance({key: 'AppNexusRequestMapper'})
+  _buildErrorObserverFactory () {
+    const logger = this.getInstance({key: 'Logger'})
+    return errorObserverFactory(logger)
+  }
+
+  _buildDisplayPositionUseCase () {
+    return new DisplayPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'})
     })
   }
 
-  _buildAdChainedRepository () {
-    return new AdChainedRepository({
-      appnexusRepository: this.getInstance({key: 'AppNexusRepository'}),
-      configuration: this._config
-    })
+  _buildPositionDisplayedObserver () {
+    const appNexusConnector = this.getInstance({key: 'AppNexusConnector'})
+    return positionDisplayedObserver(appNexusConnector)
   }
 
-  _buildAppNexusResultMapper () {
-    return new AppNexusResultMapper({
-      bannerFactory: this.getInstance({key: 'BannerFactory'}),
-      nativeFactory: this.getInstance({key: 'NativeFactory'})
-    })
+  _buildPositionAlreadyDisplayedObserver () {
+    const appNexusConnector = this.getInstance({key: 'AppNexusConnector'})
+    return positionAlreadyDisplayedObserver(appNexusConnector)
   }
 
-  _buildAppNexusRequestMapper () {
-    return new AppNexusRequestMapper()
+  _buildPositionCreatedObserver () {
+    const connector = this.getInstance({key: 'AppNexusConnector'})
+    const appnexusConsumerRepository = this.getInstance({key: 'AdRepository'})
+    return positionCreatedObserverFactory(connector)(appnexusConsumerRepository)
   }
 
-  _buildBannerFactory () {
-    return new BannerFactory({
-      appNexusBannerRenderer: this.getInstance({key: 'AppNexusBannerRenderer'}),
-      eventDispatcher: this.getInstance({key: 'EventDispatcher'})
-    })
-  }
-
-  _buildAppNexusBannerRenderer () {
-    return new AppNexusBannerRenderer({
-      appNexusConnector: this.getInstance({key: 'AppNexusConnector'}),
-      domDriver: this.getInstance({key: 'DOMDriver'})
-    })
-  }
-
-  _buildNativeFactory () {
-    return new NativeFactory({
-      nativeRendererProcessor: this.getInstance({key: 'NativeRendererProcessor'}),
-      eventDispatcher: this.getInstance({key: 'EventDispatcher'})
-    })
+  _buildPositionSegmentationChangedObserver () {
+    const connector = this.getInstance({key: 'AppNexusConnector'})
+    return positionSegmentationChangedObserverFactory(connector)
   }
 
   _buildEagerSingletonInstances () {
-    this.getInstance({key: 'EventDispatcher'})
+    const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    const positionCreatedObserver = this.getInstance({key: 'PositionCreatedObserver'})
+    const positionDisplayedObserver = this.getInstance({key: 'PositionDisplayedObserver'})
+    const positionAlreadyDisplayedObserver = this.getInstance({key: 'PositionAlreadyDisplayedObserver'})
+    const positionSegmentationChangedObserver = this.getInstance({key: 'PositionSegmentationChangedObserver'})
+
+    DomainEventBus.register({
+      eventName: OBSERVER_ERROR_THROWN,
+      observer: errorObserver})
+    DomainEventBus.register({
+      eventName: POSITION_DISPLAYED,
+      observer: positionDisplayedObserver})
+    DomainEventBus.register({
+      eventName: POSITION_ALREADY_DISPLAYED,
+      observer: positionAlreadyDisplayedObserver})
+    DomainEventBus.register({
+      eventName: POSITION_CREATED,
+      observer: positionCreatedObserver
+    })
+    DomainEventBus.register({
+      eventName: POSITION_SEGMENTATION_CHANGED,
+      observer: positionSegmentationChangedObserver
+    })
   }
 }

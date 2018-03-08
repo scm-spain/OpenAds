@@ -32,11 +32,14 @@ export default class AppNexusConnector extends Connector {
 
   /**
    * Method to define tags.
+   * @param member
+   * @param targetId
    * @param invCode
    * @param sizes
-   * @param targetId
+   * @param keywords
+   * @param native
    */
-  defineTag ({invCode, sizes, targetId}) {
+  defineTag ({member, targetId, invCode, sizes, keywords, native}) {
     throw new Error('AppNexusConnector#defineTag must be implemented')
   }
 
@@ -60,5 +63,27 @@ export default class AppNexusConnector extends Connector {
    */
   reset () {
     throw new Error('AppNexusConnector#clearRequest must be implemented')
+  }
+
+  /**
+   * Refreshes ads on the page.
+   * @param target : an array of ids
+   */
+  refresh (target) {
+    throw new Error('AppNexusConnector#refresh must be implemented')
+  }
+
+  /**
+   * Updates tag information.
+   * @param targetId : an array of ids
+   * @param data : the data to update
+   * @param data.member
+   * @param data.invCode
+   * @param data.sizes
+   * @param data.keywords
+   * @param data.native
+   */
+  modifyTag ({targetId, data}) {
+    throw new Error('AppNexusConnector#modifyTag must be implemented')
   }
 }

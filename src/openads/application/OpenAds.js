@@ -6,65 +6,47 @@ export default class OpenAds {
   constructor ({container}) {
     this._container = container
   }
+  /**
+   * Create a new Position on the page
+   * @param {string} id
+   * @param {string} name
+   * @param {string} source
+   * @param {string} placement
+   * @param {string} segmentation
+   * @param {Array<Array<>>}sizes
+   * @param {Object} native - Fields requested to the ad server
+   * @returns {Promise<Position>}
+   */
+  addPosition ({id, name, source, placement, segmentation, sizes, native}) {
+    return this._container.getInstance({key: 'AddPositionUseCase'}).addPosition({id, name, source, placement, segmentation, sizes, native})
+  }
 
   /**
-   *
-   * @param {AdRequest} adRequest
-   * @param {string} adRequest.position - Position where Ad will be displayed
-   * @param {string} adRequest.containerId - DOM element where Ad will be rendered
-   * @param {string} adRequest.segmentation - Segmentation to target the Ad
-   * @param {string} adRequest.placement - Placement to target the Ad
-   * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
+   * Update a Position with given changes and refresh his Ad
+   * @param {string} id
+   * @param {object} position
+   * @param {string} position.name
+   * @param {string} position.placement
+   * @param {string} position.segmentation
+   * @param {Array} position.sizes
+   * @returns {Promise<Position>}
    */
-  find ({adRequest}) {
-    return this._container.getInstance({key: 'FindAdsUseCase'}).find({adRequest})
+  refreshPosition ({id, position}) {
+    return this._container.getInstance({key: 'RefreshPositionUseCase'}).refreshPosition({id, position})
   }
   /**
-   *
-   * @param {AdRequest} adRequest
-   * @param {string} adRequest.position - Position where Ad will be displayed
-   * @param {string} adRequest.containerId - DOM element where Ad will be rendered
-   * @param {string} adRequest.segmentation - Segmentation to target the Ad
-   * @param {string} adRequest.placement - Placement to target the Ad
-   * @param {Array<Size>} adRequest.sizes - Collection of sizes accepted for given targeting segmentation
+   * Displays a position in the page
+   * @param {string} position id
+   * @return {Promise<Position>}
    */
-  display ({adRequest}) {
-    return this._container.getInstance({key: 'DisplayAdsUseCase'}).display({adRequest})
+  displayPosition ({id} = {}) {
+    return this._container.getInstance({key: 'DisplayPositionUseCase'}).displayPosition({id})
   }
 
-  registerHook ({eventName, position, callback}) {
-    this._container.getInstance({key: 'EventDispatcher'}).addObserver({
-      eventName,
-      position,
-      observer: callback
-    })
-  }
-
-  unregisterHook ({eventName, position, callback}) {
-    this._container.getInstance({key: 'EventDispatcher'}).removeObserver({
-      eventName,
-      position,
-      observer: callback
-    })
-  }
-
-  registerNativeRenderer ({position, renderer}) {
-    this._container.getInstance({key: 'NativeRendererProcessor'}).addPositionRenderer({
-      position,
-      renderer: renderer
-    })
-  }
-
-  unregisterNativeRenderer ({position}) {
-    this._container.getInstance({key: 'NativeRendererProcessor'}).removePositionRenderer({
-      position
-    })
-  }
-
-  resetConnectors () {
-    return this._container.getInstance({key: 'ResetConnectorsUseCase'}).resetConnectors()
-  }
-
+  /**
+   * Returns current configuration loaded
+   * @returns {Object}
+   */
   environment () {
     return this._container.config
   }
