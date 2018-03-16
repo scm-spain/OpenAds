@@ -25,10 +25,10 @@ import DefaultPositionFactory from '../position/DefaultPositionFactory'
 import PullingAdRepository from '../repository/PullingAdRepository'
 
 export default class Container {
-  constructor ({config}) {
+  constructor ({config, eager = true} = {}) {
     this._config = config
     this._instances = new Map()
-    this._buildEagerSingletonInstances()
+    if (eager) this._buildEagerSingletonInstances()
   }
 
   getInstance ({key}) {
