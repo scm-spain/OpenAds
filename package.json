@@ -14,7 +14,7 @@
     "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\" && npm run test:integration",
     "test:integration": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/itest/**/*.js\"",
     "server": "http-server './dist' -p 8080",
-    "coverage": "istanbul cover --report html _mocha -- ./src/test --recursive --compilers js:babel-register",
+    "coverage": "istanbul cover --report html _mocha -- ./src/*test --recursive --compilers js:babel-register",
     "coverage:ci": "istanbul cover _mocha -- ./src/*test --recursive --compilers js:babel-register && codecov",
     "watch": "onchange 'src/**/*.js' -- npm run build",
     "lint": "sui-lint js"
