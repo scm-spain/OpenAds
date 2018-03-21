@@ -95,7 +95,7 @@ describe('Refresh Position use case', function () {
           expect(position.placement).to.be.equals(newSegmentation.placement)
           expect(position.segmentation).to.be.equals(newSegmentation.segmentation)
           expect(position.sizes).to.be.equals(newSegmentation.sizes)
-          expect(position.ad.status).to.be.equals(AD_AVAILABLE)
+          expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
           done()
         })
         .catch(error => done(error))
@@ -153,11 +153,11 @@ describe('Refresh Position use case', function () {
       openAds.addPosition(newPosition)
         .then(position => openAds.refreshPosition({id: position.id}))
         .then(position => {
-          expect(position.name).to.be.equals(newPosition.name)
-          expect(position.placement).to.be.equals(newPosition.placement)
-          expect(position.segmentation).to.be.equals(newPosition.segmentation)
+          expect(position.name, `Name is ${position.name} and should be ${newPosition.name}, perharps you forget to keep previous value in the update process?`).to.be.equals(newPosition.name)
+          expect(position.placement, `Placement is ${position.placement} and should be ${newPosition.placement}, perharps you forget to keep previous value in the update process?`).to.be.equals(newPosition.placement)
+          expect(position.segmentation, `Segmentation is ${position.segmentation} and should be ${newPosition.segmentation}, perharps you forget to keep previous value in the update process?`).to.be.equals(newPosition.segmentation)
           expect(position.sizes, `Sizes is ${position.sizes} and should be ${newPosition.sizes}, perhaps you forget to keep previous value in the update process?`).to.be.equals(newPosition.sizes)
-          expect(position.ad.status).to.be.equals(AD_AVAILABLE)
+          expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
           done()
         })
         .catch(error => done(error))
@@ -232,7 +232,7 @@ describe('Refresh Position use case', function () {
 
       openAds.addPosition(newPosition)
         .then(position => {
-          expect(position.ad.status).to.be.equals(AD_AVAILABLE)
+          expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
           expect(position.ad.data.adType).to.be.equals(loadTags.data.adType)
           expect(position.ad.data.creativeId).to.be.equals(loadTags.data.creativeId)
           expect(position.ad.data.banner.width).to.be.equals(loadTags.data.banner.width)
@@ -241,7 +241,7 @@ describe('Refresh Position use case', function () {
         })
         .then(position => openAds.refreshPosition({id: position.id}))
         .then(position => {
-          expect(position.ad.status).to.be.equals(AD_AVAILABLE)
+          expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
           expect(position.ad.data.adType).to.be.equals(refresh.data.adType)
           expect(position.ad.data.creativeId).to.be.equals(refresh.data.creativeId)
           expect(position.ad.data.banner.width).to.be.equals(refresh.data.banner.width)
@@ -311,7 +311,7 @@ describe('Refresh Position use case', function () {
 
       openAds.addPosition(newPosition)
         .then(position => {
-          expect(position.ad.status).to.be.equals(AD_AVAILABLE)
+          expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
           expect(position.ad.data.adType).to.be.equals(loadTags.data.adType)
           expect(position.ad.data.creativeId).to.be.equals(loadTags.data.creativeId)
           expect(position.ad.data.banner.width).to.be.equals(loadTags.data.banner.width)

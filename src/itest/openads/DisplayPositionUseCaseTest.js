@@ -56,7 +56,7 @@ describe('Display Position use case', function () {
       })
         .then(position => openAds.displayPosition({id: position.id}))
         .then(position => {
-          expect(position.ad.status).to.be.equals(AD_AVAILABLE)
+          expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
           expect(position.ad.data.adType).to.be.equals('banner')
           expect(position.status).to.be.equals(POSITION_VISIBLE)
           done()
@@ -183,7 +183,7 @@ describe('Display Position use case', function () {
         .catch(error => {
           expect(error.name).to.be.equals('PositionAdNotAvailableError')
           expect(error.position.ad.data.nobid).to.be.equals(true)
-          expect(error.position.ad.status).to.be.equals(AD_NO_BID)
+          expect(error.position.ad.status, `The ad status is equal to ${error.position.ad.status}, instead it should be equal to 'AD_NO_BID'`).to.be.equals(AD_NO_BID)
           done()
         })
     })
