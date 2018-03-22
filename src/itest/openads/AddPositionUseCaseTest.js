@@ -1,3 +1,4 @@
+/* eslint-disable no-trailing-spaces */
 import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'

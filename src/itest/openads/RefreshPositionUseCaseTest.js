@@ -312,10 +312,10 @@ describe('Refresh Position use case', function () {
       openAds.addPosition(newPosition)
         .then(position => {
           expect(position.ad.status, `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`).to.be.equals(AD_AVAILABLE)
-          expect(position.ad.data.adType, `The refreshed position ad adType should be ${refresh.data.adType}, instead of it is ${position.ad.data.adType}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.adType)
-          expect(position.ad.data.creativeId, `The refreshed position ad creativeId should be ${refresh.data.creativeId}, instead of it is ${position.ad.data.creativeId}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.creativeId)
-          expect(position.ad.data.banner.width, `The refreshed position ad width should be ${refresh.data.banner.width}, instead of it is ${position.ad.data.banner.width}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.banner.width)
-          expect(position.ad.data.banner.height, `The refreshed position ad height should be ${refresh.data.banner.height}, instead of it is ${position.ad.data.banner.height}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.banner.height)
+          expect(position.ad.data.adType, `The refreshed position ad adType should be ${position.ad.data.adType}, instead of it is ${position.ad.data.adType}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.adType)
+          expect(position.ad.data.creativeId, `The refreshed position ad creativeId should be ${position.ad.data.creativeId}, instead of it is ${position.ad.data.creativeId}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.creativeId)
+          expect(position.ad.data.banner.width, `The refreshed position ad width should be ${position.ad.data.banner.width}, instead of it is ${position.ad.data.banner.width}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.banner.width)
+          expect(position.ad.data.banner.height, `The refreshed position ad height should be ${position.ad.data.banner.height}, instead of it is ${position.ad.data.banner.height}. Maybe you need to check the refreshPosition use case`).to.be.equals(loadTags.data.banner.height)
           return position
         })
         .then(position => openAds.refreshPosition({
