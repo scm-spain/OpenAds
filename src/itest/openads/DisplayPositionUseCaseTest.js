@@ -134,7 +134,7 @@ describe('Display Position use case', function () {
         .then(position => done(new Error(`should be rejected! ${position.id}`)))
         .catch(error => {
           expect(error.name, `DisplayPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdIsNativeError', but we have received a ${error.name}`).to.be.equals('PositionAdIsNativeError')
-          expect(error.position.ad.data.adType, `The ad adType of the error is equal to ${error.position.ad.data.adType}, instead it should be equal to 'native'`).to.be.equals('native')
+          expect(error.position.ad.data.adType, `The ad adType is equal to ${error.position.ad.data.adType}, instead it should be equal to 'native'`).to.be.equals('native')
           done()
         })
     })
@@ -183,7 +183,7 @@ describe('Display Position use case', function () {
         .catch(error => {
           expect(error.name, `DisplayPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdNotAvailableError', but we have received a ${error.name}`).to.be.equals('PositionAdNotAvailableError')
           expect(error.position.ad.data.nobid, `We expect and ad data nobid equals to 'true', instead of this we receive ${error.position.ad.data.nobid}`).to.be.equals(true)
-          expect(error.position.ad.status, `The ad status of the error is equal to ${error.position.ad.status}, instead it should be equal to 'AD_NO_BID'`).to.be.equals(AD_NO_BID)
+          expect(error.position.ad.status, `The ad status is equal to ${error.position.ad.status}, instead it should be equal to 'AD_NO_BID'`).to.be.equals(AD_NO_BID)
           done()
         })
     })
