@@ -10,6 +10,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     this._appNexusClient = appNexusClient
     this._registeredEvents = new Map()
     this._logger = logger
+    this._debounce = undefined
   }
 
   get member () {
@@ -46,8 +47,14 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   loadTags () {
-    this._logger.debug('Loading AppNexus Tags')
-    this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
+    if (this._debounce === undefined) {
+      this._debounce = setTimeout(() => {
+        this._logger.debug('Loading AppNexus Tags')
+        this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
+        clearTimeout(this._debounce)
+        this._debounce = undefined
+      }, 10)
+    }
     return this
   }
 
@@ -80,4 +87,5 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     this._appNexusClient.anq.push(() => this._appNexusClient.modifyTag(targetId, data))
     return this
   }
+
 }

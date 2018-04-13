@@ -129,7 +129,7 @@ describe('AppNexusConnectorImpl implementation', function () {
       expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
       expect(loggerSpy.calledOnce, 'logger debug method should be called twice, one for addPositionRenderer ').to.be.true
     })
-    it('should create a new instance of AppNexusConnectorImpl and push loadTags function to the queue', function () {
+    it('should create a new instance of AppNexusConnectorImpl and push loadTags function to the queue', function (done) {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
       let appNexusQueue = []
@@ -149,11 +149,89 @@ describe('AppNexusConnectorImpl implementation', function () {
         logger: loggerMock
       })
       const mutatedAppNexusConnector = appNexusConnector.loadTags()
+      setTimeout(() => {
+        expect(appNexusClientMock.anq).to.have.lengthOf(1)
+        expect(qSpy.called).to.be.true
+        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
+        expect(loggerSpy.calledOnce, 'logger debug method should be called twice, one for addPositionRenderer ').to.be.true
+        done()
+      }, 200)
+    })
+    it('should push loadTags AppNexus function only one time after several consecutive calls of loadTags connector', function (done) {
+      const source = 'AppNexus'
+      const connectorData = { 'Member': 3296 }
+      let appNexusQueue = []
+      const qSpy = sinon.spy(appNexusQueue, 'push')
+      const loggerSpy = sinon.spy()
+      let appNexusClientMock = {
+        anq: appNexusQueue,
+        loadTags: () => undefined
+      }
+      const loggerMock = {
+        debug: (title, log) => loggerSpy()
+      }
+      const appNexusConnector = new AppNexusConnectorImpl({
+        source,
+        connectorData,
+        appNexusClient: appNexusClientMock,
+        logger: loggerMock
+      })
+      const mutatedAppNexusConnector = appNexusConnector.loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
 
-      expect(appNexusClientMock.anq).to.have.lengthOf(1)
-      expect(qSpy.called).to.be.true
-      expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
-      expect(loggerSpy.calledOnce, 'logger debug method should be called twice, one for addPositionRenderer ').to.be.true
+      setTimeout(() => {
+        expect(appNexusClientMock.anq).to.have.lengthOf(1)
+        expect(qSpy.calledOnce).to.be.true
+        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
+        expect(loggerSpy.calledOnce, 'logger debug method should be called once ').to.be.true
+        done()
+      }, 200)
+    })
+    it('should push loadTags AppNexus function two times after several consecutive calls of loadTags connector', function (done) {
+      const source = 'AppNexus'
+      const connectorData = { 'Member': 3296 }
+      let appNexusQueue = []
+      const qSpy = sinon.spy(appNexusQueue, 'push')
+      const loggerSpy = sinon.spy()
+      let appNexusClientMock = {
+        anq: appNexusQueue,
+        loadTags: () => undefined
+      }
+      const loggerMock = {
+        debug: (title, log) => loggerSpy()
+      }
+      const appNexusConnector = new AppNexusConnectorImpl({
+        source,
+        connectorData,
+        appNexusClient: appNexusClientMock,
+        logger: loggerMock
+      })
+      let mutatedAppNexusConnector = appNexusConnector.loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+        .loadTags()
+
+      setTimeout(() => {
+        mutatedAppNexusConnector.loadTags()
+      }, 20)
+
+      setTimeout(() => {
+        expect(appNexusClientMock.anq).to.have.lengthOf(2)
+        expect(qSpy.calledTwice).to.be.true
+        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
+        expect(loggerSpy.calledTwice, 'logger debug method should be called twice ').to.be.true
+        done()
+      }, 200)
     })
     it('should create a new instance of AppNexusConnectorImpl and push showTag function to the queue', function () {
       const source = 'AppNexus'
@@ -255,7 +333,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     })
   })
   describe('Given an AppNexusConnector with an AppNexusClient', () => {
-    it('Should call client methods', () => {
+    it('Should call client methods', (done) => {
       const sourceMock = {}
       const connectorDataMock = {}
       const appNexusQueue = {
@@ -301,20 +379,22 @@ describe('AppNexusConnectorImpl implementation', function () {
         .showTag(givenShowTag)
         .modifyTag(givenModifyTag)
         .refresh(givenRefresh)
-
-      expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(6)
-      expect(setPageOptsSpy.called).to.be.true
-      expect(defineTagSpy.called).to.be.true
-      expect(loadTagsSpy.called).to.be.true
-      expect(showTagSpy.called).to.be.true
-      expect(modifyTagSpy.called).to.be.true
-      expect(refreshSpy.called).to.be.true
-      expect(setPageOptsSpy.lastCall.args[0]).to.deep.equal(givenPageOpts)
-      expect(defineTagSpy.lastCall.args[0]).to.deep.equal(givenDefineTag)
-      expect(showTagSpy.lastCall.args[0]).to.deep.equal(givenShowTag.target)
-      expect(modifyTagSpy.lastCall.args[0]).to.deep.equal(givenModifyTag.targetId)
-      expect(modifyTagSpy.lastCall.args[1]).to.deep.equal(givenModifyTag.data)
-      expect(refreshSpy.lastCall.args[0]).to.deep.equal(givenRefresh)
+      setTimeout(() => {
+        expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(6)
+        expect(setPageOptsSpy.called).to.be.true
+        expect(defineTagSpy.called).to.be.true
+        expect(loadTagsSpy.called).to.be.true
+        expect(showTagSpy.called).to.be.true
+        expect(modifyTagSpy.called).to.be.true
+        expect(refreshSpy.called).to.be.true
+        expect(setPageOptsSpy.lastCall.args[0]).to.deep.equal(givenPageOpts)
+        expect(defineTagSpy.lastCall.args[0]).to.deep.equal(givenDefineTag)
+        expect(showTagSpy.lastCall.args[0]).to.deep.equal(givenShowTag.target)
+        expect(modifyTagSpy.lastCall.args[0]).to.deep.equal(givenModifyTag.targetId)
+        expect(modifyTagSpy.lastCall.args[1]).to.deep.equal(givenModifyTag.data)
+        expect(refreshSpy.lastCall.args[0]).to.deep.equal(givenRefresh)
+        done()
+      }, 200)
     })
   })
 })
