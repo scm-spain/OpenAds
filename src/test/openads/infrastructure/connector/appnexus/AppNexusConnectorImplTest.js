@@ -8,9 +8,10 @@ describe('AppNexusConnectorImpl implementation', function () {
     it('should create a new instance of AppNexusConnectorImpl according to parameters', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusClientMock = {}
 
-      const appNexusConnector = new AppNexusConnectorImpl({source, connectorData, appNexusClientMock})
+      const appNexusConnector = new AppNexusConnectorImpl({source, connectorData, appNexusClientMock, debounceTimeOut})
       let member = appNexusConnector.member
       expect(member).to.equal(3296)
     })
@@ -18,6 +19,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     it('should create a new instance of AppNexusConnectorImpl and set debug mode to true', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       const loggerSpy = sinon.spy()
       let appNexusClientMock = {
         'debug': false
@@ -29,7 +31,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.activateDebugMode()
 
@@ -41,6 +44,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     it('should create a new instance of AppNexusConnectorImpl and push setPageOpts function to the queue', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -55,7 +59,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.setPageOpts({
         member: 3296,
@@ -71,6 +76,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     it('should create a new instance of AppNexusConnectorImpl and push onEvent function to the queue', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -85,7 +91,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.onEvent({
         callback: () => undefined,
@@ -102,6 +109,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     it('should create a new instance of AppNexusConnectorImpl and push defineTag function to the queue', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -116,7 +124,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.defineTag({
         targetId: 'forlayoDiv',
@@ -129,9 +138,11 @@ describe('AppNexusConnectorImpl implementation', function () {
       expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
       expect(loggerSpy.calledOnce, 'logger debug method should be called twice, one for addPositionRenderer ').to.be.true
     })
+
     it('should create a new instance of AppNexusConnectorImpl and push loadTags function to the queue', function (done) {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -140,13 +151,14 @@ describe('AppNexusConnectorImpl implementation', function () {
         loadTags: () => undefined
       }
       const loggerMock = {
-        debug: (title, log) => loggerSpy()
+        debug:  (title, log) => loggerSpy()
       }
       const appNexusConnector = new AppNexusConnectorImpl({
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.loadTags()
       setTimeout(() => {
@@ -157,9 +169,11 @@ describe('AppNexusConnectorImpl implementation', function () {
         done()
       }, 200)
     })
+
     it('should push loadTags AppNexus function only one time after several consecutive calls of loadTags connector', function (done) {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -174,7 +188,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.loadTags()
         .loadTags()
@@ -193,9 +208,11 @@ describe('AppNexusConnectorImpl implementation', function () {
         done()
       }, 200)
     })
+
     it('should push loadTags AppNexus function two times after several consecutive calls of loadTags connector', function (done) {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -210,7 +227,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       let mutatedAppNexusConnector = appNexusConnector.loadTags()
         .loadTags()
@@ -233,9 +251,11 @@ describe('AppNexusConnectorImpl implementation', function () {
         done()
       }, 200)
     })
+
     it('should create a new instance of AppNexusConnectorImpl and push showTag function to the queue', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
+      const debounceTimeOut = 10
       let appNexusQueue = []
       const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
@@ -250,7 +270,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source,
         connectorData,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut
       })
       const mutatedAppNexusConnector = appNexusConnector.showTag({target: 'Odin'})
 
@@ -260,6 +281,7 @@ describe('AppNexusConnectorImpl implementation', function () {
       expect(loggerSpy.calledOnce, 'logger debug method should be called twice, one for addPositionRenderer ').to.be.true
     })
   })
+
   describe('Given two events registered for two different targets', () => {
     beforeEach('Define the events', () => {
       this.givenEvent11 = {event: 'event1', targetId: 'target1', callback: () => null}
@@ -288,7 +310,8 @@ describe('AppNexusConnectorImpl implementation', function () {
           appNexusClient: appNexusClientMock,
           source: {},
           connectorData: {},
-          logger: this.loggerMock
+          logger: this.loggerMock,
+          debounceTimeOut: 10
         })
         appNexusConnector
           .onEvent(this.givenEvent11)
@@ -318,7 +341,8 @@ describe('AppNexusConnectorImpl implementation', function () {
           appNexusClient: appNexusClientMock,
           source: {},
           connectorData: {},
-          logger: this.loggerMock
+          logger: this.loggerMock,
+          debounceTimeOut: 10
         })
         appNexusConnector
           .onEvent(this.givenEvent11)
@@ -336,6 +360,7 @@ describe('AppNexusConnectorImpl implementation', function () {
     it('Should call client methods', (done) => {
       const sourceMock = {}
       const connectorDataMock = {}
+      const debounceTimeOutMock = 10
       const appNexusQueue = {
         push: (f) => f()
       }
@@ -364,7 +389,8 @@ describe('AppNexusConnectorImpl implementation', function () {
         source: sourceMock,
         connectorData: connectorDataMock,
         appNexusClient: appNexusClientMock,
-        logger: loggerMock
+        logger: loggerMock,
+        debounceTimeOut: debounceTimeOutMock
       })
 
       const givenPageOpts = {member: 1111, keywords: {p1: 'pv1'}}

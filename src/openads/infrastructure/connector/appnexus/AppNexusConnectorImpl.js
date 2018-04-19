@@ -1,13 +1,13 @@
 import AppNexusConnector from './AppNexusConnector'
-// import loadTagsDebounceOperator from './loadTagsDebounceOperator'
 
 export default class AppNexusConnectorImpl extends AppNexusConnector {
-  constructor ({source, connectorData, appNexusClient, logger}) {
+  constructor ({source, connectorData, appNexusClient, logger, debounceTimeOut}) {
     super({
       source: source,
       configuration: connectorData
     })
     this._member = this.configuration.Member
+    this._debounceTimeOut = debounceTimeOut
     this._appNexusClient = appNexusClient
     this._registeredEvents = new Map()
     this._logger = logger
@@ -48,21 +48,17 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   loadTags () {
-    if (this._debounce === undefined) {
-      this._loadTagsDebounceOperator()
-    } else {
-      clearTimeout(this._debounce)
-      this._loadTagsDebounceOperator()
-    }
+    if (this._debounce !== undefined) clearTimeout(this._debounce)
+    this._loadTagsDebounceOperator()
     return this
   }
 
   _loadTagsDebounceOperator () {
     this._debounce = setTimeout(() => {
-      this._logger.debug('Loading AppNexus Tags')
+      this._logger.debug('AppNexusConnectorImpl - debounce called')
       this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
       this._debounce = undefined
-    }, 100)
+    }, this._debounceTimeOut)
   }
 
   showTag ({target}) {
