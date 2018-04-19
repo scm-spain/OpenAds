@@ -11,7 +11,6 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
     this._appNexusClient = appNexusClient
     this._registeredEvents = new Map()
     this._logger = logger
-    this._debounce = undefined
   }
 
   get member () {
