@@ -3,7 +3,6 @@ import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
 import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
 import {POSITION_NOT_VISIBLE} from '../../openads/domain/position/positionStatus'
-import AppNexusConnectorImpl from "../../openads/infrastructure/connector/appnexus/AppNexusConnectorImpl";
 
 describe('Add Position use case', function () {
   describe('given a position segmentation data', function () {

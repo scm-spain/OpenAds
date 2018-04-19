@@ -151,7 +151,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         loadTags: () => undefined
       }
       const loggerMock = {
-        debug:  (title, log) => loggerSpy()
+        debug: (title, log) => loggerSpy()
       }
       const appNexusConnector = new AppNexusConnectorImpl({
         source,
