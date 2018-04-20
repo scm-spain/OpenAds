@@ -47,6 +47,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   loadTags () {
+    this._logger.debug('loadTags has been requested')
     if (this._debounce !== undefined) clearTimeout(this._debounce)
     this._loadTagsDebounceOperator()
     return this
@@ -54,7 +55,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
 
   _loadTagsDebounceOperator () {
     this._debounce = setTimeout(() => {
-      this._logger.debug('AppNexusConnectorImpl - debounce called')
+      this._logger.debug('loadTags is called')
       this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
       this._debounce = undefined
     }, this._debounceTimeOut)

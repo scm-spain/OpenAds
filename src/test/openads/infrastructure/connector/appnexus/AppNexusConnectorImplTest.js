@@ -165,7 +165,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         expect(appNexusClientMock.anq).to.have.lengthOf(1)
         expect(qSpy.called).to.be.true
         expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
-        expect(loggerSpy.calledOnce, 'logger debug method should be called twice, one for addPositionRenderer ').to.be.true
+        expect(loggerSpy.calledTwice, 'logger debug method should be called twice, one for loadTags has been requested and another for loadTags has been called').to.be.true
         done()
       }, 200)
     })
@@ -204,7 +204,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         expect(appNexusClientMock.anq).to.have.lengthOf(1)
         expect(qSpy.calledOnce).to.be.true
         expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
-        expect(loggerSpy.calledOnce, 'logger debug method should be called once ').to.be.true
+        expect(loggerSpy.callCount, 'logger debug method should be called 9 times, one for each loadTags request (in this case 8 times) and one more for the loadTags call').to.be.equal(9)
         done()
       }, 200)
     })
@@ -247,7 +247,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         expect(appNexusClientMock.anq).to.have.lengthOf(2)
         expect(qSpy.calledTwice).to.be.true
         expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
-        expect(loggerSpy.calledTwice, 'logger debug method should be called twice ').to.be.true
+        expect(loggerSpy.callCount, 'logger debug method should be called 11 times, one for each loadTags request (in this case 9 times) and 2 more for each loadTags call').to.be.equal(11)
         done()
       }, 200)
     })
@@ -406,7 +406,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         .modifyTag(givenModifyTag)
         .refresh(givenRefresh)
       setTimeout(() => {
-        expect(loggerSpy.callCount, 'logger debug method should be called four times').to.equal(6)
+        expect(loggerSpy.callCount, 'logger debug method should be called seven times').to.equal(7)
         expect(setPageOptsSpy.called).to.be.true
         expect(defineTagSpy.called).to.be.true
         expect(loadTagsSpy.called).to.be.true
