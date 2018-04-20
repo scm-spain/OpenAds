@@ -35,12 +35,8 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
   }
 
   loadTags () {
-    if (this._debounce === undefined) {
-      this._loadTagsDebounceOperator()
-    } else {
-      clearTimeout(this._debounce)
-      this._loadTagsDebounceOperator()
-    }
+    if (this._debounce !== undefined) clearTimeout(this._debounce)
+    this._loadTagsDebounceOperator()
     return this
   }
 
