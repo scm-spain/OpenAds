@@ -1,16 +1,18 @@
 import AppNexusConnector from './AppNexusConnector'
 
 export default class AppNexusConnectorImpl extends AppNexusConnector {
-  constructor ({source, connectorData, appNexusClient, logger, debounceTimeOut}) {
+  constructor ({source, connectorData, appNexusClient, logger, debounceTimeOut, bufferTimeOut}) {
     super({
       source: source,
       configuration: connectorData
     })
     this._member = this.configuration.Member
     this._debounceTimeOut = debounceTimeOut
+    this._bufferTimeOut = bufferTimeOut
     this._appNexusClient = appNexusClient
     this._registeredEvents = new Map()
     this._logger = logger
+    this._bufferAccumulator = []
   }
 
   get member () {
@@ -80,9 +82,19 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   refresh (target) {
-    this._logger.debug('Refresh AppNexus Tag', '| target:', target)
-    this._appNexusClient.anq.push(() => this._appNexusClient.refresh(target))
+    this._logger.debug('Refresh has been requested')
+    if (this._buffer !== undefined) clearTimeout(this._buffer)
+    this._bufferAccumulator.push(target[0])
+    this._refreshBufferOperator()
     return this
+  }
+
+  _refreshBufferOperator () {
+    this._buffer = setTimeout(() => {
+      this._logger.debug('refresh is called')
+      this._appNexusClient.anq.push(() => this._appNexusClient.refresh(this._bufferAccumulator))
+      this._buffer = undefined
+    }, this._bufferTimeOut)
   }
 
   modifyTag ({targetId, data}) {
