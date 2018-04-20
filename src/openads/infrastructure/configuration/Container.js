@@ -23,6 +23,7 @@ import {POSITION_SEGMENTATION_CHANGED} from '../../domain/position/positionSegme
 import positionSegmentationChangedObserverFactory from '../position/positionSegmentationChangedObserver'
 import DefaultPositionFactory from '../position/DefaultPositionFactory'
 import PullingAdRepository from '../repository/PullingAdRepository'
+import {TIMEOUT_DEBOUNCE} from '../connector/appnexus/timeout/timeouts'
 
 export default class Container {
   constructor ({config, eager = true} = {}) {
@@ -109,7 +110,8 @@ export default class Container {
       source: 'AppNexus',
       connectorData: this._config.Sources.AppNexus,
       appNexusClient: this.getInstance({key: 'AppNexusClient'}),
-      logger: this.getInstance({key: 'Logger'})
+      logger: this.getInstance({key: 'Logger'}),
+      debounceTimeOut: TIMEOUT_DEBOUNCE
     })
   }
 
