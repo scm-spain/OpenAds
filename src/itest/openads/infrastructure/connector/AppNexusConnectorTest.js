@@ -8,7 +8,10 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
     this._callbackLoadTags = null
     this._callbackRefresh = null
     this._debounce = undefined
+    this._buffer = undefined
     this.numberOfCallsToLoadTags = 0
+    this.numberOfCallsToRefresh = 0
+    this._bufferAccumulator = []
   }
 
   activateDebugMode () {
@@ -56,9 +59,24 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
     return this
   }
 
-  refresh (target) {
+  /*  refresh (target) {
     this._callbackRefresh(this._refresh.data)
     return this
+  } */
+
+  refresh (target) {
+    if (this._buffer !== undefined) clearTimeout(this._buffer)
+    this._bufferAccumulator.push(target[0])
+    this._refreshBufferOperator()
+    return this
+  }
+
+  _refreshBufferOperator () {
+    this._buffer = setTimeout(() => {
+      this._callbackRefresh(this._refresh.data)
+      this.numberOfCallsToRefresh++
+      this._buffer = undefined
+    }, 10)
   }
 
   modifyTag ({targetId, data}) {
