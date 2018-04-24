@@ -84,7 +84,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   refresh (target) {
     this._logger.debug('Refresh has been requested')
     if (this._buffer !== undefined) clearTimeout(this._buffer)
-    this._bufferAccumulator.push(target[0])
+    this._bufferAccumulator.push(target)
     this._refreshBufferOperator()
     return this
   }

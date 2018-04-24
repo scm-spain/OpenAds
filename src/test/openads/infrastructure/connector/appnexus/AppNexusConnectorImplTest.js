@@ -252,12 +252,86 @@ describe('AppNexusConnectorImpl implementation', function () {
       }, 200)
     })
 
-    it('should push refresh AppNexus function one time after one call of refresh connector', function () {
+    it('should push refresh AppNexus function one time after one call of refresh connector', function (done) {
+      const source = 'AppNexus'
+      const connectorData = { 'Member': 3296 }
+      const bufferTimeOut = 10
+      let appNexusQueue = []
+      const qSpy = sinon.spy(appNexusQueue, 'push')
+      const loggerSpy = sinon.spy()
+      let appNexusClientMock = {
+        anq: appNexusQueue,
+        refresh: () => undefined
+      }
+      const loggerMock = {
+        debug: (title, log) => loggerSpy()
+      }
+      const appNexusConnector = new AppNexusConnectorImpl({
+        source,
+        connectorData,
+        appNexusClient: appNexusClientMock,
+        logger: loggerMock,
+        bufferTimeOut
+      })
+      let mutatedAppNexusConnector = appNexusConnector.refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
 
+      setTimeout(() => {
+        expect(appNexusClientMock.anq).to.have.lengthOf(1)
+        expect(qSpy.calledOnce).to.be.true
+        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
+        expect(loggerSpy.callCount).to.be.equal(9)
+        done()
+      }, 200)
     })
 
-    it('should push refresh AppNexus function one time after several calls of refresh connector', function () {
+    it('should push refresh AppNexus function one time after several calls of refresh connector', function (done) {
+      const source = 'AppNexus'
+      const connectorData = { 'Member': 3296 }
+      const bufferTimeOut = 10
+      let appNexusQueue = []
+      const qSpy = sinon.spy(appNexusQueue, 'push')
+      const loggerSpy = sinon.spy()
+      let appNexusClientMock = {
+        anq: appNexusQueue,
+        refresh: () => undefined
+      }
+      const loggerMock = {
+        debug: (title, log) => loggerSpy()
+      }
+      const appNexusConnector = new AppNexusConnectorImpl({
+        source,
+        connectorData,
+        appNexusClient: appNexusClientMock,
+        logger: loggerMock,
+        bufferTimeOut
+      })
+      let mutatedAppNexusConnector = appNexusConnector.refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
+        .refresh('Ad1')
 
+      setTimeout(() => {
+        mutatedAppNexusConnector.refresh('Ad1')
+      }, 20)
+
+      setTimeout(() => {
+        expect(appNexusClientMock.anq).to.have.lengthOf(2)
+        expect(qSpy.calledTwice).to.be.true
+        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
+        expect(loggerSpy.callCount).to.be.equal(11)
+        done()
+      }, 200)
     })
 
     it('should create a new instance of AppNexusConnectorImpl and push showTag function to the queue', function () {
@@ -413,7 +487,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         .loadTags()
         .showTag(givenShowTag)
         .modifyTag(givenModifyTag)
-        .refresh(givenRefresh)
+        . refresh(givenRefresh)
       setTimeout(() => {
         expect(loggerSpy.callCount, 'logger debug method should be called seven times').to.equal(8)
         expect(setPageOptsSpy.called).to.be.true
@@ -427,7 +501,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         expect(showTagSpy.lastCall.args[0]).to.deep.equal(givenShowTag.target)
         expect(modifyTagSpy.lastCall.args[0]).to.deep.equal(givenModifyTag.targetId)
         expect(modifyTagSpy.lastCall.args[1]).to.deep.equal(givenModifyTag.data)
-        // expect(refreshSpy.lastCall.args[0]).to.deep.equal(givenRefresh)
+        expect(refreshSpy.lastCall.args[0][0]).to.deep.equal(givenRefresh)
         done()
       }, 200)
     })

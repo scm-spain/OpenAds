@@ -59,14 +59,9 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
     return this
   }
 
-  /*  refresh (target) {
-    this._callbackRefresh(this._refresh.data)
-    return this
-  } */
-
   refresh (target) {
     if (this._buffer !== undefined) clearTimeout(this._buffer)
-    this._bufferAccumulator.push(target[0])
+    this._bufferAccumulator.push(target)
     this._refreshBufferOperator()
     return this
   }
