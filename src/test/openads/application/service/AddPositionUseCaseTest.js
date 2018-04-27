@@ -2,8 +2,8 @@ import {expect} from 'chai'
 import sinon from 'sinon'
 import AddPositionUseCase from '../../../../openads/application/service/AddPositionUseCase'
 import DefaultPositionFactory from '../../../../openads/infrastructure/position/DefaultPositionFactory'
-import {AD_AVAILABLE, AD_ERROR, AD_NO_BID} from '../../../../openads/infrastructure/connector/appnexus/event/events'
 import {POSITION_NOT_VISIBLE} from '../../../../openads/domain/position/positionStatus'
+import {AD_AVAILABLE, AD_ERROR, AD_NO_BID} from '../../../../openads/domain/ad/adStatus'
 
 describe('Add Position use case', function () {
   describe('given an non existent Position', function () {

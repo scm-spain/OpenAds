@@ -5,7 +5,7 @@ import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
 import sinon from 'sinon'
 import DefaultPositionFactory from '../../../../openads/infrastructure/position/DefaultPositionFactory'
-import {AD_AVAILABLE} from '../../../../openads/infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE} from '../../../../openads/domain/ad/adStatus'
 
 describe('Refresh Position use case', function () {
   describe('given a Position DTO of changes', function () {

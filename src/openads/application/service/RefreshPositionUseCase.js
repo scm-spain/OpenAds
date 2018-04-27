@@ -1,16 +1,16 @@
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
-import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE} from '../../domain/ad/adStatus'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 
 export default class RefreshPositionUseCase {
   /**
    * Update a Position with given changes and refresh his Ad
    * @param {PositionRepository} positionRepository
-   * @param {AdRepository} adRepository
+   * @param {AdConnectorManager} adConnectorManager
    */
-  constructor ({positionRepository, adRepository}) {
+  constructor ({positionRepository, adConnectorManager}) {
     this._positionRepository = positionRepository
-    this._adRepository = adRepository
+    this._adConnectorManager = adConnectorManager
   }
   /**
    * Update a Position with given changes and refresh his Ad
@@ -26,7 +26,6 @@ export default class RefreshPositionUseCase {
     return this._positionRepository.find({id})
       .then(optionalPosition => ({id, position: optionalPosition}))
       .then(this._filterPositionExists)
-      .then(position => this._setAdFetchWorkInProgress(position))
       .then(positionToBeUpdated => positionToBeUpdated.changeSegmentation({...position}))
       .then(changedPosition => this._setAdToPosition(changedPosition))
       .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
@@ -39,13 +38,19 @@ export default class RefreshPositionUseCase {
     }
     return optionalPositionWithId.position
   }
-  _setAdFetchWorkInProgress (position) {
-    this._adRepository.remove({id: position.id})
-    return position
-  }
-
   _setAdToPosition (position) {
-    return this._adRepository.find({id: position.id})
+    return Promise.resolve()
+      .then(() => this._adConnectorManager.getConnector({source: position.source}))
+      .then(connector => connector.refresh(
+        {
+          id: position.id,
+          segmentation: {
+            placement: position.placement,
+            sizes: position.sizes,
+            keywords: position.segmentation
+          }
+        })
+      )
       .catch(error => ({data: error.cause, status: error.status}))
       .then(ad => position.updateAd(ad))
   }

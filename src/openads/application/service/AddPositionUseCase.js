@@ -1,18 +1,18 @@
 import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
-import {AD_AVAILABLE, AD_ERROR} from '../../infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE, AD_ERROR} from '../../domain/ad/adStatus'
 
 export default class AddPositionUseCase {
   /**
    * @constructor
    * @param {PositionRepository} positionRepository
    * @param {PositionFactory} positionFactory
-   * @param {AdRepository} adRepository
+   * @param {AdConnectorManager} adConnectorManager
    */
-  constructor ({positionRepository, positionFactory, adRepository}) {
+  constructor ({positionRepository, positionFactory, adConnectorManager}) {
     this._positionRepository = positionRepository
     this._positionFactory = positionFactory
-    this._adRepository = adRepository
+    this._adConnectorManager = adConnectorManager
   }
   /**
    * Create a new Position on the page
@@ -35,7 +35,15 @@ export default class AddPositionUseCase {
   }
 
   _setAdToPosition (position) {
-    return this._adRepository.find({id: position.id})
+    return Promise.resolve()
+      .then(() => this._adConnectorManager.getConnector({source: position.source}))
+      .then(connector => connector.loadAd({
+        domElementId: position.id,
+        placement: position.placement,
+        sizes: position.sizes,
+        segmentation: position.segmentation,
+        native: position.native
+      }))
       .catch(error => ({
         data: error.stack || error.message,
         status: error.status || AD_ERROR

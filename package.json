@@ -32,6 +32,7 @@
   "license": "ISC",
   "devDependencies": {
     "@s-ui/lint": "^2.7.0",
+    "@schibstedspain/openads-appnexus": "file:../OpenAds-appnexus",
     "babel-cli": "^6.24.0",
     "babel-loader": "^7.1.1",
     "babel-polyfill": "^6.23.0",
@@ -66,7 +67,6 @@
     ]
   },
   "dependencies": {
-    "@schibstedspain/ast": "^0.14.0",
     "loglevel": "^1.6.1",
     "loglevel-plugin-prefix": "^0.7.2",
     "querystring": "^0.2.0"

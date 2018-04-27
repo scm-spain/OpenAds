@@ -1,6 +1,6 @@
 import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
-import {AD_AVAILABLE, AD_BAD_REQUEST, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE, AD_NO_BID, AD_BAD_REQUEST} from '../../openads/domain/ad/adStatus'
 import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
 import {POSITION_VISIBLE} from '../../openads/domain/position/positionStatus'
 

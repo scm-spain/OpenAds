@@ -2,7 +2,7 @@ import {expect} from 'chai'
 import DisplayPositionUseCase from '../../../../openads/application/service/DisplayPositionUseCase'
 import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
 import Position from '../../../../openads/domain/position/Position'
-import {AD_AVAILABLE, AD_NO_BID} from '../../../../openads/infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE, AD_NO_BID} from '../../../../openads/domain/ad/adStatus'
 
 describe('DisplayPositionUseCase test', () => {
   describe('display method test', () => {

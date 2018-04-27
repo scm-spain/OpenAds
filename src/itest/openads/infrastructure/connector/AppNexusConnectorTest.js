@@ -1,8 +1,5 @@
-import AppNexusConnector from '../../../../openads/infrastructure/connector/appnexus/AppNexusConnector'
-
-export default class AppNexusConnectorTest extends AppNexusConnector {
+export default class AppNexusConnectorTest {
   constructor ({loadTags, refresh} = {}) {
-    super({})
     this._loadTags = loadTags
     this._refresh = refresh || loadTags
     this._callbackLoadTags = null

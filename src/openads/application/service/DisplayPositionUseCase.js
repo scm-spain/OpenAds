@@ -1,17 +1,19 @@
 import {POSITION_VISIBLE} from '../../domain/position/positionStatus'
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
-import {AD_AVAILABLE} from '../../infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE} from '../../domain/ad/adStatus'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 import PositionAdIsNativeError from '../../domain/position/PositionAdIsNativeError'
-import {NATIVE} from '../../domain/value-objects/AdTypes'
+import {NATIVE} from '../../domain/ad/AdTypes'
 
 export default class DisplayPositionUseCase {
   /**
    * @constructor
    * @param {PositionRepository} positionRepository
+   * @param {AdConnectorManager} adConnectorManager
    */
-  constructor ({positionRepository}) {
+  constructor ({positionRepository, adConnectorManager}) {
     this._positionRepository = positionRepository
+    this._adConnectorManager = adConnectorManager
   }
 
   /**
@@ -25,6 +27,11 @@ export default class DisplayPositionUseCase {
       .then(this._filterPositionExists)
       .then(this._filterPositionAdAvailable)
       .then(this._filterPositionAdNoNative)
+      .then(foundPosition =>
+        this._adConnectorManager.getConnector({source: foundPosition.source})
+          .then(connector => (foundPosition.visible === POSITION_VISIBLE) ? connector.display({id: foundPosition.id}) : connector.refresh({ids: [foundPosition.id]}))
+          .then(() => foundPosition)
+      )
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
       .then(modifiedPosition => this._positionRepository.saveOrUpdate({position: modifiedPosition}))
   }
