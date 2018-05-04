@@ -18,6 +18,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   get member () {
     return this._member
   }
+
   activateDebugMode () {
     this._logger.debug('Activating AppNexus Debug Mode')
     this._appNexusClient.debug = true
@@ -84,7 +85,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   refresh (target) {
     this._logger.debug('Refresh has been requested')
     if (this._buffer !== undefined) clearTimeout(this._buffer)
-    this._bufferAccumulator.push(target)
+    this._bufferAccumulator = this._bufferAccumulator.concat(target)
     this._refreshBufferOperator()
     return this
   }
@@ -94,6 +95,7 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
       this._logger.debug('Refresh is called')
       this._appNexusClient.anq.push(() => this._appNexusClient.refresh(this._bufferAccumulator))
       this._buffer = undefined
+      this._bufferAccumulator = []
     }, this._bufferTimeOut)
   }
 

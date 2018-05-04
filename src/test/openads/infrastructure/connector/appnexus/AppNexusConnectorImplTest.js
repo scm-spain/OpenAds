@@ -256,13 +256,14 @@ describe('AppNexusConnectorImpl implementation', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
       const bufferTimeOut = 10
-      let appNexusQueue = []
-      const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
       let appNexusClientMock = {
-        anq: appNexusQueue,
+        anq: {
+          push: fn => fn()
+        },
         refresh: () => undefined
       }
+      const refreshSpy = sinon.spy(appNexusClientMock, 'refresh')
       const loggerMock = {
         debug: (title, log) => loggerSpy()
       }
@@ -273,35 +274,35 @@ describe('AppNexusConnectorImpl implementation', function () {
         logger: loggerMock,
         bufferTimeOut
       })
-      let mutatedAppNexusConnector = appNexusConnector.refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
 
+      appNexusConnector.refresh(['Ad1'])
+        .refresh(['Ad2', 'Ad3'])
+        .refresh(['Ad4'])
+        .refresh(['Ad5'])
+        .refresh(['Ad6'])
+        .refresh(['Ad7'])
+        .refresh(['Ad8'])
+
+      const expectedRefreshArgs = ['Ad1', 'Ad2', 'Ad3', 'Ad4', 'Ad5', 'Ad6', 'Ad7', 'Ad8']
       setTimeout(() => {
-        expect(appNexusClientMock.anq).to.have.lengthOf(1)
-        expect(qSpy.calledOnce).to.be.true
-        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
-        expect(loggerSpy.callCount).to.be.equal(9)
+        expect(refreshSpy.callCount, 'AppNexus client refresh method should be called only once').to.equal(1)
+        expect(refreshSpy.args[0][0], 'AppNexus client refresh method should have received all the accumulated ids').to.deep.equal(expectedRefreshArgs)
         done()
-      }, 200)
+      }, 100)
     })
 
     it('should push refresh AppNexus function one time after several calls of refresh connector', function (done) {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
       const bufferTimeOut = 10
-      let appNexusQueue = []
-      const qSpy = sinon.spy(appNexusQueue, 'push')
       const loggerSpy = sinon.spy()
       let appNexusClientMock = {
-        anq: appNexusQueue,
+        anq: {
+          push: fn => fn()
+        },
         refresh: () => undefined
       }
+      const refreshSpy = sinon.spy(appNexusClientMock, 'refresh')
       const loggerMock = {
         debug: (title, log) => loggerSpy()
       }
@@ -312,24 +313,26 @@ describe('AppNexusConnectorImpl implementation', function () {
         logger: loggerMock,
         bufferTimeOut
       })
-      let mutatedAppNexusConnector = appNexusConnector.refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
-        .refresh('Ad1')
+
+      appNexusConnector.refresh(['Ad1', 'Ad2'])
+        .refresh(['Ad3'])
+        .refresh(['Ad4'])
+        .refresh(['Ad5'])
+        .refresh(['Ad6'])
+        .refresh(['Ad7'])
+        .refresh(['Ad8'])
 
       setTimeout(() => {
-        mutatedAppNexusConnector.refresh('Ad1')
+        appNexusConnector.refresh('Ad9')
       }, 20)
 
+      const expectedRefreshArgsFirstCall = ['Ad1', 'Ad2', 'Ad3', 'Ad4', 'Ad5', 'Ad6', 'Ad7', 'Ad8']
+      const expectedRefreshArgsSecondCall = ['Ad9']
+
       setTimeout(() => {
-        expect(appNexusClientMock.anq).to.have.lengthOf(2)
-        expect(qSpy.calledTwice).to.be.true
-        expect(mutatedAppNexusConnector).to.be.an.instanceof(AppNexusConnectorImpl)
-        expect(loggerSpy.callCount).to.be.equal(11)
+        expect(refreshSpy.callCount, 'AppNexus client refresh method should be called only once').to.equal(2)
+        expect(refreshSpy.args[0][0], 'AppNexus client refresh method should have received all the accumulated ids').to.deep.equal(expectedRefreshArgsFirstCall)
+        expect(refreshSpy.args[1][0], 'AppNexus client refresh method should have received all the accumulated ids').to.deep.equal(expectedRefreshArgsSecondCall)
         done()
       }, 200)
     })
@@ -501,7 +504,7 @@ describe('AppNexusConnectorImpl implementation', function () {
         expect(showTagSpy.lastCall.args[0]).to.deep.equal(givenShowTag.target)
         expect(modifyTagSpy.lastCall.args[0]).to.deep.equal(givenModifyTag.targetId)
         expect(modifyTagSpy.lastCall.args[1]).to.deep.equal(givenModifyTag.data)
-        expect(refreshSpy.lastCall.args[0][0]).to.deep.equal(givenRefresh)
+        expect(refreshSpy.lastCall.args[0]).to.deep.equal(givenRefresh)
         done()
       }, 200)
     })

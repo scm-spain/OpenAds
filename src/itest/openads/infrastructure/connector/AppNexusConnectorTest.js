@@ -7,8 +7,8 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
     this._refresh = refresh || loadTags
     this._callbackLoadTags = null
     this._callbackRefresh = null
-    this._debounce = undefined
-    this._buffer = undefined
+    // this._debounce = undefined
+    // this._buffer = undefined
     this.numberOfCallsToLoadTags = 0
     this.numberOfCallsToRefresh = 0
     this._bufferAccumulator = []
@@ -61,7 +61,7 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
 
   refresh (target) {
     if (this._buffer !== undefined) clearTimeout(this._buffer)
-    this._bufferAccumulator.push(target)
+    // this._bufferAccumulator = this._bufferAccumulator.concat(target)
     this._refreshBufferOperator()
     return this
   }
@@ -71,6 +71,7 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
       this._callbackRefresh(this._refresh.data)
       this.numberOfCallsToRefresh++
       this._buffer = undefined
+      // this._bufferAccumulator = []
     }, 10)
   }
 
@@ -78,3 +79,21 @@ export default class AppNexusConnectorTest extends AppNexusConnector {
     return this
   }
 }
+
+
+// refresh (target) {
+//   this._logger.debug('Refresh has been requested')
+//   if (this._buffer !== undefined) clearTimeout(this._buffer)
+//   this._bufferAccumulator = this._bufferAccumulator.concat(target)
+//   this._refreshBufferOperator()
+//   return this
+// }
+//
+// _refreshBufferOperator () {
+//   this._buffer = setTimeout(() => {
+//     this._logger.debug('Refresh is called')
+//     this._appNexusClient.anq.push(() => this._appNexusClient.refresh(this._bufferAccumulator))
+//     this._buffer = undefined
+//     this._bufferAccumulator = []
+//   }, this._bufferTimeOut)
+// }
