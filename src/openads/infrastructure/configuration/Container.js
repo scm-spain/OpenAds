@@ -111,8 +111,8 @@ export default class Container {
       connectorData: this._config.Sources.AppNexus,
       appNexusClient: this.getInstance({key: 'AppNexusClient'}),
       logger: this.getInstance({key: 'Logger'}),
-      debounceTimeOut: TIMEOUT_DEBOUNCE,
-      bufferTimeOut: TIMEOUT_BUFFER
+      debounceTimeOutDelay: TIMEOUT_DEBOUNCE,
+      bufferTimeOutDelay: TIMEOUT_BUFFER
     })
   }
 
