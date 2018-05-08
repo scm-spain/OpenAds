@@ -1,4 +1,4 @@
-import {POSITION_VISIBLE} from '../../domain/position/positionStatus'
+import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../domain/position/positionStatus'
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
 import {AD_AVAILABLE} from '../../domain/ad/adStatus'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
@@ -29,7 +29,7 @@ export default class DisplayPositionUseCase {
       .then(this._filterPositionAdNoNative)
       .then(foundPosition =>
         this._adConnectorManager.getConnector({source: foundPosition.source})
-          .then(connector => (foundPosition.visible === POSITION_VISIBLE) ? connector.display({id: foundPosition.id}) : connector.refresh({ids: [foundPosition.id]}))
+          .then(connector => (foundPosition.status === POSITION_NOT_VISIBLE) ? connector.display({id: foundPosition.id}) : connector.refresh({ids: [foundPosition.id]}))
           .then(() => foundPosition)
       )
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))
