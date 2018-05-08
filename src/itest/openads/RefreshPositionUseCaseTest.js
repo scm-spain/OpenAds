@@ -101,6 +101,188 @@ describe('Refresh Position use case', function () {
         .catch(error => done(error))
     })
 
+    it('should update the positions with the new updated data with just one call to the AdServer', function (done) {
+      const appnexusConnectorTest = new AppNexusConnectorTest({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusConnector: appnexusConnectorTest
+      })
+
+      const expectedNumberOfRefreshCalls = 1
+
+      const newPositionOne = {
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      const newPositionTwo = {
+        id: 'ad2',
+        name: 'ad number two',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      openAds.addPosition(newPositionOne)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      openAds.addPosition(newPositionTwo)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      setTimeout(() => {
+        expect(appnexusConnectorTest.numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
+        done()
+      }, 200)
+    })
+
+    it('should update the positions with the new updated data with two calls to the AdServer', function (done) {
+      const appnexusConnectorTest = new AppNexusConnectorTest({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusConnector: appnexusConnectorTest
+      })
+
+      const expectedNumberOfRefreshCalls = 2
+
+      const newPositionOne = {
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      const newPositionTwo = {
+        id: 'ad2',
+        name: 'ad number two',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      const newPositionThree = {
+        id: 'ad3',
+        name: 'ad number three',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      openAds.addPosition(newPositionOne)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      openAds.addPosition(newPositionTwo)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      setTimeout(() => {
+        openAds.addPosition(newPositionThree)
+          .then(position => openAds.refreshPosition({id: position.id}))
+      }, 20)
+
+      setTimeout(() => {
+        expect(appnexusConnectorTest.numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
+        done()
+      }, 200)
+    })
+
     it('shouldn\'t update anything from the position but will refresh the ad response', function (done) {
       const appnexusConnectorTest = new AppNexusConnectorTest({
         loadTags: {

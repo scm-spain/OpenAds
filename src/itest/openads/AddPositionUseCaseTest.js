@@ -3,6 +3,7 @@ import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
 import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
 import {POSITION_NOT_VISIBLE} from '../../openads/domain/position/positionStatus'
+import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
 
 describe('Add Position use case', function () {
   describe('given a position segmentation data', function () {
@@ -27,6 +28,8 @@ describe('Add Position use case', function () {
         }
       })
 
+      const appNexusClientMock = new AppNexusClientMock()
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -35,7 +38,7 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({
@@ -76,6 +79,8 @@ describe('Add Position use case', function () {
         }
       })
 
+      const appNexusClientMock = new AppNexusClientMock()
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -84,7 +89,8 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusConnector: appnexusConnectorTest,
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({
@@ -113,6 +119,341 @@ describe('Add Position use case', function () {
           expect(error.position.ad.data).to.deep.equal(appnexusResponse)
           done()
         })
+    })
+
+    it('should return just one call to appNexus loadTags', function (done) {
+      const appnexusConnectorTest = new AppNexusConnectorTest({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const appNexusClientMock = new AppNexusClientMock()
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusConnector: appnexusConnectorTest,
+        appNexusClient: appNexusClientMock
+      })
+
+      const expectedNumberOfLoadTagsCalls = 1
+
+      openAds.addPosition({
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      setTimeout(() => {
+        expect(appnexusConnectorTest.numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
+        done()
+      }, 200)
+    })
+
+    it('should return just one call to appNexus loadTags when we add a several positions', function (done) {
+      const appnexusConnectorTest = new AppNexusConnectorTest({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const appNexusClientMock = new AppNexusClientMock()
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusConnector: appnexusConnectorTest,
+        appNexusClient: appNexusClientMock
+      })
+
+      const expectedNumberOfLoadTagsCalls = 1
+
+      openAds.addPosition({
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad2',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad3',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad4',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad5',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      setTimeout(() => {
+        expect(appnexusConnectorTest.numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
+        done()
+      }, 200)
+    })
+
+    it('should return two calls to appNexus loadTags when we add a several positions and then add another one after the first time windows ends', function (done) {
+      const appnexusConnectorTest = new AppNexusConnectorTest({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const appNexusClientMock = new AppNexusClientMock()
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusConnector: appnexusConnectorTest,
+        appNexusClient: appNexusClientMock
+      })
+
+      const expectedNumberOfLoadTagsCalls = 2
+
+      openAds.addPosition({
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad2',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad3',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad4',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      openAds.addPosition({
+        id: 'ad5',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      })
+
+      setTimeout(() => {
+        openAds.addPosition({
+          id: 'ad6',
+          name: 'ad number one',
+          source: 'AppNexus',
+          placement: 'es-cn-wph-ocasion-list-x_65',
+          segmentation: {
+            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+            'es-sch-event_name': 'list',
+            'aa-sch-country_code': 'es',
+            'aa-sch-supply_type': 'wph',
+            'es-sch-section': 'ocasion',
+            'aa-sch-page_type': 'list',
+            'es-sch-adformat': 'x65'
+          },
+          sizes: [[300, 250], [320, 250]]
+        })
+      }, 30)
+
+      setTimeout(() => {
+        expect(appnexusConnectorTest.numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
+        done()
+      }, 200)
     })
   })
 })
