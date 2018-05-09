@@ -7,12 +7,14 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
       configuration: connectorData
     })
     this._member = this.configuration.Member
-    this._debounceTimeOutDelay = debounceTimeOutDelay
-    this._bufferTimeOutDelay = bufferTimeOutDelay
     this._appNexusClient = appNexusClient
     this._registeredEvents = new Map()
     this._logger = logger
+    this._bufferTimeOutDelay = bufferTimeOutDelay
+    this._bufferTimerID = null
     this._bufferAccumulator = []
+    this._debounceTimeOutDelay = debounceTimeOutDelay
+    this._debounceTimerID = null
   }
 
   get member () {
@@ -51,16 +53,16 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
 
   loadTags () {
     this._logger.debug('loadTags has been requested')
-    if (this._debounceTimeOut !== undefined) clearTimeout(this._debounceTimeOut)
+    if (this._debounceTimerID !== null) clearTimeout(this._debounceTimerID)
     this._loadTagsDebounceOperator()
     return this
   }
 
   _loadTagsDebounceOperator () {
-    this._debounceTimeOut = setTimeout(() => {
+    this._debounceTimerID = setTimeout(() => {
       this._logger.debug('loadTags is called')
       this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
-      this._debounceTimeOut = undefined
+      this._debounceTimerID = null
     }, this._debounceTimeOutDelay)
   }
 
@@ -84,17 +86,17 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
 
   refresh (target) {
     this._logger.debug('Refresh has been requested')
-    if (this._bufferTimeOut !== undefined) clearTimeout(this._bufferTimeOut)
+    if (this._bufferTimerID !== null) clearTimeout(this._bufferTimerID)
     this._bufferAccumulator = this._bufferAccumulator.concat(target)
     this._refreshBufferOperator()
     return this
   }
 
   _refreshBufferOperator () {
-    this._bufferTimeOut = setTimeout(() => {
+    this._bufferTimerID = setTimeout(() => {
       this._logger.debug('Refresh is called')
       this._appNexusClient.anq.push(() => this._appNexusClient.refresh(this._bufferAccumulator))
-      this._bufferTimeOut = undefined
+      this._bufferTimerID = null
       this._bufferAccumulator = []
     }, this._bufferTimeOutDelay)
   }
