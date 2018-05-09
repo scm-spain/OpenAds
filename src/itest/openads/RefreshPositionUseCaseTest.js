@@ -1,7 +1,6 @@
 import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
-import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
 import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
 
 describe('Refresh Position use case', function () {
