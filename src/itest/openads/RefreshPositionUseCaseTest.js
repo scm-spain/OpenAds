@@ -2,11 +2,12 @@ import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
 import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
+import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
 
 describe('Refresh Position use case', function () {
   describe('given a position id', function () {
     it('should return a rejected promise with an error of type PositionNotFoundException', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {}
@@ -21,7 +22,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.refreshPosition({id: 'no id found'})
@@ -33,7 +34,7 @@ describe('Refresh Position use case', function () {
     })
 
     it('should update the position with the new updated data', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -61,7 +62,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newSegmentation = {
@@ -102,7 +103,7 @@ describe('Refresh Position use case', function () {
     })
 
     it('should update the positions with the new updated data with just one call to the AdServer', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -130,7 +131,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const expectedNumberOfRefreshCalls = 1
@@ -176,13 +177,13 @@ describe('Refresh Position use case', function () {
         .then(position => openAds.refreshPosition({id: position.id}))
 
       setTimeout(() => {
-        expect(appnexusConnectorTest.numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
+        expect(appNexusClientMock._numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
         done()
       }, 200)
     })
 
     it('should update the positions with the new updated data with two calls to the AdServer', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -210,7 +211,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const expectedNumberOfRefreshCalls = 2
@@ -278,13 +279,13 @@ describe('Refresh Position use case', function () {
       }, 20)
 
       setTimeout(() => {
-        expect(appnexusConnectorTest.numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
+        expect(appNexusClientMock._numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
         done()
       }, 200)
     })
 
     it('shouldn\'t update anything from the position but will refresh the ad response', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -312,7 +313,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newPosition = {
@@ -382,7 +383,7 @@ describe('Refresh Position use case', function () {
         }
       }
 
-      const appnexusConnectorTest = new AppNexusConnectorTest({loadTags, refresh})
+      const appNexusClientMock = new AppNexusClientMock({loadTags, refresh})
 
       const openAds = OpenAds.init({
         config: {
@@ -392,7 +393,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newPosition = {
@@ -461,7 +462,7 @@ describe('Refresh Position use case', function () {
         }
       }
 
-      const appnexusConnectorTest = new AppNexusConnectorTest({loadTags, refresh})
+      const appNexusClientMock = new AppNexusClientMock({loadTags, refresh})
 
       const openAds = OpenAds.init({
         config: {
@@ -471,7 +472,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newPosition = {

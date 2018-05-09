@@ -7,61 +7,73 @@ export default class AppNexusClientMock extends AppNexusClient {
     this._refresh = refresh || loadTags
     this._callbackLoadTags = null
     this._callbackRefresh = null
-    // this._debounce = undefined
-    // this._buffer = undefined
-    this.numberOfCallsDefineTag = 0
-    this.numberOfCallsToLoadTags = 0
-    this.numberOfCallsToShowTag = 0
-    this.numberOfCallsToRefresh = 0
-    this.numberOfCallsToOffEvent = 0
-    this.numberOfCallsToSetPageOpts = 0
-    this.numberOfCallsToClearReques = 0
-    // this._bufferAccumulator = []
+    this._numberOfCallsDefineTag = 0
+    this._numberOfCallsToLoadTags = 0
+    this._numberOfCallsToShowTag = 0
+    this._numberOfCallsToRefresh = 0
+    this._numberOfCallsToOffEvent = 0
+    this._numberOfCallsToSetPageOpts = 0
+    this._numberOfCallsToClearReques = 0
+    this._numberOfCallsToOnEvent = 0
+    this._numberOfCallsToModifyTag = 0
     this.debug = false
     this.anq = {
-      push: () => { console.log('anq.push') }
+      push: (param) => {
+        param()
+      }
     }
   }
 
   defineTag ({member, targetId, invCode, sizes, keywords, native}) {
-    console.log('defineTags')
-    this.numberOfCallsDefineTag++
+    this._numberOfCallsDefineTag++
+    return this
+  }
+
+  onEvent (event, targetId, callback) {
+    this._numberOfCallsToOnEvent++
+    if (event === this._loadTags.event) {
+      this._callbackLoadTags = callback
+    }
+    if (event === this._refresh.event) {
+      this._callbackRefresh = callback
+    }
     return this
   }
 
   loadTags () {
-    console.log('loadTags')
-    this.numberOfCallsToLoadTags++
+    this._numberOfCallsToLoadTags++
+    this._callbackLoadTags(this._loadTags.data)
     return this
   }
 
   showTag ({target}) {
-    console.log('showtag')
-    this.numberOfCallsToShowTag++
+    this._numberOfCallsToShowTag++
     return this
   }
 
   refresh (target) {
-    console.log('refresh')
-    this.numberOfCallsToRefresh++
+    this._numberOfCallsToRefresh++
+    this._callbackRefresh(this._refresh.data)
     return this
   }
 
   offEvent (event, targetId) {
-    console.log('offEvent')
-    this.numberOfCallsToOffEvent++
+    this._numberOfCallsToOffEvent++
     return this
   }
 
   setPageOpts ({member, keywords}) {
-    console.log('setPageOpts')
-    this.numberOfCallsToSetPageOpts++
+    this._numberOfCallsToSetPageOpts++
     return this
   }
 
   clearRequest () {
-    console.log('clearRequest')
-    this.numberOfCallsToClearReques++
+    this._numberOfCallsToClearReques++
+    return this
+  }
+
+  modifyTag ({targetId, data}) {
+    this._numberOfCallsToModifyTag++
     return this
   }
 }
