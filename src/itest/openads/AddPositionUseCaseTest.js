@@ -299,7 +299,7 @@ describe('Add Position use case', function () {
     })
 
     it('should return two calls to appNexus loadTags when we add a several positions and then add another one after the first time windows ends', function (done) {
-        const appNexusClientMock = new AppNexusClientMock({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
