@@ -252,6 +252,91 @@ describe('AppNexusConnectorImpl implementation', function () {
       }, 200)
     })
 
+    it('should push refresh AppNexus function one time after one call of refresh connector', function (done) {
+      const source = 'AppNexus'
+      const connectorData = { 'Member': 3296 }
+      const bufferTimeOut = 10
+      const loggerSpy = sinon.spy()
+      let appNexusClientMock = {
+        anq: {
+          push: fn => fn()
+        },
+        refresh: () => undefined
+      }
+      const refreshSpy = sinon.spy(appNexusClientMock, 'refresh')
+      const loggerMock = {
+        debug: (title, log) => loggerSpy()
+      }
+      const appNexusConnector = new AppNexusConnectorImpl({
+        source,
+        connectorData,
+        appNexusClient: appNexusClientMock,
+        logger: loggerMock,
+        bufferTimeOut
+      })
+
+      appNexusConnector.refresh(['Ad1'])
+        .refresh(['Ad2', 'Ad3'])
+        .refresh(['Ad4'])
+        .refresh(['Ad5'])
+        .refresh(['Ad6'])
+        .refresh(['Ad7'])
+        .refresh(['Ad8'])
+
+      const expectedRefreshArgs = ['Ad1', 'Ad2', 'Ad3', 'Ad4', 'Ad5', 'Ad6', 'Ad7', 'Ad8']
+      setTimeout(() => {
+        expect(refreshSpy.callCount, 'AppNexus client refresh method should be called only once').to.equal(1)
+        expect(refreshSpy.args[0][0], 'AppNexus client refresh method should have received all the accumulated ids').to.deep.equal(expectedRefreshArgs)
+        done()
+      }, 100)
+    })
+
+    it('should push refresh AppNexus function one time after several calls of refresh connector', function (done) {
+      const source = 'AppNexus'
+      const connectorData = { 'Member': 3296 }
+      const bufferTimeOut = 10
+      const loggerSpy = sinon.spy()
+      let appNexusClientMock = {
+        anq: {
+          push: fn => fn()
+        },
+        refresh: () => undefined
+      }
+      const refreshSpy = sinon.spy(appNexusClientMock, 'refresh')
+      const loggerMock = {
+        debug: (title, log) => loggerSpy()
+      }
+      const appNexusConnector = new AppNexusConnectorImpl({
+        source,
+        connectorData,
+        appNexusClient: appNexusClientMock,
+        logger: loggerMock,
+        bufferTimeOut
+      })
+
+      appNexusConnector.refresh(['Ad1', 'Ad2'])
+        .refresh(['Ad3'])
+        .refresh(['Ad4'])
+        .refresh(['Ad5'])
+        .refresh(['Ad6'])
+        .refresh(['Ad7'])
+        .refresh(['Ad8'])
+
+      setTimeout(() => {
+        appNexusConnector.refresh('Ad9')
+      }, 20)
+
+      const expectedRefreshArgsFirstCall = ['Ad1', 'Ad2', 'Ad3', 'Ad4', 'Ad5', 'Ad6', 'Ad7', 'Ad8']
+      const expectedRefreshArgsSecondCall = ['Ad9']
+
+      setTimeout(() => {
+        expect(refreshSpy.callCount, 'AppNexus client refresh method should be called only once').to.equal(2)
+        expect(refreshSpy.args[0][0], 'AppNexus client refresh method should have received all the accumulated ids').to.deep.equal(expectedRefreshArgsFirstCall)
+        expect(refreshSpy.args[1][0], 'AppNexus client refresh method should have received all the accumulated ids').to.deep.equal(expectedRefreshArgsSecondCall)
+        done()
+      }, 200)
+    })
+
     it('should create a new instance of AppNexusConnectorImpl and push showTag function to the queue', function () {
       const source = 'AppNexus'
       const connectorData = { 'Member': 3296 }
@@ -356,6 +441,7 @@ describe('AppNexusConnectorImpl implementation', function () {
       })
     })
   })
+
   describe('Given an AppNexusConnector with an AppNexusClient', () => {
     it('Should call client methods', (done) => {
       const sourceMock = {}
@@ -404,9 +490,9 @@ describe('AppNexusConnectorImpl implementation', function () {
         .loadTags()
         .showTag(givenShowTag)
         .modifyTag(givenModifyTag)
-        .refresh(givenRefresh)
+        . refresh(givenRefresh)
       setTimeout(() => {
-        expect(loggerSpy.callCount, 'logger debug method should be called seven times').to.equal(7)
+        expect(loggerSpy.callCount, 'logger debug method should be called seven times').to.equal(8)
         expect(setPageOptsSpy.called).to.be.true
         expect(defineTagSpy.called).to.be.true
         expect(loadTagsSpy.called).to.be.true

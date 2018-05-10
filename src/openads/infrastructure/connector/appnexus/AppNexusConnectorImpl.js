@@ -1,21 +1,26 @@
 import AppNexusConnector from './AppNexusConnector'
 
 export default class AppNexusConnectorImpl extends AppNexusConnector {
-  constructor ({source, connectorData, appNexusClient, logger, debounceTimeOut}) {
+  constructor ({source, connectorData, appNexusClient, logger, debounceTimeOutDelay, bufferTimeOutDelay}) {
     super({
       source: source,
       configuration: connectorData
     })
     this._member = this.configuration.Member
-    this._debounceTimeOut = debounceTimeOut
     this._appNexusClient = appNexusClient
     this._registeredEvents = new Map()
     this._logger = logger
+    this._bufferTimeOutDelay = bufferTimeOutDelay
+    this._bufferTimerID = null
+    this._bufferAccumulator = []
+    this._debounceTimeOutDelay = debounceTimeOutDelay
+    this._debounceTimerID = null
   }
 
   get member () {
     return this._member
   }
+
   activateDebugMode () {
     this._logger.debug('Activating AppNexus Debug Mode')
     this._appNexusClient.debug = true
@@ -48,17 +53,17 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
 
   loadTags () {
     this._logger.debug('loadTags has been requested')
-    if (this._debounce !== undefined) clearTimeout(this._debounce)
+    if (this._debounceTimerID !== null) clearTimeout(this._debounceTimerID)
     this._loadTagsDebounceOperator()
     return this
   }
 
   _loadTagsDebounceOperator () {
-    this._debounce = setTimeout(() => {
+    this._debounceTimerID = setTimeout(() => {
       this._logger.debug('loadTags is called')
       this._appNexusClient.anq.push(() => this._appNexusClient.loadTags())
-      this._debounce = undefined
-    }, this._debounceTimeOut)
+      this._debounceTimerID = null
+    }, this._debounceTimeOutDelay)
   }
 
   showTag ({target}) {
@@ -80,9 +85,20 @@ export default class AppNexusConnectorImpl extends AppNexusConnector {
   }
 
   refresh (target) {
-    this._logger.debug('Refresh AppNexus Tag', '| target:', target)
-    this._appNexusClient.anq.push(() => this._appNexusClient.refresh(target))
+    this._logger.debug('Refresh has been requested')
+    if (this._bufferTimerID !== null) clearTimeout(this._bufferTimerID)
+    this._bufferAccumulator = this._bufferAccumulator.concat(target)
+    this._refreshBufferOperator()
     return this
+  }
+
+  _refreshBufferOperator () {
+    this._bufferTimerID = setTimeout(() => {
+      this._logger.debug('Refresh is called')
+      this._appNexusClient.anq.push(() => this._appNexusClient.refresh(this._bufferAccumulator))
+      this._bufferTimerID = null
+      this._bufferAccumulator = []
+    }, this._bufferTimeOutDelay)
   }
 
   modifyTag ({targetId, data}) {

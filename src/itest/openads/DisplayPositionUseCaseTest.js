@@ -1,13 +1,13 @@
 import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_BAD_REQUEST, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
-import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
 import {POSITION_VISIBLE} from '../../openads/domain/position/positionStatus'
+import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
 
 describe('Display Position use case', function () {
   describe('given a position segmentation data', function () {
     it('should return a Promise with a Domain Position and AppNexus data loaded and Position displayed in DOM', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -35,7 +35,7 @@ describe('Display Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({
@@ -65,12 +65,13 @@ describe('Display Position use case', function () {
     })
 
     it('should return a rejected promise due a nonexistent position', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_BAD_REQUEST,
           data: {}
         }
       })
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -79,7 +80,7 @@ describe('Display Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.displayPosition({id: 'id not found'})
@@ -93,7 +94,7 @@ describe('Display Position use case', function () {
     })
 
     it('should return a rejected promise with an error of type PositionAdIsNativeError', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -111,7 +112,7 @@ describe('Display Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({
@@ -140,7 +141,7 @@ describe('Display Position use case', function () {
     })
 
     it('should return a rejected promise with an error of type PositionAdNotAvailableError', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_NO_BID,
           data: {
@@ -159,7 +160,7 @@ describe('Display Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({

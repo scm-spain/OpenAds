@@ -1,13 +1,13 @@
 import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
-import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
 import {POSITION_NOT_VISIBLE} from '../../openads/domain/position/positionStatus'
+import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
 
 describe('Add Position use case', function () {
   describe('given a position segmentation data', function () {
     it('should return a Promise with a Domain Position and AppNexus data loaded', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -26,6 +26,7 @@ describe('Add Position use case', function () {
           }
         }
       })
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -34,7 +35,7 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({
@@ -68,7 +69,8 @@ describe('Add Position use case', function () {
         nobid: true,
         tagId: 6051399
       }
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_NO_BID,
           data: appnexusResponse
@@ -83,7 +85,7 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.addPosition({
@@ -115,7 +117,7 @@ describe('Add Position use case', function () {
     })
 
     it('should return just one call to appNexus loadTags', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -134,6 +136,7 @@ describe('Add Position use case', function () {
           }
         }
       })
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -142,7 +145,7 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const expectedNumberOfLoadTagsCalls = 1
@@ -165,13 +168,13 @@ describe('Add Position use case', function () {
       })
 
       setTimeout(() => {
-        expect(appnexusConnectorTest.numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
+        expect(appNexusClientMock._numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
         done()
       }, 200)
     })
 
     it('should return just one call to appNexus loadTags when we add a several positions', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -190,6 +193,7 @@ describe('Add Position use case', function () {
           }
         }
       })
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -198,7 +202,7 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const expectedNumberOfLoadTagsCalls = 1
@@ -289,13 +293,13 @@ describe('Add Position use case', function () {
       })
 
       setTimeout(() => {
-        expect(appnexusConnectorTest.numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
+        expect(appNexusClientMock._numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
         done()
       }, 200)
     })
 
     it('should return two calls to appNexus loadTags when we add a several positions and then add another one after the first time windows ends', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -314,6 +318,7 @@ describe('Add Position use case', function () {
           }
         }
       })
+
       const openAds = OpenAds.init({
         config: {
           Sources: {
@@ -322,7 +327,7 @@ describe('Add Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const expectedNumberOfLoadTagsCalls = 2
@@ -432,7 +437,7 @@ describe('Add Position use case', function () {
       }, 30)
 
       setTimeout(() => {
-        expect(appnexusConnectorTest.numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
+        expect(appNexusClientMock._numberOfCallsToLoadTags).is.equal(expectedNumberOfLoadTagsCalls)
         done()
       }, 200)
     })
