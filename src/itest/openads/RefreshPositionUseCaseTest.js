@@ -2,11 +2,12 @@ import {expect} from 'chai'
 import OpenAds from './infrastructure/bootstrap/index'
 import {AD_AVAILABLE, AD_NO_BID} from '../../openads/domain/ad/adStatus'
 import AppNexusConnectorTest from './infrastructure/connector/AppNexusConnectorTest'
+import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
 
 describe('Refresh Position use case', function () {
   describe('given a position id', function () {
     it('should return a rejected promise with an error of type PositionNotFoundException', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {}
@@ -21,7 +22,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       openAds.refreshPosition({id: 'no id found'})
@@ -33,7 +34,7 @@ describe('Refresh Position use case', function () {
     })
 
     it('should update the position with the new updated data', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -61,7 +62,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newSegmentation = {
@@ -101,8 +102,8 @@ describe('Refresh Position use case', function () {
         .catch(error => done(error))
     })
 
-    it('shouldn\'t update anything from the position but will refresh the ad response', function (done) {
-      const appnexusConnectorTest = new AppNexusConnectorTest({
+    it('should update the positions with the new updated data with just one call to the AdServer', function (done) {
+      const appNexusClientMock = new AppNexusClientMock({
         loadTags: {
           event: AD_AVAILABLE,
           data: {
@@ -130,7 +131,189 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
+      })
+
+      const expectedNumberOfRefreshCalls = 1
+
+      const newPositionOne = {
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      const newPositionTwo = {
+        id: 'ad2',
+        name: 'ad number two',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      openAds.addPosition(newPositionOne)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      openAds.addPosition(newPositionTwo)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      setTimeout(() => {
+        expect(appNexusClientMock._numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
+        done()
+      }, 200)
+    })
+
+    it('should update the positions with the new updated data with two calls to the AdServer', function (done) {
+      const appNexusClientMock = new AppNexusClientMock({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusClient: appNexusClientMock
+      })
+
+      const expectedNumberOfRefreshCalls = 2
+
+      const newPositionOne = {
+        id: 'ad1',
+        name: 'ad number one',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      const newPositionTwo = {
+        id: 'ad2',
+        name: 'ad number two',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      const newPositionThree = {
+        id: 'ad3',
+        name: 'ad number three',
+        source: 'AppNexus',
+        placement: 'es-cn-wph-ocasion-list-x_65',
+        segmentation: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]
+      }
+
+      openAds.addPosition(newPositionOne)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      openAds.addPosition(newPositionTwo)
+        .then(position => openAds.refreshPosition({id: position.id}))
+
+      setTimeout(() => {
+        openAds.addPosition(newPositionThree)
+          .then(position => openAds.refreshPosition({id: position.id}))
+      }, 20)
+
+      setTimeout(() => {
+        expect(appNexusClientMock._numberOfCallsToRefresh).is.equal(expectedNumberOfRefreshCalls)
+        done()
+      }, 200)
+    })
+
+    it('shouldn\'t update anything from the position but will refresh the ad response', function (done) {
+      const appNexusClientMock = new AppNexusClientMock({
+        loadTags: {
+          event: AD_AVAILABLE,
+          data: {
+            adType: 'banner',
+            source: 'rtb',
+            creativeId: 26299226,
+            targetId: 'ad1',
+            banner: {
+              width: 728,
+              height: 90,
+              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
+              trackers: [{
+                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
+              }]
+            }
+          }
+        }
+      })
+
+      const openAds = OpenAds.init({
+        config: {
+          Sources: {
+            AppNexus: {
+              Member: 3397
+            }
+          }
+        },
+        appNexusClient: appNexusClientMock
       })
 
       const newPosition = {
@@ -200,7 +383,7 @@ describe('Refresh Position use case', function () {
         }
       }
 
-      const appnexusConnectorTest = new AppNexusConnectorTest({loadTags, refresh})
+      const appNexusClientMock = new AppNexusClientMock({loadTags, refresh})
 
       const openAds = OpenAds.init({
         config: {
@@ -210,7 +393,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newPosition = {
@@ -279,7 +462,7 @@ describe('Refresh Position use case', function () {
         }
       }
 
-      const appnexusConnectorTest = new AppNexusConnectorTest({loadTags, refresh})
+      const appNexusClientMock = new AppNexusClientMock({loadTags, refresh})
 
       const openAds = OpenAds.init({
         config: {
@@ -289,7 +472,7 @@ describe('Refresh Position use case', function () {
             }
           }
         },
-        appNexusConnector: appnexusConnectorTest
+        appNexusClient: appNexusClientMock
       })
 
       const newPosition = {
