@@ -38,7 +38,17 @@ describe('DisplayPositionUseCase test', () => {
           find: () => Promise.resolve(givenPosition),
           saveOrUpdate: ({position}) => Promise.resolve(position)
         }
-        const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
+
+        const adConnectorManagerMock = {
+          getConnector: ({source}) => Promise.resolve({
+            display: ({id}) => givenAd
+          })
+        }
+
+        const displayPositionUseCase = new DisplayPositionUseCase({
+          positionRepository: positionRepositoryMock,
+          adConnectorManager: adConnectorManagerMock
+        })
         displayPositionUseCase.displayPosition({id: givenIdPosition})
           .then((position) => {
             expect(position.status).equal(POSITION_VISIBLE)
