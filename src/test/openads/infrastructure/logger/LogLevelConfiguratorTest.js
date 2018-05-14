@@ -1,8 +1,8 @@
 import {expect} from 'chai'
 import sinon from 'sinon'
-import LogLevelConfigurator from '../../../../openads/infrastructure/logger/LogLevelConfigurator'
+import LogLevelLoggerInitializer from '../../../../openads/infrastructure/logger/LogLevelLoggerInitializer'
 
-describe('LogLevel Configurator', () => {
+describe('LogLevel Logger Initializer', () => {
   const givenLoggerName = 'OpenAds'
   describe('Given no level to be configured', () => {
     it('Should use error as default level if no DEBUG option is in URL', () => {
@@ -19,7 +19,7 @@ describe('LogLevel Configurator', () => {
 
       const setLevelSpy = sinon.spy(loggerMock, 'setLevel')
 
-      const levelConfigurator = new LogLevelConfigurator({
+      const levelConfigurator = new LogLevelLoggerInitializer({
         logLevel: logLevelMock,
         domDriver: domDriverMock
       })
@@ -72,7 +72,7 @@ describe('LogLevel Configurator', () => {
 
       const setLevelSpy = sinon.spy(loggerMock, 'setLevel')
 
-      const levelConfigurator = new LogLevelConfigurator({
+      const levelConfigurator = new LogLevelLoggerInitializer({
         logLevel: logLevelMock,
         domDriver: domDriverMock,
         options: givenOptions
@@ -97,7 +97,7 @@ describe('LogLevel Configurator', () => {
 
       const setLevelSpy = sinon.spy(loggerMock, 'setLevel')
 
-      const levelConfigurator = new LogLevelConfigurator({
+      const levelConfigurator = new LogLevelLoggerInitializer({
         logLevel: logLevelMock,
         domDriver: domDriverMock,
         options: givenOptions
