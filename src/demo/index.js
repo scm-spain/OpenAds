@@ -6,9 +6,15 @@ const appNexusConnector = new AppNexusConnector({
   member: 3397
 })
 
+const appNexusConnectorPro = new AppNexusConnector({
+  source: 'AppNexus-pro',
+  member: 3296
+})
+
 const openAds = OpenAds.init({config: {
   Sources: {
-    'AppNexus': appNexusConnector
+    'AppNexus': appNexusConnector,
+    'AppNexus-pro': appNexusConnectorPro
   }
 }})
 
@@ -33,7 +39,7 @@ openAds.addPosition({
 openAds.addPosition({
   id: 'ad2',
   name: 'ad number two',
-  source: 'AppNexus',
+  source: 'AppNexus-pro',
   placement: 'es-cn-wde-ocasion-list-top_2',
   segmentation: {
     'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
