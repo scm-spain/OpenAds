@@ -6,9 +6,7 @@
   "scripts": {
     "cleanDistFolder": "rm -Rf ./dist",
     "prepublishOnly": "npm run cleanDistFolder && npm run build",
-    "build": "npm run cleanDistFolder && babel src --ignore test,demo --out-dir dist ",
-    "deploy": "npm run cleanDistFolder && npm run demo:build && npm run now:upload",
-    "now:upload": "now -n openads dist/",
+    "build": "npm run cleanDistFolder && babel src --ignore test --out-dir dist ",
     "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\"",
     "test:integration": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/itest/**/*.js\"",
     "server": "http-server './dist' -p 8080",
