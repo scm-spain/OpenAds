@@ -8,22 +8,35 @@ import {AD_AVAILABLE, AD_ERROR, AD_NO_BID} from '../../../../openads/domain/ad/a
 describe('Add Position use case', function () {
   describe('given an non existent Position', function () {
     it('should return a Promise', function () {
-      const givenPositionDTO = {}
+      const givenPositionDTO = {
+        id: 'ad3',
+        source: 'AppNexus',
+        placement: 'blabla',
+        status: POSITION_NOT_VISIBLE
+      }
       const positionRepositoryMock = {
-        find: ({id}) => Promise.resolve({}),
+        find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.resolve({})
+
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          loadAd: ({data}) => ({
+            status: AD_AVAILABLE,
+            data: {}
+          })
+        })
       }
       const positionFactory = new DefaultPositionFactory()
 
       const addPositionUseCase = new AddPositionUseCase({
         positionRepository: positionRepositoryMock,
         positionFactory: positionFactory,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
-      expect(addPositionUseCase.addPosition(givenPositionDTO)).to.be.a('promise')
+      expect(
+        addPositionUseCase.addPosition(givenPositionDTO)
+      ).to.be.a('promise')
     })
 
     it('should call to position factory and position repository once', function (done) {
@@ -32,46 +45,53 @@ describe('Add Position use case', function () {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.resolve({data: {}, status: AD_AVAILABLE})
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          loadAd: ({data}) => ({
+            status: AD_AVAILABLE,
+            data: {}
+          })
+        })
       }
       const positionRepositoryFindSpy = sinon.spy(positionRepositoryMock, 'find')
       const positionRepositorySaveOrUpdateSpy = sinon.spy(positionRepositoryMock, 'saveOrUpdate')
-      const adRepositorySpy = sinon.spy(adRepositoryMock, 'find')
+      const adConnectorManagerSpy = sinon.spy(adConnectorManagerMock, 'getConnector')
 
       const positionFactory = new DefaultPositionFactory()
       const positionFactorySpy = sinon.spy(positionFactory, 'create')
       const addPositionUseCase = new AddPositionUseCase({
         positionRepository: positionRepositoryMock,
         positionFactory: positionFactory,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
       addPositionUseCase.addPosition(givenPositionRequest)
         .then(() => {
           expect(positionRepositoryFindSpy.calledOnce, 'repository find should be called once').to.be.true
           expect(positionRepositorySaveOrUpdateSpy.calledOnce, 'repository saveOrUpdate should be called once').to.be.true
           expect(positionFactorySpy.calledOnce, 'factory should be called once').to.be.true
-          expect(adRepositorySpy.calledOnce, 'adRepositorySpy should be called once').to.be.true
+          expect(adConnectorManagerSpy.calledOnce, 'adConnectorManager should be called once').to.be.true
           done()
         })
         .catch(error => done(error))
     })
-    it('should return the position with the Ad inside if all goes fine', function (done) {
+    it('should return the position with the Ad inside', function (done) {
       const givenAd = {data: '<html>inside</html>', status: AD_AVAILABLE}
       const givenPositionRequest = {id: 'aId'}
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.resolve(givenAd)
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          loadAd: ({data}) => givenAd
+        })
       }
 
       const positionFactory = new DefaultPositionFactory()
       const addPositionUseCase = new AddPositionUseCase({
         positionRepository: positionRepositoryMock,
         positionFactory: positionFactory,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
 
       addPositionUseCase.addPosition(givenPositionRequest)
@@ -85,21 +105,26 @@ describe('Add Position use case', function () {
         })
         .catch(error => done(error))
     })
-    it('should return the position with an unresolved Ad with AD_ERROR status if ad server fetch fails for non domain errors', function (done) {
+    it('should return the position with an unresolved Ad with AD_ERROR status if ad server fetch fails', function (done) {
       const givenPositionRequest = {id: 'aId'}
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.reject(new Error('A timeout error for example'))
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          loadAd: ({data}) => ({
+            status: AD_ERROR,
+            data: {}
+          })
+        })
       }
 
       const positionFactory = new DefaultPositionFactory()
       const addPositionUseCase = new AddPositionUseCase({
         positionRepository: positionRepositoryMock,
         positionFactory: positionFactory,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
 
       addPositionUseCase.addPosition(givenPositionRequest)
@@ -119,15 +144,17 @@ describe('Add Position use case', function () {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.resolve(givenAd)
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          loadAd: ({data}) => givenAd
+        })
       }
 
       const positionFactory = new DefaultPositionFactory()
       const addPositionUseCase = new AddPositionUseCase({
         positionRepository: positionRepositoryMock,
         positionFactory: positionFactory,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
 
       addPositionUseCase.addPosition(givenPositionRequest)

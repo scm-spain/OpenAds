@@ -16,6 +16,12 @@ describe('Refresh Position use case', function () {
       const givenPositionChanges = {
         segmentation: 'newSegmentation'
       }
+      const givenAd = {
+        status: AD_AVAILABLE,
+        data: {
+          adType: 'banner'
+        }
+      }
       const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
         id: '42',
@@ -31,13 +37,14 @@ describe('Refresh Position use case', function () {
         find: ({id}) => Promise.resolve(givenPosition),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.resolve({data: {}, status: AD_AVAILABLE}),
-        remove: () => null
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          refresh: ({id}) => givenAd
+        })
       }
       const refreshPositionUseCase = new RefreshPositionUseCase({
         positionRepository: positionRepositoryMock,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
       const observerSpy = sinon.spy()
       DomainEventBus.register({
