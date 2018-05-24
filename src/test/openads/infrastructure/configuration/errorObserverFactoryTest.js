@@ -13,7 +13,7 @@ describe('errorObserverFactory test', () => {
         message: 'Error processing the observer.',
         error: 'err'
       }
-      const givenErrorEventMessage = 'ERROR_EVENT'
+      const givenErrorEventMessage = 'ERROR | '
 
       const observer = errorObserverFactory(givenLogger)
       observer({payload: givenPayload})

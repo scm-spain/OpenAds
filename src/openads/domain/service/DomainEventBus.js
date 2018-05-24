@@ -26,6 +26,7 @@ class DomainEventBus {
         .forEach(observer => {
           try {
             observer({
+              event: domainEvent.eventName,
               payload: domainEvent.payload,
               dispatcher: (data) => this.raise({domainEvent: data})
             })

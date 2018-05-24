@@ -1,18 +1,20 @@
 import HTMLDOMDriver from '../service/HTMLDOMDriver'
 import DomainEventBus from '../../domain/service/DomainEventBus'
 import LogLevel from 'loglevel'
-import LogLevelPrefix from 'loglevel-plugin-prefix'
 import LogLevelLoggerInitializer from '../logger/LogLevelLoggerInitializer'
-import LogLevelPrefixConfigurator from '../logger/LogLevelPrefixConfigurator'
-import LogLevelConfigurator from '../logger/LogLevelConfigurator'
 import AddPositionUseCase from '../../application/service/AddPositionUseCase'
 import InMemoryPositionRepository from '../position/InMemoryPositionRepository'
 import {errorObserverFactory} from './errorObserverFactory'
+import {debugObserverFactory} from './debugObserverFactory'
 import {OBSERVER_ERROR_THROWN} from '../../domain/service/observerErrorThrown'
 import RefreshPositionUseCase from '../../application/service/RefreshPositionUseCase'
 import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
 import DefaultPositionFactory from '../position/DefaultPositionFactory'
 import RoutingAdConnectorManager from '../ad/RoutingAdConnectorManager'
+import {POSITION_SEGMENTATION_CHANGED} from '../../domain/position/positionSegmentationChanged'
+import {POSITION_CREATED} from '../../domain/position/positionCreated'
+import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
+import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
 
 export default class Container {
   constructor ({config, eager = true} = {}) {
@@ -33,30 +35,15 @@ export default class Container {
   }
 
   _buildLogger () {
-    return this.getInstance({key: 'LoggerInitializer'}).logger({
-      loggerName: 'OpenAds'
-    })
+    return this.getInstance({key: 'LoggerInitializer'}).logger()
   }
 
   _buildLoggerInitializer () {
     return new LogLevelLoggerInitializer({
-      loggerPrefixConfigurator: this.getInstance({key: 'LoggerPrefixConfigurator'}),
-      loggerLevelConfigurator: this.getInstance({key: 'LoggerLevelConfigurator'})
-    })
-  }
-
-  _buildLoggerPrefixConfigurator () {
-    return new LogLevelPrefixConfigurator({
-      logLevelPrefix: LogLevelPrefix,
-      options: this._config.LogLevelPrefix
-    })
-  }
-
-  _buildLoggerLevelConfigurator () {
-    return new LogLevelConfigurator({
+      loggerName: 'OpenAds',
       domDriver: this.getInstance({key: 'DOMDriver'}),
       logLevel: LogLevel,
-      options: this._config.LogLevel
+      connectors: this._config.Sources
     })
   }
 
@@ -98,6 +85,11 @@ export default class Container {
     return errorObserverFactory(logger)
   }
 
+  _buildDebugObserverFactory () {
+    const logger = this.getInstance({key: 'Logger'})
+    return debugObserverFactory(logger)
+  }
+
   _buildDisplayPositionUseCase () {
     return new DisplayPositionUseCase({
       positionRepository: this.getInstance({key: 'PositionRepository'}),
@@ -106,8 +98,21 @@ export default class Container {
   }
   _buildEagerSingletonInstances () {
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
+    const debugObserver = this.getInstance({key: 'DebugObserverFactory'})
     DomainEventBus.register({
       eventName: OBSERVER_ERROR_THROWN,
       observer: errorObserver})
+    DomainEventBus.register({
+      eventName: POSITION_CREATED,
+      observer: debugObserver})
+    DomainEventBus.register({
+      eventName: POSITION_DISPLAYED,
+      observer: debugObserver})
+    DomainEventBus.register({
+      eventName: POSITION_SEGMENTATION_CHANGED,
+      observer: debugObserver})
+    DomainEventBus.register({
+      eventName: POSITION_ALREADY_DISPLAYED,
+      observer: debugObserver})
   }
 }

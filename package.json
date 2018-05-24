@@ -56,8 +56,8 @@
     ]
   },
   "dependencies": {
+    "@schibstedspain/openads-connector-api": "^1.2.0",
     "loglevel": "^1.6.1",
-    "loglevel-plugin-prefix": "^0.7.2",
     "querystring": "^0.2.0"
   }
 }
