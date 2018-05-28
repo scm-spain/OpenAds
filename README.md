@@ -24,16 +24,29 @@ npm install --save @schibstedspain/openads
 ```
 
 # Usage
-First of all you must include OpenAds and **initialize it** with your desired configuration using static **init** method:
-Currently we only support AppNexus Source so you can only provide your **member** number
+First of all you must include OpenAds and **initialize it** with your desired configuration using static **init** method,
+which has to receive the **connectors** you want to use:
+
+## List of Known Connectors:
+
+* [AppNexus Connector](https://github.com/scm-spain/OpenAds-appnexus)
+* [Google AdSense Connector](https://github.com/scm-spain/OpenAds-google-adsense)
+
+## OpenAds initialization
 
 ```ecmascript 6
 import OpenAds from '@schibstedspain/openads'
+import AppNexusConnector from '@schibstedspain/openads-appnexus'
+
+// connectors initalization - sample with AppNexusConnector
+const appNexusConnector = WhateverConnector.init({config: {
+  member: 4242
+}})
+
+// openads initialization
 const openAds = OpenAds.init({config:{
   Sources: {
-    AppNexus: {
-      Member: 4242
-    }
+    AppNexus: appNexusConnector
   }
 }})
 ```
