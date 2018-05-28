@@ -29,7 +29,8 @@ export default class DisplayPositionUseCase {
       .then(this._filterPositionAdNoNative)
       .then(foundPosition =>
         this._adConnectorManager.getConnector({source: foundPosition.source})
-          .then(connector => (foundPosition.status === POSITION_NOT_VISIBLE) ? connector.display({id: foundPosition.id}) : connector.refresh({ids: [foundPosition.id]}))
+          .then(connector => (foundPosition.status === POSITION_NOT_VISIBLE)
+            ? connector.display({domElementId: foundPosition.id}) : connector.refresh({domElementId: foundPosition.id}))
           .then(() => foundPosition)
       )
       .then(foundPosition => foundPosition.changeStatus({newStatus: POSITION_VISIBLE}))

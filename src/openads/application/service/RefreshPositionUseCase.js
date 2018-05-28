@@ -41,16 +41,13 @@ export default class RefreshPositionUseCase {
   _setAdToPosition (position) {
     return Promise.resolve()
       .then(() => this._adConnectorManager.getConnector({source: position.source}))
-      .then(connector => connector.refresh(
-        {
-          id: position.id,
-          segmentation: {
-            placement: position.placement,
-            sizes: position.sizes,
-            keywords: position.segmentation
-          }
-        })
-      )
+      .then(connector => connector.refresh({
+        domElementId: position.id,
+        placement: position.placement,
+        sizes: position.sizes,
+        segmentation: position.segmentation,
+        native: position.native
+      }))
       .catch(error => ({data: error.cause, status: error.status}))
       .then(ad => position.updateAd(ad))
   }
