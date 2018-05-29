@@ -24,16 +24,29 @@ npm install --save @schibstedspain/openads
 ```
 
 # Usage
-First of all you must include OpenAds and **initialize it** with your desired configuration using static **init** method:
-Currently we only support AppNexus Source so you can only provide your **member** number
+First of all you must include OpenAds and **initialize it** with your desired configuration using static **init** method,
+which has to receive the **connectors** you want to use:
+
+## List of Known Connectors:
+
+* [AppNexus Connector](https://github.com/scm-spain/OpenAds-appnexus)
+* [Google AdSense Connector](https://github.com/scm-spain/OpenAds-google-adsense)
+
+## OpenAds initialization
 
 ```ecmascript 6
 import OpenAds from '@schibstedspain/openads'
+import AppNexusConnector from '@schibstedspain/openads-appnexus'
+
+// connectors initalization - sample with AppNexusConnector
+const appNexusConnector = WhateverConnector.init({config: {
+  member: 4242
+}})
+
+// openads initialization
 const openAds = OpenAds.init({config:{
   Sources: {
-    AppNexus: {
-      Member: 4242
-    }
+    AppNexus: appNexusConnector
   }
 }})
 ```
@@ -186,33 +199,14 @@ openAds.addPosition({
 
 # Logging
 
-In order to debug what is happening with Ads Loading, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as its logging framework.
-Also, it is using the [LogLevel Plugin Prefix](https://github.com/kutuluk/loglevel-plugin-prefix) to configure how log messages will be displayed.
-
-In order to set the Logger up, add 'LogLevel' node entry into the **config** object when calling OpenAds 'init' method as follows:
-
-```ecmascript 6
-const openAds = OpenAds.init({config: {
-  // LogLevel configuration
-  LogLevel: {
-    Level: 'debug' // defaults to 'error'
-  },
-  // LogLevel Plugin Prefix configuration
-  LogLevelPrefix: {
-    // check options in https://github.com/kutuluk/loglevel-plugin-prefix
-    template: '[%t] %l | %n:', // defaults to '[%t] %l | %n:'
-    timestampFormatter: (date) => ... // defaults to return a formatted date as 'YYYY-MM-DD HH:mm:ss.zzz'
-  }
-  //, Sources: ...
-}})
-```
-
 While navigating in a browser, adding **openads_debug** keyword to the URL query string will enable the debug mode automatically.
 
 For example:
 ```
 http://your.web.app/page?price=5000&openads_debug
 ```
+
+Currently, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as its logging framework.
 
 # Roadmap
 

@@ -1,41 +1,30 @@
 import {expect} from 'chai'
+import sinon from 'sinon'
 import OpenAds from './infrastructure/bootstrap/index'
-import {AD_AVAILABLE, AD_BAD_REQUEST, AD_NO_BID} from '../../openads/infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE, AD_NO_BID} from '../../openads/domain/ad/adStatus'
 import {POSITION_VISIBLE} from '../../openads/domain/position/positionStatus'
-import AppNexusClientMock from './infrastructure/connector/AppNexusClientMock'
+import AppNexusConnectorMock from './infrastructure/connector/AppNexusConnectorMock'
 
 describe('Display Position use case', function () {
   describe('given a position segmentation data', function () {
     it('should return a Promise with a Domain Position and AppNexus data loaded and Position displayed in DOM', function (done) {
-      const appNexusClientMock = new AppNexusClientMock({
-        loadTags: {
-          event: AD_AVAILABLE,
-          data: {
-            adType: 'banner',
-            source: 'rtb',
-            creativeId: 26299226,
-            targetId: 'ad1',
-            banner: {
-              width: 728,
-              height: 90,
-              content: '<!-- Creative 26299226 served by Member 12345 via AppNexus --><a href="http://lax1.ib.adnxs.com/click?AAAAAAAA6D8AAAAAAADoPwAAAAAAAPA_AAAAAAAA6D8A…',
-              trackers: [{
-                impression_urls: ['http://lax1.ib.adnxs.com/it?e=wqT_3QK2BMAtAgAAAgDWAAUIo4aftQUQhaGP-8eK89JxG…S4xMy4xMzKoBO6QCbIEBwgAEAAY2AU.&s=7674360f6a0ea8c3ba7018acd3467ba291de4ad0']
-              }]
-            }
-          }
+      const appNexusConnectorMock = new AppNexusConnectorMock()
+
+      const stubLoadAd = sinon.stub(appNexusConnectorMock, 'loadAd')
+
+      stubLoadAd.returns(Promise.resolve({
+        status: AD_AVAILABLE,
+        data: {
+          adType: 'banner'
         }
-      })
+      }))
 
       const openAds = OpenAds.init({
         config: {
           Sources: {
-            AppNexus: {
-              Member: 3397
-            }
+            'AppNexus': appNexusConnectorMock
           }
-        },
-        appNexusClient: appNexusClientMock
+        }
       })
 
       openAds.addPosition({
@@ -65,22 +54,14 @@ describe('Display Position use case', function () {
     })
 
     it('should return a rejected promise due a nonexistent position', function (done) {
-      const appNexusClientMock = new AppNexusClientMock({
-        loadTags: {
-          event: AD_BAD_REQUEST,
-          data: {}
-        }
-      })
+      const appNexusConnectorMock = new AppNexusConnectorMock()
 
       const openAds = OpenAds.init({
         config: {
           Sources: {
-            AppNexus: {
-              Member: 3397
-            }
+            'AppNexus': appNexusConnectorMock
           }
-        },
-        appNexusClient: appNexusClientMock
+        }
       })
 
       openAds.displayPosition({id: 'id not found'})
@@ -94,25 +75,23 @@ describe('Display Position use case', function () {
     })
 
     it('should return a rejected promise with an error of type PositionAdIsNativeError', function (done) {
-      const appNexusClientMock = new AppNexusClientMock({
-        loadTags: {
-          event: AD_AVAILABLE,
-          data: {
-            adType: 'native',
-            source: 'rtb'
-          }
+      const appNexusConnectorMock = new AppNexusConnectorMock()
+
+      const stubLoadAd = sinon.stub(appNexusConnectorMock, 'loadAd')
+
+      stubLoadAd.returns(Promise.resolve({
+        status: AD_AVAILABLE,
+        data: {
+          adType: 'native'
         }
-      })
+      }))
 
       const openAds = OpenAds.init({
         config: {
           Sources: {
-            AppNexus: {
-              Member: 3397
-            }
+            'AppNexus': appNexusConnectorMock
           }
-        },
-        appNexusClient: appNexusClientMock
+        }
       })
 
       openAds.addPosition({
@@ -141,26 +120,25 @@ describe('Display Position use case', function () {
     })
 
     it('should return a rejected promise with an error of type PositionAdNotAvailableError', function (done) {
-      const appNexusClientMock = new AppNexusClientMock({
-        loadTags: {
-          event: AD_NO_BID,
-          data: {
-            auctionId: '123456',
-            nobid: true,
-            tagId: 6051399
-          }
+      const appNexusConnectorMock = new AppNexusConnectorMock()
+
+      const stubLoadAd = sinon.stub(appNexusConnectorMock, 'loadAd')
+
+      stubLoadAd.returns(Promise.resolve({
+        status: AD_NO_BID,
+        data: {
+          auctionId: '123456',
+          nobid: true,
+          tagId: 6051399
         }
-      })
+      }))
 
       const openAds = OpenAds.init({
         config: {
           Sources: {
-            AppNexus: {
-              Member: 3397
-            }
+            'AppNexus': appNexusConnectorMock
           }
-        },
-        appNexusClient: appNexusClientMock
+        }
       })
 
       openAds.addPosition({

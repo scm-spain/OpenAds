@@ -5,7 +5,7 @@ import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
 import sinon from 'sinon'
 import DefaultPositionFactory from '../../../../openads/infrastructure/position/DefaultPositionFactory'
-import {AD_AVAILABLE} from '../../../../openads/infrastructure/connector/appnexus/event/events'
+import {AD_AVAILABLE} from '../../../../openads/domain/ad/adStatus'
 
 describe('Refresh Position use case', function () {
   describe('given a Position DTO of changes', function () {
@@ -15,6 +15,12 @@ describe('Refresh Position use case', function () {
     it('should return an updated position', function (done) {
       const givenPositionChanges = {
         segmentation: 'newSegmentation'
+      }
+      const givenAd = {
+        status: AD_AVAILABLE,
+        data: {
+          adType: 'banner'
+        }
       }
       const positionFactory = new DefaultPositionFactory()
       const givenPosition = positionFactory.create({
@@ -31,13 +37,14 @@ describe('Refresh Position use case', function () {
         find: ({id}) => Promise.resolve(givenPosition),
         saveOrUpdate: ({position}) => Promise.resolve(position)
       }
-      const adRepositoryMock = {
-        find: ({id}) => Promise.resolve({data: {}, status: AD_AVAILABLE}),
-        remove: () => null
+      const adConnectorManagerMock = {
+        getConnector: ({source}) => Promise.resolve({
+          refresh: ({id}) => givenAd
+        })
       }
       const refreshPositionUseCase = new RefreshPositionUseCase({
         positionRepository: positionRepositoryMock,
-        adRepository: adRepositoryMock
+        adConnectorManager: adConnectorManagerMock
       })
       const observerSpy = sinon.spy()
       DomainEventBus.register({
