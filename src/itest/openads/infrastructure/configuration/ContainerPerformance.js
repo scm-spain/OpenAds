@@ -1,0 +1,23 @@
+import ContainerTest from './ContainerTest'
+import {performanceHandler} from './performanceHandler'
+
+export default class ContainerPerformance extends ContainerTest {
+  constructor ({config, appNexusClient, performance}) {
+    super({config, appNexusClient, eager: false})
+    this._performance = performance
+    super._buildEagerSingletonInstances()
+  }
+
+  getInstance ({key}) {
+    this._performance.mark(`Initializing instance ${key}`)
+    if (undefined === this._instances.get(key)) {
+      try {
+        this._instances.set(key, this['_build' + key]())
+      } catch (e) {
+        throw new Error(`Error creating instance: ${key}`, e)
+      }
+    }
+    this._performance.stop(`Initializing instance ${key}`)
+    return new Proxy(this._instances.get(key), performanceHandler(this._performance))
+  }
+}

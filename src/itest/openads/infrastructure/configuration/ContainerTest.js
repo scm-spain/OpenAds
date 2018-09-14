@@ -3,10 +3,10 @@ import HTMLDOMDriver from '../../../../openads/infrastructure/service/HTMLDOMDri
 import {JSDOM} from 'jsdom'
 
 export default class ContainerTest extends Container {
-  constructor ({config, appNexusClient}) {
+  constructor ({config, appNexusClient, eager = true} = {}) {
     super({config, eager: false})
     this._appNexusClient = appNexusClient
-    super._buildEagerSingletonInstances()
+    if (eager) super._buildEagerSingletonInstances()
   }
 
   _buildDOMDriver () {

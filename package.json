@@ -11,6 +11,7 @@
     "test:integration": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/itest/**/*.js\"",
     "coverage": "istanbul cover --report html _mocha -- ./src/*test --recursive --compilers js:babel-register",
     "coverage:ci": "istanbul cover _mocha -- ./src/*test --recursive --compilers js:babel-register && codecov",
+    "performance": "babel-node src/itest/performance",
     "watch": "onchange 'src/**/*.js' -- npm run build",
     "lint": "sui-lint js"
   },
@@ -23,10 +24,11 @@
     "advertising",
     "schibsted"
   ],
-  "author": "The Mighty Ducks of Advertising",
+  "author": "One Punch Team",
   "license": "ISC",
   "devDependencies": {
     "@s-ui/lint": "^2.13.0",
+    "@s-ui/perf": "^1.4.0",
     "@schibstedspain/openads-connector-api": "^1.2.0",
     "babel-cli": "^6.24.0",
     "babel-loader": "^7.1.4",
