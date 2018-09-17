@@ -43,8 +43,8 @@ const addPosition = () => {
     },
     sizes: [[300, 250], [320, 250]]
   })
-    .then(x => performance.stop(addPosition.name))
-    .then(x => performance.getEntries())
+    .then(() => performance.stop(addPosition.name))
+    .then(() => performance.getEntries())
     .then(printTimelineChart())
 }
 
@@ -62,8 +62,8 @@ const displayNonexistentPosition = () => {
 
   openAds.displayPosition({id: 'non_existent'})
     .catch(error => error)
-    .then(x => performance.stop(displayNonexistentPosition.name))
-    .then(x => performance.getEntries())
+    .then(() => performance.stop(displayNonexistentPosition.name))
+    .then(() => performance.getEntries())
     .then(printTimelineChart())
 }
 
@@ -81,8 +81,8 @@ const refreshNonexistentPosition = () => {
 
   openAds.refreshPosition({id: 'non_existent', position: {}})
     .catch(error => error)
-    .then(x => performance.stop(refreshNonexistentPosition.name))
-    .then(x => performance.getEntries())
+    .then(() => performance.stop(refreshNonexistentPosition.name))
+    .then(() => performance.getEntries())
     .then(printTimelineChart())
 }
 
@@ -115,8 +115,8 @@ const addPositionAndDisplay = () => {
     sizes: [[300, 250], [320, 250]]
   })
     .then(position => openAds.displayPosition({id: position.id}))
-    .then(x => performance.stop(addPositionAndDisplay.name))
-    .then(x => performance.getEntries())
+    .then(() => performance.stop(addPositionAndDisplay.name))
+    .then(() => performance.getEntries())
     .then(printTimelineChart())
 }
 
@@ -151,8 +151,8 @@ const addPositionAndDisplayAndRefresh = () => {
     .then(position => openAds.displayPosition({id: position.id}))
     .then(position => openAds.refreshPosition({id: position.id}))
     .catch(error => error)
-    .then(x => performance.stop(addPositionAndDisplayAndRefresh.name))
-    .then(x => performance.getEntries())
+    .then(() => performance.stop(addPositionAndDisplayAndRefresh.name))
+    .then(() => performance.getEntries())
     .then(printTimelineChart())
 }
 
