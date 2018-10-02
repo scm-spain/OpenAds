@@ -1,9 +1,9 @@
-import ContainerTest from './ContainerTest'
+import Container from './Container'
 import {performanceHandler} from './performanceHandler'
 
-export default class ContainerPerformance extends ContainerTest {
-  constructor ({config, appNexusClient, performance}) {
-    super({config, appNexusClient, eager: false})
+export default class PerformanceContainer extends Container {
+  constructor ({config, performance, window} = {}) {
+    super({config, eager: false, currentWindow: window})
     this._performance = performance
     super._buildEagerSingletonInstances()
   }

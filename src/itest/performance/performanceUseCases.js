@@ -1,9 +1,11 @@
 import sinon from 'sinon'
 import AppNexusConnectorMock from '../openads/infrastructure/connector/AppNexusConnectorMock'
 import {AD_AVAILABLE} from '../../openads/domain/ad/adStatus'
-import BootstrapPerformance from '../openads/infrastructure/bootstrap/BootstrapPerformance'
+
 import {printTimelineChart} from '@s-ui/perf/lib/chart'
 import getPerf from '@s-ui/perf'
+import Main from '../../openads/infrastructure/bootstrap/Main'
+import {JSDOM} from 'jsdom'
 
 const appNexusConnectorMock = new AppNexusConnectorMock()
 const stubLoadAd = sinon.stub(appNexusConnectorMock, 'loadAd')
@@ -15,16 +17,19 @@ stubLoadAd.returns(Promise.resolve({
   }
 }))
 
+const windowMock = new JSDOM('<!DOCTYPE html><div id="forlayo">Hello world</div>').window
+
 const addPosition = () => {
   const performance = getPerf(`${addPosition.name}_id`)
   performance.mark(addPosition.name)
-  const openAds = BootstrapPerformance.init({
+  const openAds = Main.init({
     config: {
       Sources: {
         'AppNexus': appNexusConnectorMock
       }
     },
-    performance
+    performance,
+    window: windowMock
   })
 
   openAds.addPosition({
@@ -51,13 +56,14 @@ const addPosition = () => {
 const displayNonexistentPosition = () => {
   const performance = getPerf(`${displayNonexistentPosition.name}_id`)
   performance.mark(displayNonexistentPosition.name)
-  const openAds = BootstrapPerformance.init({
+  const openAds = Main.init({
     config: {
       Sources: {
         'AppNexus': appNexusConnectorMock
       }
     },
-    performance
+    performance,
+    window: windowMock
   })
 
   openAds.displayPosition({id: 'non_existent'})
@@ -70,13 +76,14 @@ const displayNonexistentPosition = () => {
 const refreshNonexistentPosition = () => {
   const performance = getPerf(`${refreshNonexistentPosition.name}_id`)
   performance.mark(refreshNonexistentPosition.name)
-  const openAds = BootstrapPerformance.init({
+  const openAds = Main.init({
     config: {
       Sources: {
         'AppNexus': appNexusConnectorMock
       }
     },
-    performance
+    performance,
+    window: windowMock
   })
 
   openAds.refreshPosition({id: 'non_existent', position: {}})
@@ -89,13 +96,14 @@ const refreshNonexistentPosition = () => {
 const addPositionAndDisplay = () => {
   const performance = getPerf(`${addPositionAndDisplay.name}_id`)
   performance.mark(addPositionAndDisplay.name)
-  const openAds = BootstrapPerformance.init({
+  const openAds = Main.init({
     config: {
       Sources: {
         'AppNexus': appNexusConnectorMock
       }
     },
-    performance
+    performance,
+    window: windowMock
   })
 
   openAds.addPosition({
@@ -123,13 +131,14 @@ const addPositionAndDisplay = () => {
 const addPositionAndDisplayAndRefresh = () => {
   const performance = getPerf(`${addPositionAndDisplayAndRefresh.name}_id`)
   performance.mark(addPositionAndDisplayAndRefresh.name)
-  const openAds = BootstrapPerformance.init({
+  const openAds = Main.init({
     config: {
       Sources: {
         'AppNexus': appNexusConnectorMock
       }
     },
-    performance
+    performance,
+    window: windowMock
   })
 
   openAds.addPosition({
