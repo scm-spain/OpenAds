@@ -8,7 +8,7 @@
     "prepublishOnly": "npm run cleanDistFolder && npm run build",
     "build": "npm run cleanDistFolder && babel src --ignore test --out-dir dist ",
     "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\"",
-    "test:integration": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/itest/**/*.js\"",
+    "test:integration": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/itest/openads/**/*.js\"",
     "coverage": "istanbul cover --report html _mocha -- ./src/*test --recursive --compilers js:babel-register",
     "coverage:ci": "istanbul cover _mocha -- ./src/*test --recursive --compilers js:babel-register && codecov",
     "performance": "babel-node src/itest/performance",
