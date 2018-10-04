@@ -22,6 +22,7 @@ const windowMock = new JSDOM('<!DOCTYPE html><div id="forlayo">Hello world</div>
 const addPosition = () => {
   const performance = getPerf(`${addPosition.name}_id`)
   performance.mark(addPosition.name)
+  performance.mark(`Bootstraping`)
   const openAds = Main.init({
     config: {
       Sources: {
@@ -31,7 +32,7 @@ const addPosition = () => {
     performance,
     window: windowMock
   })
-
+  performance.stop(`Bootstraping`)
   openAds.addPosition({
     id: 'ad1',
     name: 'ad number one',
@@ -56,6 +57,7 @@ const addPosition = () => {
 const displayNonexistentPosition = () => {
   const performance = getPerf(`${displayNonexistentPosition.name}_id`)
   performance.mark(displayNonexistentPosition.name)
+  performance.mark(`Bootstraping`)
   const openAds = Main.init({
     config: {
       Sources: {
@@ -65,7 +67,7 @@ const displayNonexistentPosition = () => {
     performance,
     window: windowMock
   })
-
+  performance.stop(`Bootstraping`)
   openAds.displayPosition({id: 'non_existent'})
     .catch(error => error)
     .then(() => performance.stop(displayNonexistentPosition.name))
@@ -76,6 +78,7 @@ const displayNonexistentPosition = () => {
 const refreshNonexistentPosition = () => {
   const performance = getPerf(`${refreshNonexistentPosition.name}_id`)
   performance.mark(refreshNonexistentPosition.name)
+  performance.mark(`Bootstraping`)
   const openAds = Main.init({
     config: {
       Sources: {
@@ -85,7 +88,7 @@ const refreshNonexistentPosition = () => {
     performance,
     window: windowMock
   })
-
+  performance.stop(`Bootstraping`)
   openAds.refreshPosition({id: 'non_existent', position: {}})
     .catch(error => error)
     .then(() => performance.stop(refreshNonexistentPosition.name))
@@ -96,6 +99,7 @@ const refreshNonexistentPosition = () => {
 const addPositionAndDisplay = () => {
   const performance = getPerf(`${addPositionAndDisplay.name}_id`)
   performance.mark(addPositionAndDisplay.name)
+  performance.mark(`Bootstraping`)
   const openAds = Main.init({
     config: {
       Sources: {
@@ -105,7 +109,7 @@ const addPositionAndDisplay = () => {
     performance,
     window: windowMock
   })
-
+  performance.stop(`Bootstraping`)
   openAds.addPosition({
     id: 'ad1',
     name: 'ad number one',
@@ -131,6 +135,7 @@ const addPositionAndDisplay = () => {
 const addPositionAndDisplayAndRefresh = () => {
   const performance = getPerf(`${addPositionAndDisplayAndRefresh.name}_id`)
   performance.mark(addPositionAndDisplayAndRefresh.name)
+  performance.mark(`Bootstraping`)
   const openAds = Main.init({
     config: {
       Sources: {
@@ -140,7 +145,7 @@ const addPositionAndDisplayAndRefresh = () => {
     performance,
     window: windowMock
   })
-
+  performance.stop(`Bootstraping`)
   openAds.addPosition({
     id: 'ad1',
     name: 'ad number one',
