@@ -3,17 +3,18 @@ import HTMLDOMDriver from '../../../../openads/infrastructure/service/HTMLDOMDri
 import {JSDOM} from 'jsdom'
 
 export default class ContainerTest extends Container {
-  constructor ({config, appNexusClient}) {
-    super({config, eager: false})
-    this._appNexusClient = appNexusClient
-    super._buildEagerSingletonInstances()
+  constructor ({config, eager = true} = {}) {
+    super({
+      config,
+      eager: false,
+      currentWindow: new HTMLDOMDriver({
+        dom: new JSDOM('<!DOCTYPE html><div id="forlayo">Hello world</div>').window
+      })
+    })
+    if (eager) super._buildEagerSingletonInstances()
   }
 
   _buildDOMDriver () {
-    return new HTMLDOMDriver({dom: new JSDOM('<!DOCTYPE html><div id="forlayo">Hello world</div>').window.document})
-  }
-
-  _buildAppNexusClient () {
-    return this._appNexusClient
+    return this._currentWindow
   }
 }

@@ -208,6 +208,19 @@ http://your.web.app/page?price=5000&openads_debug
 
 Currently, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as its logging framework.
 
+
+# Performance
+
+We care about performance, we know that showing ads in your page can penalize your user experience so we tried to do our best to not have bottle necks in our code.
+You can take a look at the time line of all use cases using the performance task.
+
+```bash
+npm run performance
+```
+
+![Timeline performance](./resources/timeline.png)
+
+
 # Roadmap
 
 * Add support to Google AdSense

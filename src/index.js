@@ -1,2 +1,2 @@
-import OpenAds from './openads/infrastructure/bootstrap/index'
+import OpenAds from './openads/infrastructure/bootstrap/Main'
 export default OpenAds

@@ -17,8 +17,9 @@ import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
 import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
 
 export default class Container {
-  constructor ({config, eager = true} = {}) {
+  constructor ({config, eager = true, currentWindow = window} = {}) {
     this._config = config
+    this._currentWindow = currentWindow
     this._instances = new Map()
     if (eager) this._buildEagerSingletonInstances()
   }
@@ -48,7 +49,7 @@ export default class Container {
   }
 
   _buildDOMDriver () {
-    return new HTMLDOMDriver({dom: window.document})
+    return new HTMLDOMDriver({dom: this._currentWindow.document})
   }
 
   _buildAddPositionUseCase () {
