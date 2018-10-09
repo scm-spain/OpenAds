@@ -2,13 +2,13 @@ import Container from './Container'
 import {performanceHandler} from './performanceHandler'
 
 export default class PerformanceContainer extends Container {
-  constructor ({config, performance, window} = {}) {
+  constructor({config, performance, window} = {}) {
     super({config, eager: false, currentWindow: window})
     this._performance = performance
     super._buildEagerSingletonInstances()
   }
 
-  getInstance ({key}) {
+  getInstance({key}) {
     this._performance.mark(`Initializing instance ${key}`)
     if (undefined === this._instances.get(key)) {
       try {
@@ -18,6 +18,9 @@ export default class PerformanceContainer extends Container {
       }
     }
     this._performance.stop(`Initializing instance ${key}`)
-    return new Proxy(this._instances.get(key), performanceHandler(this._performance))
+    return new Proxy(
+      this._instances.get(key),
+      performanceHandler(this._performance)
+    )
   }
 }

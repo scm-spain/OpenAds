@@ -3,11 +3,10 @@
  * @implements {AdConnectorManager}
  */
 export default class RoutingAdConnectorManager {
-  constructor ({connectors = {}} = {}) {
+  constructor({connectors = {}} = {}) {
     this._connectors = connectors
   }
-  getConnector ({source}) {
-    return Promise.resolve(source)
-      .then(source => this._connectors[source])
+  getConnector({source}) {
+    return Promise.resolve(source).then(source => this._connectors[source])
   }
 }

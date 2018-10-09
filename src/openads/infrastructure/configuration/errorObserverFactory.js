@@ -1,1 +1,2 @@
-export const errorObserverFactory = logger => ({payload, dispatcher}) => logger.error('ERROR | ', payload)
+export const errorObserverFactory = logger => ({payload, dispatcher}) =>
+  logger.error('ERROR | ', payload)

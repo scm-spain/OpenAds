@@ -7,7 +7,7 @@ export default class AdRepository {
    * @param {string} id
    * @returns {Promise.<V> | undefined}
    */
-  find ({id}) {
+  find({id}) {
     throw new Error('AdRepository#find must be implemented')
   }
 
@@ -16,7 +16,7 @@ export default class AdRepository {
    * @param {string} id
    * @returns {boolean}
    */
-  has ({id}) {
+  has({id}) {
     throw new Error('AdRepository#has must be implemented')
   }
 
@@ -25,7 +25,7 @@ export default class AdRepository {
    * @param {string} id
    * @returns {V | undefined}
    */
-  remove ({id}) {
+  remove({id}) {
     throw new Error('AdRepository#remove must be implemented')
   }
 
@@ -36,7 +36,7 @@ export default class AdRepository {
    * @param {object} adResponse.data
    * @param {string} adResponse.status
    */
-  save ({id, adResponse}) {
+  save({id, adResponse}) {
     throw new Error('AdRepository#save must be implemented')
   }
 }

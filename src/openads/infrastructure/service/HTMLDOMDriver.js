@@ -1,35 +1,35 @@
 import DOMDriver from '../../domain/service/DOMDriver'
 
 export default class HTMLDOMDriver extends DOMDriver {
-  constructor ({dom}) {
+  constructor({dom}) {
     super()
     this._dom = dom
   }
 
-  getElementById ({id}) {
+  getElementById({id}) {
     return this._dom.getElementById(id)
   }
 
-  getElementsByClassName ({className}) {
+  getElementsByClassName({className}) {
     return this._dom.getElementsByClassName(className)
   }
 
-  getElementsByTagName ({tagName}) {
+  getElementsByTagName({tagName}) {
     return this._dom.getElementsByTagName(tagName)
   }
 
-  writeElementById ({id, value}) {
+  writeElementById({id, value}) {
     let domElement = this._dom.getElementById(id)
     if (domElement === null) throw new Error(`Element with ID ${id} not found!`)
     domElement.innerHTML = value
     return domElement
   }
 
-  createElement ({tagName}) {
+  createElement({tagName}) {
     return this._dom.createElement(tagName)
   }
 
-  getQueryString () {
+  getQueryString() {
     return this._dom.location.search.slice(1)
   }
 }

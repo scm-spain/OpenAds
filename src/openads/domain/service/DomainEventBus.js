@@ -1,11 +1,11 @@
 import {observerErrorThrown} from './observerErrorThrown'
 
 class DomainEventBus {
-  constructor () {
+  constructor() {
     this._observers = new Map()
   }
 
-  register ({eventName, observer}) {
+  register({eventName, observer}) {
     if (!eventName) {
       throw new Error('Event Name is required')
     }
@@ -19,38 +19,38 @@ class DomainEventBus {
     }
   }
 
-  raise ({domainEvent}) {
+  raise({domainEvent}) {
     if (this._observers.has(domainEvent.eventName)) {
-      this._observers
-        .get(domainEvent.eventName)
-        .forEach(observer => {
-          try {
-            observer({
-              event: domainEvent.eventName,
-              payload: domainEvent.payload,
-              dispatcher: (data) => this.raise({domainEvent: data})
+      this._observers.get(domainEvent.eventName).forEach(observer => {
+        try {
+          observer({
+            event: domainEvent.eventName,
+            payload: domainEvent.payload,
+            dispatcher: data => this.raise({domainEvent: data})
+          })
+        } catch (err) {
+          this.raise({
+            domainEvent: observerErrorThrown({
+              message: 'Error processing the observer.',
+              error: err
             })
-          } catch (err) {
-            this.raise({
-              domainEvent: observerErrorThrown({
-                message: 'Error processing the observer.',
-                error: err
-              })
-            })
-          }
-        })
+          })
+        }
+      })
     }
   }
 
-  getNumberOfRegisteredEvents () {
+  getNumberOfRegisteredEvents() {
     return this._observers.size
   }
 
-  getNumberOfObserversRegisteredForAnEvent ({eventName}) {
-    return (this._observers.has(eventName)) ? this._observers.get(eventName).length : 0
+  getNumberOfObserversRegisteredForAnEvent({eventName}) {
+    return this._observers.has(eventName)
+      ? this._observers.get(eventName).length
+      : 0
   }
 
-  clearAllObservers () {
+  clearAllObservers() {
     this._observers.clear()
   }
 }

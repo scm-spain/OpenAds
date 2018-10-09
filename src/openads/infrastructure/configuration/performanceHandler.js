@@ -4,7 +4,9 @@ export const performanceHandler = performance => ({
     switch (propertyType) {
       case 'function':
         return (...args) => {
-          return performance.measure(propKey)(() => target[propKey].apply(target, args))
+          return performance.measure(propKey)(() =>
+            target[propKey].apply(target, args)
+          )
         }
     }
     return target[propKey]

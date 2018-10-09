@@ -20,7 +20,17 @@ export default class Position {
    * @param {string} status - Status of the position
    * @returns {Position}
    */
-  constructor ({id, name, source, placement, segmentation, sizes, native, ad, status = POSITION_NOT_VISIBLE} = {}) {
+  constructor({
+    id,
+    name,
+    source,
+    placement,
+    segmentation,
+    sizes,
+    native,
+    ad,
+    status = POSITION_NOT_VISIBLE
+  } = {}) {
     this._id = id
     this._name = name
     this._source = source
@@ -45,43 +55,43 @@ export default class Position {
     })
   }
 
-  get id () {
+  get id() {
     return this._id
   }
 
-  get name () {
+  get name() {
     return this._name
   }
 
-  get source () {
+  get source() {
     return this._source
   }
 
-  get placement () {
+  get placement() {
     return this._placement
   }
 
-  get segmentation () {
+  get segmentation() {
     return this._segmentation
   }
 
-  get sizes () {
+  get sizes() {
     return this._sizes
   }
 
-  get native () {
+  get native() {
     return this._native
   }
 
-  get status () {
+  get status() {
     return this._status
   }
 
-  get ad () {
+  get ad() {
     return this._ad
   }
 
-  updateAd (value) {
+  updateAd(value) {
     this._ad = value
     return this
   }
@@ -91,33 +101,46 @@ export default class Position {
    * @param {PositionStatus} newStatus
    * @return {Position}
    */
-  changeStatus ({newStatus}) {
-    if (POSITION_VISIBLE === newStatus && POSITION_NOT_VISIBLE === this._status) {
+  changeStatus({newStatus}) {
+    if (
+      POSITION_VISIBLE === newStatus &&
+      POSITION_NOT_VISIBLE === this._status
+    ) {
       this._status = POSITION_VISIBLE
-      DomainEventBus.raise({domainEvent: positionDisplayed({
-        id: this._id,
-        name: this._name,
-        source: this._source,
-        placement: this._placement,
-        segmentation: this._segmentation,
-        sizes: this._sizes,
-        native: this._native,
-        status: this._status
-      })})
-    } else if (POSITION_VISIBLE === newStatus && POSITION_VISIBLE === this._status) {
+      DomainEventBus.raise({
+        domainEvent: positionDisplayed({
+          id: this._id,
+          name: this._name,
+          source: this._source,
+          placement: this._placement,
+          segmentation: this._segmentation,
+          sizes: this._sizes,
+          native: this._native,
+          status: this._status
+        })
+      })
+    } else if (
+      POSITION_VISIBLE === newStatus &&
+      POSITION_VISIBLE === this._status
+    ) {
       this._status = POSITION_VISIBLE
-      DomainEventBus.raise({domainEvent: positionAlreadyDisplayed({
-        id: this._id,
-        name: this._name,
-        source: this._source,
-        placement: this._placement,
-        segmentation: this._segmentation,
-        sizes: this._sizes,
-        native: this._native,
-        status: this._status
-      })})
+      DomainEventBus.raise({
+        domainEvent: positionAlreadyDisplayed({
+          id: this._id,
+          name: this._name,
+          source: this._source,
+          placement: this._placement,
+          segmentation: this._segmentation,
+          sizes: this._sizes,
+          native: this._native,
+          status: this._status
+        })
+      })
     } else {
-      throw new InvalidPositionStatusException({position: this, status: newStatus})
+      throw new InvalidPositionStatusException({
+        position: this,
+        status: newStatus
+      })
     }
     return this
   }
@@ -131,7 +154,12 @@ export default class Position {
    * @param {Array} position.sizes
    * @returns {Position}
    */
-  changeSegmentation ({ name = this._name, placement = this._placement, segmentation = this._segmentation, sizes = this._sizes } = {}) {
+  changeSegmentation({
+    name = this._name,
+    placement = this._placement,
+    segmentation = this._segmentation,
+    sizes = this._sizes
+  } = {}) {
     this._ad = undefined
     this._name = name
     this._placement = placement
