@@ -4,13 +4,13 @@
  * @implements AdViewable
  */
 export default class AppNexusConnectorMock {
-  loadAd ({domElementId, placement, sizes, segmentation, native}) {
+  loadAd({domElementId, placement, sizes, segmentation, native}) {
     return null
   }
-  display ({domElementId}) {
+  display({domElementId}) {
     return null
   }
-  refresh ({domElementId, placement, sizes, segmentation, native}) {
+  refresh({domElementId, placement, sizes, segmentation, native}) {
     return null
   }
 }

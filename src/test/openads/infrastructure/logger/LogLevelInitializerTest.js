@@ -7,10 +7,10 @@ describe('LogLevel Logger Initializer', () => {
   it('Should use error as default level if no DEBUG option is in URL', () => {
     const givenSearch = ''
     const loggerMock = {
-      setLevel: (level) => null
+      setLevel: level => null
     }
     const logLevelMock = {
-      getLogger: (loggerName) => loggerMock
+      getLogger: loggerName => loggerMock
     }
     const domDriverMock = {
       getQueryString: () => givenSearch
@@ -30,10 +30,10 @@ describe('LogLevel Logger Initializer', () => {
   it('Should use debug as level if DEBUG option is in URL, enabling debug to any connector implementing Logger interface', () => {
     const givenSearch = '?a=a&openads_debug&b=b'
     const loggerMock = {
-      setLevel: (level) => null
+      setLevel: level => null
     }
     const logLevelMock = {
-      getLogger: (loggerName) => loggerMock
+      getLogger: loggerName => loggerMock
     }
     const domDriverMock = {
       getQueryString: () => givenSearch
@@ -41,16 +41,18 @@ describe('LogLevel Logger Initializer', () => {
     const fooLoggerConnector = {
       enableDebug: ({debug}) => null
     }
-    const noLoggerConnector = {
-    }
+    const noLoggerConnector = {}
     const givenConnectors = {
-      'a': noLoggerConnector,
-      'b': fooLoggerConnector,
-      'c': noLoggerConnector
+      a: noLoggerConnector,
+      b: fooLoggerConnector,
+      c: noLoggerConnector
     }
 
     const setLevelSpy = sinon.spy(loggerMock, 'setLevel')
-    const setConnectorEnableDebugSpy = sinon.spy(fooLoggerConnector, 'enableDebug')
+    const setConnectorEnableDebugSpy = sinon.spy(
+      fooLoggerConnector,
+      'enableDebug'
+    )
 
     const logLevelInitializer = new LogLevelLoggerInitializer({
       logLevel: logLevelMock,

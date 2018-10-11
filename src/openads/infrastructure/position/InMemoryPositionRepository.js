@@ -1,7 +1,7 @@
 import PositionRepository from '../../domain/position/PositionRepository'
 
 export default class InMemoryPositionRepository extends PositionRepository {
-  constructor ({positions = [[]]} = {}) {
+  constructor({positions = [[]]} = {}) {
     super()
     this._positions = new Map(positions)
   }
@@ -11,7 +11,7 @@ export default class InMemoryPositionRepository extends PositionRepository {
    * @param {Position} position
    * @returns {Promise<Position>}
    */
-  saveOrUpdate ({position}) {
+  saveOrUpdate({position}) {
     return Promise.resolve()
       .then(() => this._positions.set(position.id, position))
       .then(() => position)
@@ -21,8 +21,9 @@ export default class InMemoryPositionRepository extends PositionRepository {
    * @param {string} id
    * @returns {Promise<Position>}
    */
-  find ({id}) {
-    return Promise.resolve()
-      .then(() => this._positions.has(id) && this._positions.get(id))
+  find({id}) {
+    return Promise.resolve().then(
+      () => this._positions.has(id) && this._positions.get(id)
+    )
   }
 }

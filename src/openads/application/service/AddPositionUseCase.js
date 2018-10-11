@@ -9,7 +9,7 @@ export default class AddPositionUseCase {
    * @param {PositionFactory} positionFactory
    * @param {AdConnectorManager} adConnectorManager
    */
-  constructor ({positionRepository, positionFactory, adConnectorManager}) {
+  constructor({positionRepository, positionFactory, adConnectorManager}) {
     this._positionRepository = positionRepository
     this._positionFactory = positionFactory
     this._adConnectorManager = adConnectorManager
@@ -25,25 +25,42 @@ export default class AddPositionUseCase {
    * @param {Object} native - Fields requested to the ad server
    * @returns {Promise<Position>}
    */
-  addPosition ({id, name, source, placement, segmentation, sizes, native}) {
-    return this._positionRepository.find({id})
+  addPosition({id, name, source, placement, segmentation, sizes, native}) {
+    return this._positionRepository
+      .find({id})
       .then(this._filterPositionAlreadyExists)
-      .then(() => this._positionFactory.create({id, name, source, placement, segmentation, sizes, native}))
+      .then(() =>
+        this._positionFactory.create({
+          id,
+          name,
+          source,
+          placement,
+          segmentation,
+          sizes,
+          native
+        })
+      )
       .then(createdPosition => this._setAdToPosition(createdPosition))
-      .then(positionWithAd => this._positionRepository.saveOrUpdate({position: positionWithAd}))
+      .then(positionWithAd =>
+        this._positionRepository.saveOrUpdate({position: positionWithAd})
+      )
       .then(this._filterPositionAdIsAvailable)
   }
 
-  _setAdToPosition (position) {
+  _setAdToPosition(position) {
     return Promise.resolve()
-      .then(() => this._adConnectorManager.getConnector({source: position.source}))
-      .then(connector => connector.loadAd({
-        domElementId: position.id,
-        placement: position.placement,
-        sizes: position.sizes,
-        segmentation: position.segmentation,
-        native: position.native
-      }))
+      .then(() =>
+        this._adConnectorManager.getConnector({source: position.source})
+      )
+      .then(connector =>
+        connector.loadAd({
+          domElementId: position.id,
+          placement: position.placement,
+          sizes: position.sizes,
+          segmentation: position.segmentation,
+          native: position.native
+        })
+      )
       .catch(error => ({
         data: error.stack || error.message,
         status: error.status || AD_ERROR
@@ -51,14 +68,14 @@ export default class AddPositionUseCase {
       .then(ad => position.updateAd(ad))
   }
 
-  _filterPositionAlreadyExists (optionalPosition) {
+  _filterPositionAlreadyExists(optionalPosition) {
     if (optionalPosition) {
       throw new PositionAlreadyExists({position: optionalPosition})
     }
     return optionalPosition
   }
 
-  _filterPositionAdIsAvailable (position) {
+  _filterPositionAdIsAvailable(position) {
     if (position.ad.status !== AD_AVAILABLE) {
       throw new PositionAdNotAvailableError({position})
     }

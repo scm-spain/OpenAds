@@ -2,27 +2,27 @@
  * @interface
  */
 export default class DOMDriver {
-  getElementById ({id}) {
+  getElementById({id}) {
     throw new Error('DOMDriver#getElementById must be implemented')
   }
 
-  getElementsByClassName ({className}) {
+  getElementsByClassName({className}) {
     throw new Error('DOMDriver#getElementsByClassName must be implemented')
   }
 
-  getElementsByTagName ({tagName}) {
+  getElementsByTagName({tagName}) {
     throw new Error('DOMDriver#getElementsByTagName must be implemented')
   }
 
-  writeElementById ({id, value}) {
+  writeElementById({id, value}) {
     throw new Error('DOMDriver#writeElementById must be implemented')
   }
 
-  createElement ({tagName}) {
+  createElement({tagName}) {
     throw new Error('DOMDriver#createElement must be implemented')
   }
 
-  getQueryString () {
+  getQueryString() {
     throw new Error('DOMDriver#getQueryString must be implemented')
   }
 }

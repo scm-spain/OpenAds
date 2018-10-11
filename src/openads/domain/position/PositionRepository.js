@@ -7,14 +7,14 @@ export default class PositionRepository {
    * @param {Position} page
    * @returns {Promise<Position>}
    */
-  saveOrUpdate ({position}) {
+  saveOrUpdate({position}) {
     throw new Error('PositionRepository#save must be implemented')
   }
   /**
    * Given a position id will search it on persistence layer
    * @param {string} id
    */
-  find ({id}) {
+  find({id}) {
     throw new Error('PositionRepository#find must be implemented')
   }
 }

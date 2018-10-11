@@ -4,7 +4,6 @@ import {
   displayNonexistentPosition,
   refreshNonexistentPosition,
   addPositionAndDisplayAndRefresh
-
 } from './performanceUseCases'
 
 Promise.resolve()

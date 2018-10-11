@@ -7,7 +7,7 @@ export default class AdConnectorManager {
    * @param {string} source
    * @returns {AdLoadable|AdViewable|Logger}
    */
-  getConnector ({source}) {
+  getConnector({source}) {
     throw new Error('AdConnectorManager#getConnector must be implemented')
   }
 }

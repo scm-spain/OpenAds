@@ -1,27 +1,33 @@
 import {expect} from 'chai'
 import DisplayPositionUseCase from '../../../../openads/application/service/DisplayPositionUseCase'
-import {POSITION_NOT_VISIBLE, POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
+import {
+  POSITION_NOT_VISIBLE,
+  POSITION_VISIBLE
+} from '../../../../openads/domain/position/positionStatus'
 import Position from '../../../../openads/domain/position/Position'
 import {AD_AVAILABLE, AD_NO_BID} from '../../../../openads/domain/ad/adStatus'
 
 describe('DisplayPositionUseCase test', () => {
   describe('display method test', () => {
     describe('Given a non existing position', () => {
-      it('Should return a rejected promise with an appropriate error', (done) => {
+      it('Should return a rejected promise with an appropriate error', done => {
         const positionRepositoryMock = {
           find: () => Promise.resolve(false)
         }
-        const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
-        displayPositionUseCase.displayPosition({id: 1})
+        const displayPositionUseCase = new DisplayPositionUseCase({
+          positionRepository: positionRepositoryMock
+        })
+        displayPositionUseCase
+          .displayPosition({id: 1})
           .then(() => done(new Error('Should be failing')))
-          .catch((err) => {
+          .catch(err => {
             expect(err.message).equal('Position 1 not found.')
             done()
           })
       })
     })
     describe('Given an existing position', () => {
-      it('Should save the position with the new state when AD has AD_AVAILABLE status', (done) => {
+      it('Should save the position with the new state when AD has AD_AVAILABLE status', done => {
         const givenIdPosition = 1
         const givenAd = {
           status: AD_AVAILABLE,
@@ -40,22 +46,25 @@ describe('DisplayPositionUseCase test', () => {
         }
 
         const adConnectorManagerMock = {
-          getConnector: ({source}) => Promise.resolve({
-            display: ({id}) => givenAd
-          })
+          getConnector: ({source}) =>
+            Promise.resolve({
+              display: ({id}) => givenAd
+            })
         }
 
         const displayPositionUseCase = new DisplayPositionUseCase({
           positionRepository: positionRepositoryMock,
           adConnectorManager: adConnectorManagerMock
         })
-        displayPositionUseCase.displayPosition({id: givenIdPosition})
-          .then((position) => {
+        displayPositionUseCase
+          .displayPosition({id: givenIdPosition})
+          .then(position => {
             expect(position.status).equal(POSITION_VISIBLE)
             done()
-          }).catch(e => done(e))
+          })
+          .catch(e => done(e))
       })
-      it('Should reject when the position has an AD with status not equal to AD_AVAILABLE', (done) => {
+      it('Should reject when the position has an AD with status not equal to AD_AVAILABLE', done => {
         const givenIdPosition = 1
         const givenAd = {
           status: AD_NO_BID
@@ -69,8 +78,11 @@ describe('DisplayPositionUseCase test', () => {
           find: () => Promise.resolve(givenPosition),
           saveOrUpdate: ({position}) => Promise.resolve(position)
         }
-        const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
-        displayPositionUseCase.displayPosition({id: givenIdPosition})
+        const displayPositionUseCase = new DisplayPositionUseCase({
+          positionRepository: positionRepositoryMock
+        })
+        displayPositionUseCase
+          .displayPosition({id: givenIdPosition})
           .then(() => {
             done(new Error('Should be failing'))
           })
@@ -79,7 +91,7 @@ describe('DisplayPositionUseCase test', () => {
             done()
           })
       })
-      it('Should reject when the position has an AD with status not equal to AD_AVAILABLE', (done) => {
+      it('Should reject when the position has an AD with status not equal to AD_AVAILABLE', done => {
         const givenIdPosition = 1
         const givenAd = {
           status: AD_AVAILABLE,
@@ -96,8 +108,11 @@ describe('DisplayPositionUseCase test', () => {
           find: () => Promise.resolve(givenPosition),
           saveOrUpdate: ({position}) => Promise.resolve(position)
         }
-        const displayPositionUseCase = new DisplayPositionUseCase({positionRepository: positionRepositoryMock})
-        displayPositionUseCase.displayPosition({id: givenIdPosition})
+        const displayPositionUseCase = new DisplayPositionUseCase({
+          positionRepository: positionRepositoryMock
+        })
+        displayPositionUseCase
+          .displayPosition({id: givenIdPosition})
           .then(() => {
             done(new Error('Should be failing'))
           })

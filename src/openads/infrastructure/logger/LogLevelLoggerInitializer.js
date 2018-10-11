@@ -3,13 +3,13 @@ import {Logger} from '@schibstedspain/openads-connector-api'
 import InterfaceChecker from '../service/InterfaceChecker'
 
 export default class LogLevelLoggerInitializer {
-  constructor ({loggerName, domDriver, logLevel, connectors = {}} = {}) {
+  constructor({loggerName, domDriver, logLevel, connectors = {}} = {}) {
     this._loggerName = loggerName
     this._domDriver = domDriver
     this._logLevel = logLevel
     this._connectors = connectors
   }
-  logger () {
+  logger() {
     const logger = this._logLevel.getLogger(this._loggerName)
     if (this._isDebugMode()) {
       logger.setLevel('debug')
@@ -19,16 +19,19 @@ export default class LogLevelLoggerInitializer {
     }
     return logger
   }
-  _isDebugMode () {
+  _isDebugMode() {
     const queryString = this._domDriver.getQueryString()
     const parameters = QS.parse(queryString)
     return parameters[this._loggerName.toLowerCase() + '_debug'] !== undefined
   }
-  _enableConnectorsDebug () {
+  _enableConnectorsDebug() {
     Object.values(this._connectors).forEach(connector => {
-      if (InterfaceChecker.implements({
-        instance: connector,
-        iface: Logger})) {
+      if (
+        InterfaceChecker.implements({
+          instance: connector,
+          iface: Logger
+        })
+      ) {
         connector.enableDebug({debug: true})
       }
     })

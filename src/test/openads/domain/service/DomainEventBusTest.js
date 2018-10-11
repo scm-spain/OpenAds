@@ -11,7 +11,7 @@ describe('DomainEventBus test', () => {
     DomainEventBus.clearAllObservers()
   })
   describe('Given invalid register parameters', () => {
-    it('Should fail if eventName is not present', (done) => {
+    it('Should fail if eventName is not present', done => {
       try {
         DomainEventBus.register({eventName: undefined, observer: undefined})
         done(new Error('Should fail'))
@@ -19,7 +19,7 @@ describe('DomainEventBus test', () => {
         done()
       }
     })
-    it('Should fail if observer is not a function', (done) => {
+    it('Should fail if observer is not a function', done => {
       try {
         DomainEventBus.register({eventName: 'givenEvent', observer: undefined})
         done(new Error('Should fail'))
@@ -27,33 +27,38 @@ describe('DomainEventBus test', () => {
         done()
       }
     })
-    it('Should return 0 when calling getNumberOfRegisteredEvents if there is no events registered', (done) => {
+    it('Should return 0 when calling getNumberOfRegisteredEvents if there is no events registered', done => {
       DomainEventBus.clearAllObservers()
       const result = DomainEventBus.getNumberOfRegisteredEvents()
       expect(0).equal(result)
       done()
     })
-    it('Should return 0 when calling getNumberOfObserversRegisteredForAnEvent if there is no events registered', (done) => {
+    it('Should return 0 when calling getNumberOfObserversRegisteredForAnEvent if there is no events registered', done => {
       DomainEventBus.clearAllObservers()
       const givenEventName = 'nonExistingEvent'
-      const result = DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEventName})
+      const result = DomainEventBus.getNumberOfObserversRegisteredForAnEvent({
+        eventName: givenEventName
+      })
       expect(0).equal(result)
       done()
     })
   })
   describe('Given a registered DomainEventBus', () => {
     let observerSpy = sinon.spy()
-    beforeEach(function () {
+    beforeEach(function() {
       observerSpy.reset()
     })
-    it('Should execute observer callback using the raised payload', (done) => {
+    it('Should execute observer callback using the raised payload', done => {
       const givenEventName = 'givenEventName'
       const domainEvent = {
         eventName: givenEventName,
         payload: 'domainEvent payload'
       }
 
-      DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
+      DomainEventBus.register({
+        eventName: givenEventName,
+        observer: observerSpy
+      })
       DomainEventBus.raise({domainEvent})
 
       expect(observerSpy.calledOnce).equal(true)
@@ -66,7 +71,10 @@ describe('DomainEventBus test', () => {
         eventName: givenEventName2,
         payload: 'domainEvent 2 payload'
       }
-      domainEventBusTestHelper.register({eventName: givenEventName2, observer: observerSpy})
+      domainEventBusTestHelper.register({
+        eventName: givenEventName2,
+        observer: observerSpy
+      })
       domainEventBusTestHelper.raise({domainEvent: domainEvent2})
 
       expect(observerSpy.calledTwice).equal(true)
@@ -74,30 +82,40 @@ describe('DomainEventBus test', () => {
       expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(2)
       done()
     })
-    it('Should clear all observers', (done) => {
+    it('Should clear all observers', done => {
       expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(0)
       done()
     })
-    it('Should execute all observers related to an event', (done) => {
+    it('Should execute all observers related to an event', done => {
       const givenEventName = 'givenEventName'
       const domainEvent = {
         eventName: givenEventName,
         payload: '1'
       }
 
-      DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
-      DomainEventBus.register({eventName: givenEventName, observer: observerSpy})
+      DomainEventBus.register({
+        eventName: givenEventName,
+        observer: observerSpy
+      })
+      DomainEventBus.register({
+        eventName: givenEventName,
+        observer: observerSpy
+      })
       DomainEventBus.raise({domainEvent: domainEvent})
       expect(observerSpy.getCalls().length).equal(2)
       expect(observerSpy.getCall(0).args[0].payload).equal(domainEvent.payload)
       expect(observerSpy.getCall(1).args[0].payload).equal(domainEvent.payload)
       expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(1)
-      expect(DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEventName})).equal(2)
+      expect(
+        DomainEventBus.getNumberOfObserversRegisteredForAnEvent({
+          eventName: givenEventName
+        })
+      ).equal(2)
       done()
     })
   })
   describe('Given 1 event with 1 subscriber which has a dispatcher to raise a second event with another subscriber', () => {
-    it('Should be raised event 2 by subscriber 1 when event 1 is raised', (done) => {
+    it('Should be raised event 2 by subscriber 1 when event 1 is raised', done => {
       const givenEvent1Name = 'event-1'
       const event1DomainEvent = {
         eventName: givenEvent1Name,
@@ -114,14 +132,19 @@ describe('DomainEventBus test', () => {
         }
       }
       const observer2 = {
-        getObserverFunction: ({payload, dispatcher}) => {
-        }
+        getObserverFunction: ({payload, dispatcher}) => {}
       }
       const spy1 = sinon.spy(observer1, 'getObserverFunction')
       const spy2 = sinon.spy(observer2, 'getObserverFunction')
 
-      DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
-      DomainEventBus.register({eventName: givenEvent2Name, observer: observer2.getObserverFunction})
+      DomainEventBus.register({
+        eventName: givenEvent1Name,
+        observer: observer1.getObserverFunction
+      })
+      DomainEventBus.register({
+        eventName: givenEvent2Name,
+        observer: observer2.getObserverFunction
+      })
       DomainEventBus.raise({domainEvent: event1DomainEvent})
       expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(2)
       expect(spy1.calledOnce).equal(true)
@@ -134,7 +157,7 @@ describe('DomainEventBus test', () => {
     })
   })
   describe('Given 1 event with 2 subscribers, one of them causing an error', () => {
-    it('Should execute the non failing subscriber smoothly and log the error', (done) => {
+    it('Should execute the non failing subscriber smoothly and log the error', done => {
       const givenEvent1Name = 'event-1'
       const event1DomainEvent = {
         eventName: givenEvent1Name,
@@ -154,17 +177,30 @@ describe('DomainEventBus test', () => {
       const spy1 = sinon.spy(observer1, 'getObserverFunction')
       const spy2 = sinon.spy(observer2, 'getObserverFunction')
 
-      const errorObserver = (payload) => { console.log('ERROR_EVENT TEST: ', payload) }
+      const errorObserver = payload => {
+        console.log('ERROR_EVENT TEST: ', payload)
+      }
       DomainEventBus.register({
         eventName: 'ERROR_EVENT',
-        observer: errorObserver})
+        observer: errorObserver
+      })
 
-      DomainEventBus.register({eventName: givenEvent1Name, observer: observer1.getObserverFunction})
-      DomainEventBus.register({eventName: givenEvent1Name, observer: observer2.getObserverFunction})
+      DomainEventBus.register({
+        eventName: givenEvent1Name,
+        observer: observer1.getObserverFunction
+      })
+      DomainEventBus.register({
+        eventName: givenEvent1Name,
+        observer: observer2.getObserverFunction
+      })
       DomainEventBus.raise({domainEvent: event1DomainEvent})
 
       expect(DomainEventBus.getNumberOfRegisteredEvents()).equal(2)
-      expect(DomainEventBus.getNumberOfObserversRegisteredForAnEvent({eventName: givenEvent1Name})).equal(2)
+      expect(
+        DomainEventBus.getNumberOfObserversRegisteredForAnEvent({
+          eventName: givenEvent1Name
+        })
+      ).equal(2)
       expect(spy1.calledOnce).equal(true)
       expect(spy2.calledOnce).equal(true)
       done()
@@ -172,7 +208,7 @@ describe('DomainEventBus test', () => {
   })
 
   describe('Given 1 event with no subscribers', () => {
-    it('Should do nothing', (done) => {
+    it('Should do nothing', done => {
       DomainEventBus.raise({domainEvent: positionCreated({})})
       done()
     })
