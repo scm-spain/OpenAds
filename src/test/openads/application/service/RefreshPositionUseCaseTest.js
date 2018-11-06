@@ -2,10 +2,10 @@ import {expect} from 'chai'
 import {POSITION_VISIBLE} from '../../../../openads/domain/position/positionStatus'
 import RefreshPositionUseCase from '../../../../openads/application/service/RefreshPositionUseCase'
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
-import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
 import sinon from 'sinon'
 import DefaultPositionFactory from '../../../../openads/infrastructure/position/DefaultPositionFactory'
 import {AD_AVAILABLE} from '../../../../openads/domain/ad/adStatus'
+import {POSITION_UPDATED} from '../../../../openads/domain/position/positionUpdated'
 
 describe('Refresh Position use case', function() {
   describe('given a Position DTO of changes', function() {
@@ -14,7 +14,13 @@ describe('Refresh Position use case', function() {
     })
     it('should return an updated position', function(done) {
       const givenPositionChanges = {
-        segmentation: 'newSegmentation'
+        source: 'appnexus',
+        appnexus: {
+          placement: 'blabla',
+          segmentation: 'newSegmentation',
+          sizes: [],
+          native: {}
+        }
       }
       const givenAd = {
         status: AD_AVAILABLE,
@@ -26,11 +32,15 @@ describe('Refresh Position use case', function() {
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'Name',
-        source: 'appnexus',
-        placement: 'Placement',
-        segmentation: 'Segmentation',
-        sizes: [],
-        native: {},
+        specification: {
+          source: 'appnexus',
+          appnexus: {
+            placement: 'blabla',
+            segmentation: 'adsasd',
+            sizes: [],
+            native: {}
+          }
+        },
         status: POSITION_VISIBLE
       })
       const positionRepositoryMock = {
@@ -49,26 +59,26 @@ describe('Refresh Position use case', function() {
       })
       const observerSpy = sinon.spy()
       DomainEventBus.register({
-        eventName: POSITION_SEGMENTATION_CHANGED,
+        eventName: POSITION_UPDATED,
         observer: ({payload, dispatcher}) => {
           expect(payload.id).to.be.equal(givenPosition.id)
           expect(
-            payload.segmentation,
-            'position segmentation not updated'
-          ).to.be.equal(givenPositionChanges.segmentation)
+            payload.specification,
+            'position specification not updated'
+          ).to.be.equal(givenPositionChanges)
           observerSpy()
         }
       })
       refreshPositionUseCase
-        .refreshPosition({id: '42', position: givenPositionChanges})
+        .refreshPosition({id: '42', specification: givenPositionChanges})
         .then(positionUpdated => {
           expect(positionUpdated.id, 'position not updated').to.equal(
             givenPosition.id
           )
           expect(
-            positionUpdated.segmentation,
-            'position segmentation not updated'
-          ).to.equal(givenPositionChanges.segmentation)
+            positionUpdated.specification,
+            'position specification not updated'
+          ).to.deep.equal(givenPositionChanges)
           expect(observerSpy.calledOnce, 'observer should be called once').to.be
             .true
           done()
@@ -78,7 +88,13 @@ describe('Refresh Position use case', function() {
 
     it('should return a PositionNotFoundException', function(done) {
       const givenPositionChanges = {
-        segmentation: 'newSegmentation'
+        source: 'appnexus',
+        appnexus: {
+          placement: 'blabla',
+          segmentation: 'adsasd',
+          sizes: [],
+          native: {}
+        }
       }
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false)
@@ -87,7 +103,7 @@ describe('Refresh Position use case', function() {
         positionRepository: positionRepositoryMock
       })
       DomainEventBus.register({
-        eventName: POSITION_SEGMENTATION_CHANGED,
+        eventName: POSITION_UPDATED,
         observer: ({payload, dispatcher}) =>
           done(new Error('Observer shouldnt be called'))
       })

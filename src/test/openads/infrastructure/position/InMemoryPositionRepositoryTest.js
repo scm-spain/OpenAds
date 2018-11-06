@@ -10,11 +10,15 @@ describe('InMemory Position Repository', function() {
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'lala',
-        source: 'appnexus',
-        placement: 'blabla',
-        segmentation: 'adsasd',
-        sizes: [],
-        native: {},
+        specification: {
+          source: 'appnexus',
+          appnexus: {
+            placement: 'blabla',
+            segmentation: 'adsasd',
+            sizes: [],
+            native: {}
+          }
+        },
         status: POSITION_NOT_VISIBLE
       })
       const inMemoryPositionRepository = new InMemoryPositionRepository()
@@ -28,11 +32,15 @@ describe('InMemory Position Repository', function() {
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'lala',
-        source: 'appnexus',
-        placement: 'blabla',
-        segmentation: 'adsasd',
-        sizes: [],
-        native: {},
+        specification: {
+          source: 'appnexus',
+          appnexus: {
+            placement: 'blabla',
+            segmentation: 'adsasd',
+            sizes: [],
+            native: {}
+          }
+        },
         status: POSITION_NOT_VISIBLE
       })
       const inMemoryPositionRepository = new InMemoryPositionRepository()
@@ -52,11 +60,15 @@ describe('InMemory Position Repository', function() {
             {
               id: '42',
               name: 'lala',
-              source: 'appnexus',
-              placement: 'blabla',
-              segmentation: 'adsasd',
-              sizes: [],
-              native: {},
+              specification: {
+                source: 'appnexus',
+                appnexus: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
               status: POSITION_NOT_VISIBLE
             }
           ],
@@ -65,11 +77,15 @@ describe('InMemory Position Repository', function() {
             {
               id: '43',
               name: 'lala43',
-              source: 'google',
-              placement: 'jarjar',
-              segmentation: 'lala=true',
-              sizes: [],
-              native: {},
+              specification: {
+                source: 'google',
+                google: {
+                  placement: 'jarjar',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
               status: POSITION_NOT_VISIBLE
             }
           ]
@@ -95,11 +111,15 @@ describe('InMemory Position Repository', function() {
             {
               id: '42',
               name: 'lala',
-              source: 'appnexus',
-              placement: 'blabla',
-              segmentation: 'adsasd',
-              sizes: [],
-              native: {},
+              specification: {
+                source: 'appnexus',
+                appnexus: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
               status: POSITION_NOT_VISIBLE
             }
           ],
@@ -108,11 +128,15 @@ describe('InMemory Position Repository', function() {
             {
               id: '43',
               name: 'lala43',
-              source: 'google',
-              placement: 'jarjar',
-              segmentation: 'lala=true',
-              sizes: [],
-              native: {},
+              specification: {
+                source: 'google',
+                google: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
               status: POSITION_NOT_VISIBLE
             }
           ]
@@ -132,11 +156,15 @@ describe('InMemory Position Repository', function() {
       const givenPosition = positionFactory.create({
         id: '42',
         name: 'updatedName',
-        source: 'appnexus',
-        placement: 'updatedPlacement',
-        segmentation: 'updatedSegmentation',
-        sizes: [],
-        native: {},
+        specification: {
+          source: 'appnexus',
+          appnexus: {
+            placement: 'xxxx',
+            segmentation: 'yyyy',
+            sizes: [],
+            native: {}
+          }
+        },
         status: POSITION_NOT_VISIBLE
       })
 
@@ -147,11 +175,15 @@ describe('InMemory Position Repository', function() {
             {
               id: '42',
               name: 'lala',
-              source: 'appnexus',
-              placement: 'blabla',
-              segmentation: 'adsasd',
-              sizes: [],
-              native: {},
+              specification: {
+                source: 'appnexus',
+                appnexus: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
               status: POSITION_NOT_VISIBLE
             }
           ],
@@ -160,11 +192,15 @@ describe('InMemory Position Repository', function() {
             {
               id: '43',
               name: 'lala43',
-              source: 'google',
-              placement: 'jarjar',
-              segmentation: 'lala=true',
-              sizes: [],
-              native: {},
+              specification: {
+                source: 'google',
+                google: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
               status: POSITION_NOT_VISIBLE
             }
           ]
@@ -181,13 +217,9 @@ describe('InMemory Position Repository', function() {
             givenPosition.name
           )
           expect(
-            positionUpdated.placement,
-            'position placement not updated'
-          ).to.equal(givenPosition.placement)
-          expect(
-            positionUpdated.segmentation,
-            'position segmentation not updated'
-          ).to.equal(givenPosition.segmentation)
+            positionUpdated.specification,
+            'position specification not updated'
+          ).to.deep.equal(givenPosition.specification)
           done()
         })
         .catch(error => done(error))

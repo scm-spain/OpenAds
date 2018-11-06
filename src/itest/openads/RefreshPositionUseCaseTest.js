@@ -71,21 +71,10 @@ describe('Refresh Position use case', function() {
         }
       })
 
-      const newSegmentation = {
-        name: 'new name',
-        placement: 'new placement',
-        segmentation: {
-          'es-sch-adformat': 'new adformat'
-        },
-        sizes: [[200, 150]]
-      }
-
-      openAds
-        .addPosition({
-          id: 'ad1',
-          name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
+      const newSpecification = {
+        source: 'AppNexus',
+        appnexus: {
+          placement: 'the-x77-placement',
           segmentation: {
             'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
             'es-sch-event_name': 'list',
@@ -93,42 +82,44 @@ describe('Refresh Position use case', function() {
             'aa-sch-supply_type': 'wph',
             'es-sch-section': 'ocasion',
             'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
+            'es-sch-adformat': 'x77'
           },
-          sizes: [[300, 250], [320, 250]]
+          sizes: [[200, 150]]
+        }
+      }
+
+      openAds
+        .addPosition({
+          id: 'ad1',
+          name: 'ad number one',
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .then(position =>
-          openAds.refreshPosition({id: position.id, position: newSegmentation})
+          openAds.refreshPosition({
+            id: position.id,
+            specification: newSpecification
+          })
         )
         .then(position => {
           expect(
-            position.name,
-            `Name is equal to ${position.name} and should be equal to ${
-              newSegmentation.name
-            }, ¿Are you sure that you have updated the previous value, with the new one?`
-          ).to.be.equals(newSegmentation.name)
-          expect(
-            position.placement,
-            `Placement is equal to ${
-              position.placement
-            } and should be equal to ${
-              newSegmentation.placement
-            }, ¿Are you sure that you have updated the previous value, with the new one?`
-          ).to.be.equals(newSegmentation.placement)
-          expect(
-            position.segmentation,
-            `Segmentation is equal to ${
-              position.segmentation
-            } and should be equal to ${
-              newSegmentation.segmentation
-            }, ¿Are you sure that you have updated the previous value, with the new one?`
-          ).to.be.equals(newSegmentation.segmentation)
-          expect(
-            position.sizes,
-            `Sizes is equal to ${position.sizes} and should be equal to ${
-              newSegmentation.sizes
-            }, ¿Are you sure that you have updated the previous value, with the new one?`
-          ).to.be.equals(newSegmentation.sizes)
+            position.specification,
+            'specification has not changed properly'
+          ).to.deep.equals(newSpecification)
           expect(
             position.ad.status,
             `The ad status is equal to ${
@@ -172,18 +163,22 @@ describe('Refresh Position use case', function() {
       const newPosition = {
         id: 'ad1',
         name: 'ad number one',
-        source: 'AppNexus',
-        placement: 'es-cn-wph-ocasion-list-x_65',
-        segmentation: {
-          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-          'es-sch-event_name': 'list',
-          'aa-sch-country_code': 'es',
-          'aa-sch-supply_type': 'wph',
-          'es-sch-section': 'ocasion',
-          'aa-sch-page_type': 'list',
-          'es-sch-adformat': 'x65'
-        },
-        sizes: [[300, 250], [320, 250]]
+        specification: {
+          source: 'AppNexus',
+          appnexus: {
+            placement: 'es-cn-wph-ocasion-list-x_65',
+            segmentation: {
+              'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+              'es-sch-event_name': 'list',
+              'aa-sch-country_code': 'es',
+              'aa-sch-supply_type': 'wph',
+              'es-sch-section': 'ocasion',
+              'aa-sch-page_type': 'list',
+              'es-sch-adformat': 'x65'
+            },
+            sizes: [[300, 250], [320, 250]]
+          }
+        }
       }
 
       openAds
@@ -191,29 +186,9 @@ describe('Refresh Position use case', function() {
         .then(position => openAds.refreshPosition({id: position.id}))
         .then(position => {
           expect(
-            position.name,
-            `Name is ${position.name} and should be ${
-              newPosition.name
-            }, perharps you forget to keep previous value in the update process?`
-          ).to.be.equals(newPosition.name)
-          expect(
-            position.placement,
-            `Placement is ${position.placement} and should be ${
-              newPosition.placement
-            }, perharps you forget to keep previous value in the update process?`
-          ).to.be.equals(newPosition.placement)
-          expect(
-            position.segmentation,
-            `Segmentation is ${position.segmentation} and should be ${
-              newPosition.segmentation
-            }, perharps you forget to keep previous value in the update process?`
-          ).to.be.equals(newPosition.segmentation)
-          expect(
-            position.sizes,
-            `Sizes is ${position.sizes} and should be ${
-              newPosition.sizes
-            }, perhaps you forget to keep previous value in the update process?`
-          ).to.be.equals(newPosition.sizes)
+            position.specification,
+            'specification must not be updated'
+          ).to.deep.equals(newPosition.specification)
           expect(
             position.ad.status,
             `The ad status is equal to ${
@@ -300,18 +275,22 @@ describe('Refresh Position use case', function() {
       const newPosition = {
         id: 'ad1',
         name: 'ad number one',
-        source: 'AppNexus',
-        placement: 'es-cn-wph-ocasion-list-x_65',
-        segmentation: {
-          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-          'es-sch-event_name': 'list',
-          'aa-sch-country_code': 'es',
-          'aa-sch-supply_type': 'wph',
-          'es-sch-section': 'ocasion',
-          'aa-sch-page_type': 'list',
-          'es-sch-adformat': 'x65'
-        },
-        sizes: [[300, 250], [320, 250]]
+        specification: {
+          source: 'AppNexus',
+          appnexus: {
+            placement: 'es-cn-wph-ocasion-list-x_65',
+            segmentation: {
+              'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+              'es-sch-event_name': 'list',
+              'aa-sch-country_code': 'es',
+              'aa-sch-supply_type': 'wph',
+              'es-sch-section': 'ocasion',
+              'aa-sch-page_type': 'list',
+              'es-sch-adformat': 'x65'
+            },
+            sizes: [[300, 250], [320, 250]]
+          }
+        }
       }
 
       openAds
@@ -455,18 +434,29 @@ describe('Refresh Position use case', function() {
       const newPosition = {
         id: 'ad1',
         name: 'ad number one',
+        specification: {
+          source: 'AppNexus',
+          appnexus: {
+            placement: 'es-cn-wph-ocasion-list-x_65',
+            segmentation: {
+              'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+              'es-sch-event_name': 'list',
+              'aa-sch-country_code': 'es',
+              'aa-sch-supply_type': 'wph',
+              'es-sch-section': 'ocasion',
+              'aa-sch-page_type': 'list',
+              'es-sch-adformat': 'x65'
+            },
+            sizes: [[300, 250], [320, 250]]
+          }
+        }
+      }
+
+      const updatedSpecification = {
         source: 'AppNexus',
-        placement: 'es-cn-wph-ocasion-list-x_65',
-        segmentation: {
-          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-          'es-sch-event_name': 'list',
-          'aa-sch-country_code': 'es',
-          'aa-sch-supply_type': 'wph',
-          'es-sch-section': 'ocasion',
-          'aa-sch-page_type': 'list',
-          'es-sch-adformat': 'x65'
-        },
-        sizes: [[300, 250], [320, 250]]
+        appnexus: {
+          placement: 'does-not-exist'
+        }
       }
 
       openAds
@@ -515,9 +505,7 @@ describe('Refresh Position use case', function() {
         .then(position =>
           openAds.refreshPosition({
             id: position.id,
-            position: {
-              placement: 'placement not found'
-            }
+            specification: updatedSpecification
           })
         )
         .then(position => done(new Error('should be rejected!')))

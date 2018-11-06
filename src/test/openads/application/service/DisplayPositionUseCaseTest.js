@@ -37,6 +37,9 @@ describe('DisplayPositionUseCase test', () => {
         }
         const givenPosition = new Position({
           id: givenIdPosition,
+          specification: {
+            source: 'appnexus'
+          },
           status: POSITION_NOT_VISIBLE,
           ad: givenAd
         })
@@ -71,6 +74,9 @@ describe('DisplayPositionUseCase test', () => {
         }
         const givenPosition = new Position({
           id: givenIdPosition,
+          specification: {
+            source: 'appnexus'
+          },
           status: POSITION_NOT_VISIBLE,
           ad: givenAd
         })
@@ -101,6 +107,9 @@ describe('DisplayPositionUseCase test', () => {
         }
         const givenPosition = new Position({
           id: givenIdPosition,
+          specification: {
+            source: 'appnexus'
+          },
           status: POSITION_NOT_VISIBLE,
           ad: givenAd
         })
