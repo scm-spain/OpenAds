@@ -16,16 +16,13 @@ export default class AddPositionUseCase {
   }
   /**
    * Create a new Position on the page
-   * @param {string} id
-   * @param {string} name
-   * @param {string} source
-   * @param {string} placement
-   * @param {string} segmentation
-   * @param {Array<Array<>>}sizes
-   * @param {Object} native - Fields requested to the ad server
+   * @param {string} id - position unique identifier
+   * @param {string} name - position name
+   * @param {Object} specification - connector specific data that defines the position
+   * @param {string} specification.source - connector source
    * @returns {Promise<Position>}
    */
-  addPosition({id, name, source, placement, segmentation, sizes, native}) {
+  addPosition({id, name, specification}) {
     return this._positionRepository
       .find({id})
       .then(this._filterPositionAlreadyExists)
@@ -33,11 +30,7 @@ export default class AddPositionUseCase {
         this._positionFactory.create({
           id,
           name,
-          source,
-          placement,
-          segmentation,
-          sizes,
-          native
+          specification
         })
       )
       .then(createdPosition => this._setAdToPosition(createdPosition))
@@ -50,15 +43,14 @@ export default class AddPositionUseCase {
   _setAdToPosition(position) {
     return Promise.resolve()
       .then(() =>
-        this._adConnectorManager.getConnector({source: position.source})
+        this._adConnectorManager.getConnector({
+          source: position.specification.source
+        })
       )
       .then(connector =>
         connector.loadAd({
-          domElementId: position.id,
-          placement: position.placement,
-          sizes: position.sizes,
-          segmentation: position.segmentation,
-          native: position.native
+          id: position.id,
+          specification: position.specification
         })
       )
       .catch(error => ({
