@@ -40,7 +40,9 @@ import AppNexusConnector from '@schibstedspain/openads-appnexus'
 
 // connectors initalization - sample with AppNexusConnector
 const appNexusConnector = WhateverConnector.init({config: {
-  member: 4242
+  pageOpts:{
+    member: 4242
+  }
 }})
 
 // openads initialization
@@ -56,18 +58,23 @@ After having OpenAds initialized, the first and simplest step is to start adding
 openAds.addPosition({
   id: 'ad1',
   name: 'ad number one',
-  source: 'AppNexus',
-  placement: 'es-cn-wph-ocasion-list-x_65',
-  segmentation: {
-    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-    'es-sch-event_name': 'list',
-    'aa-sch-country_code': 'es',
-    'aa-sch-supply_type': 'wph',
-    'es-sch-section': 'ocasion',
-    'aa-sch-page_type': 'list',
-    'es-sch-adformat': 'x65'
-  },
-  sizes: [[300, 250], [320, 250]]
+  specification: {
+    source: 'AppNexus',
+    appnexus: {
+        targetId: 'ad1',
+        invCode: 'es-cn-wph-ocasion-list-x_65',
+        keywords: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]]    
+    }
+  }
 })
   .then(position => openAds.displayPosition({id: position.id}))
   .catch(error => console.log('Do some interesting stuff if there is an error',error))      
@@ -84,13 +91,13 @@ to the position, you can use the refreshPosition use case:
 ```ecmascript 6
 const positionUpdated = openAds.refreshPosition({
   id: 'ad1',
-  position: {
-    name: 'new name',
-    placement: 'new-placement-to-update',
-    segmentation: {
-        'es-sch-ads_name_page': 'new/segmentation/to/page',        
-    },
-    sizes: [[300, 250], [320, 250]]
+  specification: {
+    source: 'AppNexus',
+    appnexus: {
+      targetId: 'ad1',
+      invCode: 'new-placement-to-update',
+      sizes: [[300, 600]]    
+    }
   }
 }) 
   .catch(error => console.log('Maybe new segmentation have generated some kind of error',error))      
@@ -115,37 +122,42 @@ To request what **fields** you want to receive with the Native ad you can provid
 openAds.addPosition({
   id: 'ad1',
   name: 'ad number one',
-  source: 'AppNexus',
-  placement: 'es-cn-wph-ocasion-list-x_65',
-  segmentation: {
-    'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-    'es-sch-event_name': 'list',
-    'aa-sch-country_code': 'es',
-    'aa-sch-supply_type': 'wph',
-    'es-sch-section': 'ocasion',
-    'aa-sch-page_type': 'list',
-    'es-sch-adformat': 'x65'
-  },
-  sizes: [[300, 250], [320, 250]],
-  native: {
-      "title": {
-        "required": true,
-        "max_length": 35
-      },
-      "body": {
-        "required": true,
-        "max_length": 1000
-      },
-      "image": {
-        "required": false
-      },
-      "icon": {
-        "required": false
-      },
-      "clickUrl": {
-        "required": true
-      }
+  specification: {
+    source: 'AppNexus',
+    appnexus: {
+        targetId: 'ad1',
+        invCode: 'es-cn-wph-ocasion-list-x_65',
+        keywords: {
+          'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+          'es-sch-event_name': 'list',
+          'aa-sch-country_code': 'es',
+          'aa-sch-supply_type': 'wph',
+          'es-sch-section': 'ocasion',
+          'aa-sch-page_type': 'list',
+          'es-sch-adformat': 'x65'
+        },
+        sizes: [[300, 250], [320, 250]],
+        native: {
+            "title": {
+              "required": true,
+              "max_length": 35
+            },
+            "body": {
+              "required": true,
+              "max_length": 1000
+            },
+            "image": {
+              "required": false
+            },
+            "icon": {
+              "required": false
+            },
+            "clickUrl": {
+              "required": true
+            }
+          }
     }
+  }
 })
   .then(position => openAds.displayPosition({id: position.id}))
   .catch(error => console.log('Do some interesting stuff',error))      
@@ -174,24 +186,13 @@ and chain it with a refresh with new segmentation data.
 openAds.addPosition({
   id: 'ad1_with_error',
   name: 'ad_error',
-  source: 'AppNexus',
-  placement: 'placement_not_found',
-  segmentation: {
-    'es-sch-ads_name_page': 'segmentation/not/found'    
-  },
-  sizes: [[300, 250], [320, 250]]
+  specification: {}
 })
   .then(position => openAds.displayPosition({id: position.id}))
   .catch(error => 
       openAds.refreshPosition({
         id: error.position.id,
-        position: {
-          name: 'new name',
-          placement: 'new-placement-to-update',
-          segmentation: {
-              'es-sch-ads_name_page': 'new/segmentation/to/page',        
-          }
-        }
+        specification: {}
       })
       .then(position => openAds.displayPosition({id: position.id}))
   )      
