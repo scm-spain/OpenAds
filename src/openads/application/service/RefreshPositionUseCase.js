@@ -1,6 +1,7 @@
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
 import {AD_AVAILABLE} from '../../domain/ad/adStatus'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
+import PositionAdError from '../../domain/position/PositionAdError'
 
 export default class RefreshPositionUseCase {
   /**
@@ -56,7 +57,11 @@ export default class RefreshPositionUseCase {
 
   _filterPositionAdIsAvailable(position) {
     if (position.ad.status !== AD_AVAILABLE) {
-      throw new PositionAdNotAvailableError({position})
+      if (position.ad.data && position.ad.data.errMessage) {
+        throw new PositionAdError({position})
+      } else {
+        throw new PositionAdNotAvailableError({position})
+      }
     }
     return position
   }

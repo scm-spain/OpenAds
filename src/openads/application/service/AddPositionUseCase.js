@@ -1,6 +1,7 @@
 import PositionAlreadyExists from '../../domain/position/PositionAlreadyExists'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
 import {AD_AVAILABLE, AD_ERROR} from '../../domain/ad/adStatus'
+import PositionAdError from '../../domain/position/PositionAdError'
 
 export default class AddPositionUseCase {
   /**
@@ -69,7 +70,11 @@ export default class AddPositionUseCase {
 
   _filterPositionAdIsAvailable(position) {
     if (position.ad.status !== AD_AVAILABLE) {
-      throw new PositionAdNotAvailableError({position})
+      if (position.ad.data && position.ad.data.errMessage) {
+        throw new PositionAdError({position})
+      } else {
+        throw new PositionAdNotAvailableError({position})
+      }
     }
     return position
   }
