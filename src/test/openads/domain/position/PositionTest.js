@@ -7,7 +7,7 @@ import {
 import DomainEventBus from '../../../../openads/domain/service/DomainEventBus'
 import sinon from 'sinon'
 import {POSITION_CREATED} from '../../../../openads/domain/position/positionCreated'
-import {POSITION_SEGMENTATION_CHANGED} from '../../../../openads/domain/position/positionSegmentationChanged'
+import {POSITION_UPDATED} from '../../../../openads/domain/position/positionUpdated'
 
 describe('Position', () => {
   beforeEach(() => {
@@ -22,20 +22,25 @@ describe('Position', () => {
     const givenPosition = new Position({
       id: 'top1',
       name: 'forlayo',
-      source: 'appnexus',
-      placement: 'lalala',
-      segmentation: 'idkfa&iddqd',
-      sizes: [],
-      native: {}
+      specification: {
+        source: 'appnexus',
+        appnexus: {
+          placement: 'lalala',
+          segmentation: 'idkfa&iddqd',
+          sizes: [],
+          native: {}
+        }
+      }
     })
-    expect(givenPosition.segmentation, 'Tricks for DOOM!!').to.be.equal(
-      'idkfa&iddqd'
-    )
+    expect(
+      givenPosition.specification.appnexus.segmentation,
+      'Tricks for DOOM!!'
+    ).to.be.equal('idkfa&iddqd')
   })
 
   it('Should update the position with new segmentation data and raise an event', () => {
     DomainEventBus.register({
-      eventName: POSITION_SEGMENTATION_CHANGED,
+      eventName: POSITION_UPDATED,
       observer: ({payload, dispatcher}) => {
         expect(payload.id).to.be.equal('top1')
         expect(payload.segmentation).to.be.equal('godmode=true')
@@ -44,50 +49,72 @@ describe('Position', () => {
     let givenPosition = new Position({
       id: 'top1',
       name: 'forlayo',
+      specification: {
+        source: 'appnexus',
+        appnexus: {
+          placement: 'lalala',
+          segmentation: 'idkfa&iddqd',
+          sizes: [],
+          native: {}
+        }
+      }
+    })
+    const newSpecification = {
       source: 'appnexus',
-      placement: 'lalala',
-      segmentation: 'idkfa&iddqd',
-      sizes: [],
-      native: {}
+      appnexus: {
+        placement: 'lelele',
+        segmentation: 'godmode=true',
+        sizes: [],
+        native: {}
+      }
+    }
+    let updatedPosition = givenPosition.update({
+      specification: newSpecification
     })
-    let updatedPosition = givenPosition.changeSegmentation({
-      segmentation: 'godmode=true'
-    })
-    expect(updatedPosition.segmentation, 'Tricks for DOOM!!').to.be.equal(
-      'godmode=true'
+    expect(updatedPosition.specification, 'Tricks for DOOM!!').to.deep.equal(
+      newSpecification
     )
   })
 
   it("Shouldn't update any field of the position", () => {
     const observerSpy = sinon.spy()
 
+    const givenSpecification = {
+      source: 'appnexus',
+      appnexus: {
+        placement: 'lalala',
+        segmentation: 'idkfa&iddqd',
+        sizes: [],
+        native: {}
+      }
+    }
     DomainEventBus.register({
-      eventName: POSITION_SEGMENTATION_CHANGED,
+      eventName: POSITION_UPDATED,
       observer: ({payload, dispatcher}) => {
         expect(payload.id).to.be.equal('top1')
-        expect(payload.segmentation).to.be.equal('idkfa&iddqd')
+        expect(payload.specification).to.deep.equal(givenSpecification)
         observerSpy()
       }
     })
     let givenPosition = new Position({
       id: 'top1',
       name: 'forlayo',
-      source: 'appnexus',
-      placement: 'lalala',
-      segmentation: 'idkfa&iddqd',
-      sizes: [],
-      native: {}
+      specification: givenSpecification
     })
-    let updatedPosition = givenPosition.changeSegmentation()
-    expect(updatedPosition.segmentation, 'Tricks for DOOM!!').to.be.equal(
-      'idkfa&iddqd'
-    )
+    let updatedPosition = givenPosition.update({})
+    expect(
+      updatedPosition.specification,
+      'specification should not change'
+    ).to.deep.equal(givenSpecification)
     expect(observerSpy.calledOnce, 'observer should be called once').to.be.true
   })
   describe('changeStatus method', () => {
     describe('Given a valid input status', () => {
       it('Should change the position status and return the position with the changed status', done => {
-        const position = new Position({status: POSITION_NOT_VISIBLE})
+        const position = new Position({
+          status: POSITION_NOT_VISIBLE,
+          specification: {source: 'invent'}
+        })
         const result = position.changeStatus({newStatus: POSITION_VISIBLE})
         expect(result.status).equal(POSITION_VISIBLE)
         done()
@@ -98,7 +125,10 @@ describe('Position', () => {
         }
         const observerSpy = sinon.spy(observer, 'getObserverFunction')
         const givenEventName = 'POSITION_DISPLAYED'
-        const givenPosition = new Position({status: POSITION_NOT_VISIBLE})
+        const givenPosition = new Position({
+          status: POSITION_NOT_VISIBLE,
+          specification: {source: 'invent'}
+        })
         DomainEventBus.clearAllObservers()
         DomainEventBus.register({
           eventName: givenEventName,
@@ -122,7 +152,10 @@ describe('Position', () => {
         }
         const observerSpy = sinon.spy(observer, 'getObserverFunction')
         const givenEventName = 'POSITION_ALREADY_DISPLAYED'
-        const givenPosition = new Position({status: POSITION_VISIBLE})
+        const givenPosition = new Position({
+          status: POSITION_VISIBLE,
+          specification: {source: 'invent'}
+        })
 
         DomainEventBus.register({
           eventName: givenEventName,

@@ -33,18 +33,22 @@ describe('Display Position use case', function() {
         .addPosition({
           id: 'Ad1',
           name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
-          segmentation: {
-            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-            'es-sch-event_name': 'list',
-            'aa-sch-country_code': 'es',
-            'aa-sch-supply_type': 'wph',
-            'es-sch-section': 'ocasion',
-            'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
-          },
-          sizes: [[300, 250], [320, 250]]
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .then(position => openAds.displayPosition({id: position.id}))
         .then(position => {
@@ -124,18 +128,22 @@ describe('Display Position use case', function() {
         .addPosition({
           id: 'Ad2',
           name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
-          segmentation: {
-            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-            'es-sch-event_name': 'list',
-            'aa-sch-country_code': 'es',
-            'aa-sch-supply_type': 'wph',
-            'es-sch-section': 'ocasion',
-            'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
-          },
-          sizes: [[300, 250], [320, 250]]
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .then(position => openAds.displayPosition({id: position.id}))
         .then(position => done(new Error(`should be rejected! ${position.id}`)))
@@ -184,18 +192,22 @@ describe('Display Position use case', function() {
         .addPosition({
           id: 'Ad2',
           name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
-          segmentation: {
-            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-            'es-sch-event_name': 'list',
-            'aa-sch-country_code': 'es',
-            'aa-sch-supply_type': 'wph',
-            'es-sch-section': 'ocasion',
-            'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
-          },
-          sizes: [[300, 250], [320, 250]]
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .catch(error => openAds.displayPosition({id: error.position.id}))
         .then(position => done(new Error(`should be rejected! ${position.id}`)))

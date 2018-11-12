@@ -8,35 +8,27 @@ export default class OpenAds {
   }
   /**
    * Create a new Position on the page
-   * @param {string} id
-   * @param {string} name
-   * @param {string} source
-   * @param {string} placement
-   * @param {string} segmentation
-   * @param {Array<Array<>>}sizes
-   * @param {Object} native - Fields requested to the ad server
-   * @returns {Promise<Position>}
+   * @param {string} id - the Ad unique identifier
+   * @param {string} name - the position name
+   * @param {Object} specification - Ad's connector specific data required to load it
+   * @returns {Promise} Promise object representing when the operation finish
    */
-  addPosition({id, name, source, placement, segmentation, sizes, native}) {
+  addPosition({id, name, specification}) {
     return this._container
       .getInstance({key: 'AddPositionUseCase'})
-      .addPosition({id, name, source, placement, segmentation, sizes, native})
+      .addPosition({id, name, specification})
   }
 
   /**
    * Update a Position with given changes and refresh his Ad
-   * @param {string} id
-   * @param {object} position
-   * @param {string} position.name
-   * @param {string} position.placement
-   * @param {string} position.segmentation
-   * @param {Array} position.sizes
-   * @returns {Promise<Position>}
+   * @param {string} id - the Ad unique identifier
+   * @param {Object} specification - Ad's connector specific data to be updated
+   * @returns {Promise} Promise object representing when the operation finish
    */
-  refreshPosition({id, position}) {
+  refreshPosition({id, specification}) {
     return this._container
       .getInstance({key: 'RefreshPositionUseCase'})
-      .refreshPosition({id, position})
+      .refreshPosition({id, specification})
   }
   /**
    * Displays a position in the page

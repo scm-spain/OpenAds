@@ -33,18 +33,22 @@ describe('Add Position use case', function() {
         .addPosition({
           id: 'ad1',
           name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
-          segmentation: {
-            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-            'es-sch-event_name': 'list',
-            'aa-sch-country_code': 'es',
-            'aa-sch-supply_type': 'wph',
-            'es-sch-section': 'ocasion',
-            'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
-          },
-          sizes: [[300, 250], [320, 250]]
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .then(position => {
           expect(
@@ -98,18 +102,22 @@ describe('Add Position use case', function() {
         .addPosition({
           id: 'ad1',
           name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
-          segmentation: {
-            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-            'es-sch-event_name': 'list',
-            'aa-sch-country_code': 'es',
-            'aa-sch-supply_type': 'wph',
-            'es-sch-section': 'ocasion',
-            'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
-          },
-          sizes: [[300, 250], [320, 250]]
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .then(position => {
           done(new Error('should generate a rejected promise!'))
@@ -164,18 +172,22 @@ describe('Add Position use case', function() {
         .addPosition({
           id: 'ad1',
           name: 'ad number one',
-          source: 'AppNexus',
-          placement: 'es-cn-wph-ocasion-list-x_65',
-          segmentation: {
-            'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
-            'es-sch-event_name': 'list',
-            'aa-sch-country_code': 'es',
-            'aa-sch-supply_type': 'wph',
-            'es-sch-section': 'ocasion',
-            'aa-sch-page_type': 'list',
-            'es-sch-adformat': 'x65'
-          },
-          sizes: [[300, 250], [320, 250]]
+          specification: {
+            source: 'AppNexus',
+            appnexus: {
+              placement: 'es-cn-wph-ocasion-list-x_65',
+              segmentation: {
+                'es-sch-ads_name_page': 'cochesnet/ocasion/listado',
+                'es-sch-event_name': 'list',
+                'aa-sch-country_code': 'es',
+                'aa-sch-supply_type': 'wph',
+                'es-sch-section': 'ocasion',
+                'aa-sch-page_type': 'list',
+                'es-sch-adformat': 'x65'
+              },
+              sizes: [[300, 250], [320, 250]]
+            }
+          }
         })
         .then(() => {
           expect(stubLoadAd.calledOnce).to.be.true

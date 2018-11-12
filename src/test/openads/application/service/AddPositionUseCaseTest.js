@@ -45,7 +45,13 @@ describe('Add Position use case', function() {
     })
 
     it('should call to position factory and position repository once', function(done) {
-      const givenPositionRequest = {}
+      const givenPositionRequest = {
+        id: 'ad-1',
+        name: 'TOP',
+        specification: {
+          source: 'appnexus'
+        }
+      }
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
@@ -102,7 +108,13 @@ describe('Add Position use case', function() {
     })
     it('should return the position with the Ad inside', function(done) {
       const givenAd = {data: '<html>inside</html>', status: AD_AVAILABLE}
-      const givenPositionRequest = {id: 'aId'}
+      const givenPositionRequest = {
+        id: 'ad-1',
+        name: 'TOP',
+        specification: {
+          source: 'appnexus'
+        }
+      }
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
@@ -134,7 +146,13 @@ describe('Add Position use case', function() {
         .catch(error => done(error))
     })
     it('should return the position with an unresolved Ad with AD_ERROR status if ad server fetch fails', function(done) {
-      const givenPositionRequest = {id: 'aId'}
+      const givenPositionRequest = {
+        id: 'ad-1',
+        name: 'TOP',
+        specification: {
+          source: 'appnexus'
+        }
+      }
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
@@ -169,7 +187,13 @@ describe('Add Position use case', function() {
     })
     it('should return the position with an unresolved Ad with AD_NO_BID status ad server returns a adNoBid response', function(done) {
       const givenAd = {data: 'ad no bid', status: AD_NO_BID}
-      const givenPositionRequest = {id: 'aId'}
+      const givenPositionRequest = {
+        id: 'ad-1',
+        name: 'TOP',
+        specification: {
+          source: 'appnexus'
+        }
+      }
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(false),
         saveOrUpdate: ({position}) => Promise.resolve(position)
@@ -202,7 +226,13 @@ describe('Add Position use case', function() {
   })
   describe('given an existing position', function() {
     it('should return a PositionAlreadyExists error', function(done) {
-      const givenPositionRequest = {id: 'aId'}
+      const givenPositionRequest = {
+        id: 'ad-1',
+        name: 'TOP',
+        specification: {
+          source: 'appnexus'
+        }
+      }
       const positionRepositoryMock = {
         find: ({id}) => Promise.resolve(givenPositionRequest)
       }

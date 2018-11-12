@@ -1,6 +1,6 @@
 {
   "name": "@schibstedspain/openads",
-  "version": "3.1.0",
+  "version": "4.0.0",
   "description": "OpenAds: Advertising library",
   "main": "dist/",
   "scripts": {
@@ -29,7 +29,6 @@
   "devDependencies": {
     "@s-ui/lint": "^2.19.0",
     "@s-ui/perf": "^1.4.0",
-    "@schibstedspain/openads-connector-api": "^1.2.0",
     "babel-cli": "^6.24.0",
     "babel-loader": "^7.1.5",
     "babel-polyfill": "^6.23.0",
@@ -58,7 +57,7 @@
     ]
   },
   "dependencies": {
-    "@schibstedspain/openads-connector-api": "^1.2.0",
+    "@schibstedspain/openads-connector-api": "^2.0.0",
     "loglevel": "^1.6.1",
     "querystring": "^0.2.0"
   }

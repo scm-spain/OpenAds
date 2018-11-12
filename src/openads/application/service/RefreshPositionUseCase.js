@@ -1,6 +1,7 @@
 import PositionNotFoundException from '../../domain/position/PositionNotFoundException'
 import {AD_AVAILABLE} from '../../domain/ad/adStatus'
 import PositionAdNotAvailableError from '../../domain/position/PositionAdNotAvailableError'
+import PositionAdError from '../../domain/position/PositionAdError'
 
 export default class RefreshPositionUseCase {
   /**
@@ -15,21 +16,15 @@ export default class RefreshPositionUseCase {
   /**
    * Update a Position with given changes and refresh his Ad
    * @param {string} id
-   * @param {object} position
-   * @param {string} position.name
-   * @param {string} position.placement
-   * @param {string} position.segmentation
-   * @param {Array} position.sizes
+   * @param {object} specification
    * @returns {Promise<Position>}
    */
-  refreshPosition({id, position}) {
+  refreshPosition({id, specification}) {
     return this._positionRepository
       .find({id})
       .then(optionalPosition => ({id, position: optionalPosition}))
       .then(this._filterPositionExists)
-      .then(positionToBeUpdated =>
-        positionToBeUpdated.changeSegmentation({...position})
-      )
+      .then(positionToBeUpdated => positionToBeUpdated.update({specification}))
       .then(changedPosition => this._setAdToPosition(changedPosition))
       .then(positionWithAd =>
         this._positionRepository.saveOrUpdate({position: positionWithAd})
@@ -46,15 +41,14 @@ export default class RefreshPositionUseCase {
   _setAdToPosition(position) {
     return Promise.resolve()
       .then(() =>
-        this._adConnectorManager.getConnector({source: position.source})
+        this._adConnectorManager.getConnector({
+          source: position.specification.source
+        })
       )
       .then(connector =>
         connector.refresh({
-          domElementId: position.id,
-          placement: position.placement,
-          sizes: position.sizes,
-          segmentation: position.segmentation,
-          native: position.native
+          id: position.id,
+          specification: position.specification
         })
       )
       .catch(error => ({data: error.cause, status: error.status}))
@@ -63,7 +57,11 @@ export default class RefreshPositionUseCase {
 
   _filterPositionAdIsAvailable(position) {
     if (position.ad.status !== AD_AVAILABLE) {
-      throw new PositionAdNotAvailableError({position})
+      if (position.ad.data && position.ad.data.errMessage) {
+        throw new PositionAdError({position})
+      } else {
+        throw new PositionAdNotAvailableError({position})
+      }
     }
     return position
   }

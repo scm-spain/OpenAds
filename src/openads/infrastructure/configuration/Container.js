@@ -11,10 +11,10 @@ import RefreshPositionUseCase from '../../application/service/RefreshPositionUse
 import DisplayPositionUseCase from '../../application/service/DisplayPositionUseCase'
 import DefaultPositionFactory from '../position/DefaultPositionFactory'
 import RoutingAdConnectorManager from '../ad/RoutingAdConnectorManager'
-import {POSITION_SEGMENTATION_CHANGED} from '../../domain/position/positionSegmentationChanged'
 import {POSITION_CREATED} from '../../domain/position/positionCreated'
 import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
 import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
+import {POSITION_UPDATED} from '../../domain/position/positionUpdated'
 
 export default class Container {
   constructor({config, eager = true, currentWindow = window} = {}) {
@@ -113,7 +113,7 @@ export default class Container {
       observer: debugObserver
     })
     DomainEventBus.register({
-      eventName: POSITION_SEGMENTATION_CHANGED,
+      eventName: POSITION_UPDATED,
       observer: debugObserver
     })
     DomainEventBus.register({

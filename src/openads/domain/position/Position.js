@@ -3,19 +3,17 @@ import {positionCreated} from './positionCreated'
 import {positionAlreadyDisplayed} from './positionAlreadyDisplayed'
 import {positionDisplayed} from './positionDisplayed'
 import DomainEventBus from '../service/DomainEventBus'
-import {positionSegmentationChanged} from './positionSegmentationChanged'
 import InvalidPositionStatusException from './InvalidPositionStatusException'
+import InvalidPositionSpecificationError from './InvalidPositionSpecificationError'
+import {positionUpdated} from './positionUpdated'
 
 export default class Position {
   /**
    * Create a new Position
    * @param {string} id
    * @param {string} name
-   * @param {string} source
-   * @param {string} placement
-   * @param {string} segmentation
-   * @param {Array<Array<>>}sizes
-   * @param {Object} native - Fields requested to the ad server
+   * @param {Object} specification
+   * @param {string} specification.source
    * @param {Ad} ad - ValueObject width data from the ad loaded in this position
    * @param {string} status - Status of the position
    * @returns {Position}
@@ -23,21 +21,14 @@ export default class Position {
   constructor({
     id,
     name,
-    source,
-    placement,
-    segmentation,
-    sizes,
-    native,
+    specification,
     ad,
     status = POSITION_NOT_VISIBLE
   } = {}) {
+    checkSpecificationHasSource({specification})
     this._id = id
     this._name = name
-    this._source = source
-    this._placement = placement
-    this._segmentation = segmentation
-    this._sizes = sizes
-    this._native = native
+    this._specification = specification
     this._status = status
     this._ad = ad
 
@@ -45,11 +36,7 @@ export default class Position {
       domainEvent: positionCreated({
         id: this._id,
         name: this._name,
-        source: this._source,
-        placement: this._placement,
-        segmentation: this._segmentation,
-        sizes: this._sizes,
-        native: this._native,
+        specification: this._specification,
         status: this._status
       })
     })
@@ -63,24 +50,8 @@ export default class Position {
     return this._name
   }
 
-  get source() {
-    return this._source
-  }
-
-  get placement() {
-    return this._placement
-  }
-
-  get segmentation() {
-    return this._segmentation
-  }
-
-  get sizes() {
-    return this._sizes
-  }
-
-  get native() {
-    return this._native
+  get specification() {
+    return this._specification
   }
 
   get status() {
@@ -111,11 +82,7 @@ export default class Position {
         domainEvent: positionDisplayed({
           id: this._id,
           name: this._name,
-          source: this._source,
-          placement: this._placement,
-          segmentation: this._segmentation,
-          sizes: this._sizes,
-          native: this._native,
+          specification: this._specification,
           status: this._status
         })
       })
@@ -128,11 +95,7 @@ export default class Position {
         domainEvent: positionAlreadyDisplayed({
           id: this._id,
           name: this._name,
-          source: this._source,
-          placement: this._placement,
-          segmentation: this._segmentation,
-          sizes: this._sizes,
-          native: this._native,
+          specification: this._specification,
           status: this._status
         })
       })
@@ -147,37 +110,29 @@ export default class Position {
 
   /**
    * Update Position with given changes
-   * @param {{name: *, placement: *}} position
-   * @param {string} position.name
-   * @param {string} position.placement
-   * @param {string} position.segmentation
-   * @param {Array} position.sizes
+   * @param {object} specification
    * @returns {Position}
    */
-  changeSegmentation({
-    name = this._name,
-    placement = this._placement,
-    segmentation = this._segmentation,
-    sizes = this._sizes
-  } = {}) {
+  update({specification = this._specification} = {}) {
+    checkSpecificationHasSource({specification})
     this._ad = undefined
-    this._name = name
-    this._placement = placement
-    this._segmentation = segmentation
-    this._sizes = sizes
+    this._specification = specification
 
     DomainEventBus.raise({
-      domainEvent: positionSegmentationChanged({
+      domainEvent: positionUpdated({
         id: this._id,
         name: this._name,
-        source: this._source,
-        placement: this._placement,
-        segmentation: this._segmentation,
-        sizes: this._sizes,
-        native: this._native,
+        specification: this._specification,
         status: this._status
       })
     })
     return this
+  }
+}
+const checkSpecificationHasSource = ({specification}) => {
+  if (!specification || !specification.source) {
+    throw new InvalidPositionSpecificationError({
+      message: "Position's specification source is required"
+    })
   }
 }
