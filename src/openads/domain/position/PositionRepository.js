@@ -12,9 +12,17 @@ export default class PositionRepository {
   }
   /**
    * Given a position id will search it on persistence layer
-   * @param {string} id
+   * @param {Promise<Position>} id
    */
   find({id}) {
     throw new Error('PositionRepository#find must be implemented')
+  }
+  /**
+   * Checks for the existence of a Position by id
+   * @param id
+   * @return {Promise<boolean>}
+   */
+  has({id}) {
+    throw new Error('PositionRepository#has must be implemented')
   }
 }

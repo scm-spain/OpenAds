@@ -1,4 +1,4 @@
-# OpenAds 
+# OpenAds
 
 [![Build status](https://travis-ci.org/scm-spain/OpenAds.svg?branch=master)](https://travis-ci.org/scm-spain/OpenAds) [![codecov](https://codecov.io/gh/scm-spain/OpenAds/branch/master/graph/badge.svg)](https://codecov.io/gh/scm-spain/OpenAds)
 
@@ -72,15 +72,15 @@ openAds.addPosition({
           'aa-sch-page_type': 'list',
           'es-sch-adformat': 'x65'
         },
-        sizes: [[300, 250], [320, 250]]    
+        sizes: [[300, 250], [320, 250]]
     }
   }
 })
   .then(position => openAds.displayPosition({id: position.id}))
-  .catch(error => console.log('Do some interesting stuff if there is an error',error))      
+  .catch(error => console.log('Do some interesting stuff if there is an error',error))
 ```
 The Promise response for addPosition is a Position with all data loaded.
-If some error occurred with the connector trying to load the ad inside the position you can deal with it 
+If some error occurred with the connector trying to load the ad inside the position you can deal with it
 using ```catch``` operator from Promise
 
 # Refresh a position
@@ -96,11 +96,11 @@ const positionUpdated = openAds.refreshPosition({
     appnexus: {
       targetId: 'ad1',
       invCode: 'new-placement-to-update',
-      sizes: [[300, 600]]    
+      sizes: [[300, 600]]
     }
   }
-}) 
-  .catch(error => console.log('Maybe new segmentation have generated some kind of error',error))      
+})
+  .catch(error => console.log('Maybe new segmentation have generated some kind of error',error))
 ```
 Keep in mind this two scenarios when you refresh an existent position:
 
@@ -117,7 +117,7 @@ receive a Position as usual but the ad inside will be of type Native.
 
 If you try to do a display of a position that have a Native ad you will get an error of type **PositionAdIsNativeError**.
 
-To request what **fields** you want to receive with the Native ad you can provide that configuration when you add the Position through the native field 
+To request what **fields** you want to receive with the Native ad you can provide that configuration when you add the Position through the native field
 ```ecmascript 6
 openAds.addPosition({
   id: 'ad1',
@@ -160,8 +160,8 @@ openAds.addPosition({
   }
 })
   .then(position => openAds.displayPosition({id: position.id}))
-  .catch(error => console.log('Do some interesting stuff',error))      
-``` 
+  .catch(error => console.log('Do some interesting stuff',error))
+```
 
 # Error handling
 
@@ -189,13 +189,30 @@ openAds.addPosition({
   specification: {}
 })
   .then(position => openAds.displayPosition({id: position.id}))
-  .catch(error => 
+  .catch(error =>
       openAds.refreshPosition({
         id: error.position.id,
         specification: {}
       })
       .then(position => openAds.displayPosition({id: position.id}))
-  )      
+  )
+```
+
+Anyway, you can test for the position to exist to avoid the PositionAlreadyExists error when adding positions:
+
+```ecmascript 6
+openAds.hasPosition({id: 'the_ad'})
+.then(has => has ?
+    openAds.refreshPosition({
+       id: error.position.id,
+       specification: {}
+    })
+    : openAds.addPosition({
+        id: 'the_ad',
+        name: 'some ad',
+        specification: {}
+      })
+      .openAds.displayPosition({id: position.id}))
 ```
 
 # Logging

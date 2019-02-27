@@ -42,6 +42,16 @@ export default class OpenAds {
   }
 
   /**
+   * Indicates if a position has been previously added
+   * @param id
+   */
+  hasPosition({id}) {
+    return this._container
+      .getInstance({key: 'HasPositionUseCase'})
+      .hasPosition({id})
+  }
+
+  /**
    * Returns current configuration loaded
    * @returns {Object}
    */

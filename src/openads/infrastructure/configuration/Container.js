@@ -15,6 +15,7 @@ import {POSITION_CREATED} from '../../domain/position/positionCreated'
 import {POSITION_DISPLAYED} from '../../domain/position/positionDisplayed'
 import {POSITION_ALREADY_DISPLAYED} from '../../domain/position/positionAlreadyDisplayed'
 import {POSITION_UPDATED} from '../../domain/position/positionUpdated'
+import HasPositionUseCase from '../../application/service/HasPositionUseCase'
 
 export default class Container {
   constructor({config, eager = true, currentWindow = window} = {}) {
@@ -57,6 +58,12 @@ export default class Container {
       positionRepository: this.getInstance({key: 'PositionRepository'}),
       positionFactory: this.getInstance({key: 'PositionFactory'}),
       adConnectorManager: this.getInstance({key: 'AdConnectorManager'})
+    })
+  }
+
+  _buildHasPositionUseCase() {
+    return new HasPositionUseCase({
+      positionRepository: this.getInstance({key: 'PositionRepository'})
     })
   }
 
