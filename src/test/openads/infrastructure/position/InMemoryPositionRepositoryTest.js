@@ -224,5 +224,101 @@ describe('InMemory Position Repository', function() {
         })
         .catch(error => done(error))
     })
+    it('should say that a position already exists', done => {
+      const inMemoryPositionRepository = new InMemoryPositionRepository({
+        positions: [
+          [
+            '42',
+            {
+              id: '42',
+              name: 'lala',
+              specification: {
+                source: 'appnexus',
+                appnexus: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
+              status: POSITION_NOT_VISIBLE
+            }
+          ],
+          [
+            '43',
+            {
+              id: '43',
+              name: 'lala43',
+              specification: {
+                source: 'google',
+                google: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
+              status: POSITION_NOT_VISIBLE
+            }
+          ]
+        ]
+      })
+
+      inMemoryPositionRepository
+        .has({id: '43'})
+        .then(exists => {
+          expect(exists, 'position does not exist').to.be.true
+        })
+        .then(() => done())
+        .catch(error => done(error))
+    })
+    it('should say that a position does not exit', done => {
+      const inMemoryPositionRepository = new InMemoryPositionRepository({
+        positions: [
+          [
+            '42',
+            {
+              id: '42',
+              name: 'lala',
+              specification: {
+                source: 'appnexus',
+                appnexus: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
+              status: POSITION_NOT_VISIBLE
+            }
+          ],
+          [
+            '43',
+            {
+              id: '43',
+              name: 'lala43',
+              specification: {
+                source: 'google',
+                google: {
+                  placement: 'blabla',
+                  segmentation: 'adsasd',
+                  sizes: [],
+                  native: {}
+                }
+              },
+              status: POSITION_NOT_VISIBLE
+            }
+          ]
+        ]
+      })
+
+      inMemoryPositionRepository
+        .has({id: '55'})
+        .then(exists => {
+          expect(exists, 'position should not exist').to.be.false
+        })
+        .then(() => done())
+        .catch(error => done(error))
+    })
   })
 })

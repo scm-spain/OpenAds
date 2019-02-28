@@ -26,4 +26,13 @@ export default class InMemoryPositionRepository extends PositionRepository {
       () => this._positions.has(id) && this._positions.get(id)
     )
   }
+
+  /**
+   * Checks for the existence of a Position by id
+   * @param id
+   * @return {Promise<boolean | never>}
+   */
+  has({id}) {
+    return Promise.resolve().then(() => this._positions.has(id))
+  }
 }
