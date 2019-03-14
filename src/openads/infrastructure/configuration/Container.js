@@ -50,7 +50,7 @@ export default class Container {
   }
 
   _buildDOMDriver() {
-      return new HTMLDOMDriver({dom: this._currentWindow.document})
+    return new HTMLDOMDriver({dom: this._currentWindow.document})
   }
 
   _buildAddPositionUseCase() {
