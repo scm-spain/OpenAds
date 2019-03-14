@@ -6,7 +6,7 @@ export default class BootstrapContext {
     if (performance) {
       return PerformanceBootstrap.init({config, performance, window})
     } else {
-      return ProductionBootstrap.init({config})
+      return ProductionBootstrap.init({config, window})
     }
   }
 }
