@@ -30,7 +30,7 @@ export default class Container {
       try {
         this._instances.set(key, this['_build' + key]())
       } catch (e) {
-        throw new Error(`Error creating instance: ${key}`, e)
+        throw new Error(`Error creating instance: ${key}: ` + e.message)
       }
     }
     return this._instances.get(key)
@@ -50,7 +50,7 @@ export default class Container {
   }
 
   _buildDOMDriver() {
-    return new HTMLDOMDriver({dom: this._currentWindow.document})
+      return new HTMLDOMDriver({dom: this._currentWindow.document})
   }
 
   _buildAddPositionUseCase() {
