@@ -174,4 +174,19 @@ describe('DOM Driver HTML simple implementation', function() {
     const queryString = htmlDOMDriver.getQueryString()
     expect(queryString).to.equal('')
   })
+  it('Should get a value from the local storage', () => {
+    const givenDocument = new JSDOM(
+      '<!DOCTYPE html><div id="forlayo">Hello world</div>',
+      {
+        url: 'http://localhost'
+      }
+    ).window.document
+    const givenKey = 'aKey'
+    const givenValue = 'aValue'
+    givenDocument.defaultView.localStorage.setItem(givenKey, givenValue)
+
+    const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocument})
+    const result = htmlDOMDriver.getLocalStorageValue({key: givenKey})
+    expect(result).to.equal(givenValue)
+  })
 })

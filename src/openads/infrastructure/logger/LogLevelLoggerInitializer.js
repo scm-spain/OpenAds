@@ -20,9 +20,17 @@ export default class LogLevelLoggerInitializer {
     return logger
   }
   _isDebugMode() {
+    return (
+      this._enableDebugFromLocalStorage() || this._enableDebugFromQueryString()
+    )
+  }
+  _enableDebugFromLocalStorage() {
+    return this._domDriver.getLocalStorageValue({key: DEBUG_KEY}) === 'true'
+  }
+  _enableDebugFromQueryString() {
     const queryString = this._domDriver.getQueryString()
     const parameters = QS.parse(queryString)
-    return parameters[this._loggerName.toLowerCase() + '_debug'] !== undefined
+    return parameters[DEBUG_KEY] !== undefined
   }
   _enableConnectorsDebug() {
     Object.values(this._connectors).forEach(connector => {
@@ -37,3 +45,4 @@ export default class LogLevelLoggerInitializer {
     })
   }
 }
+const DEBUG_KEY = 'openads_debug'

@@ -32,4 +32,8 @@ export default class HTMLDOMDriver extends DOMDriver {
   getQueryString() {
     return this._dom.location.search.slice(1)
   }
+
+  getLocalStorageValue({key}) {
+    return this._dom.defaultView.localStorage.getItem(key)
+  }
 }
