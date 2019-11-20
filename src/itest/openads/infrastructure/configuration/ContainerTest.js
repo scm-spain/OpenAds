@@ -1,5 +1,4 @@
 import Container from '../../../../openads/infrastructure/configuration/Container'
-import HTMLDOMDriver from '../../../../openads/infrastructure/service/HTMLDOMDriver'
 import {JSDOM} from 'jsdom'
 
 export default class ContainerTest extends Container {
