@@ -7,15 +7,13 @@ export default class ContainerTest extends Container {
     super({
       config,
       eager: false,
-      currentWindow: new HTMLDOMDriver({
-        dom: new JSDOM('<!DOCTYPE html><div id="forlayo">Hello world</div>')
-          .window
-      })
+      currentWindow: new JSDOM(
+        '<!DOCTYPE html><div id="forlayo">Hello world</div>',
+        {
+          url: 'http://localhost'
+        }
+      ).window
     })
     if (eager) super._buildEagerSingletonInstances()
-  }
-
-  _buildDOMDriver() {
-    return this._currentWindow
   }
 }
