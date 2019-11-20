@@ -25,4 +25,8 @@ export default class DOMDriver {
   getQueryString() {
     throw new Error('DOMDriver#getQueryString must be implemented')
   }
+
+  getLocalStorageValue({key}) {
+    throw new Error('DOMDriver#getLocalStorageValue must be implemented')
+  }
 }

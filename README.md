@@ -224,6 +224,12 @@ For example:
 http://your.web.app/page?price=5000&openads_debug
 ```
 
+Also, to enable debugger in persistent mode, you can add the option in your browser's local storage from the browser's console:
+```
+window.localStorage.setItem('openads_debug', 'true') // removing it or setting it to false, disables the debugger 
+```
+
+
 Currently, OpenAds uses [LogLevel](https://github.com/pimterry/loglevel) as its logging framework.
 
 
