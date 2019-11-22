@@ -5,6 +5,7 @@ cache:
   directories:
   - node_modules
 script:
+  - npm run phoenix
   - npm run lint
   - npm test
   - npm run test:integration
