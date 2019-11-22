@@ -20,7 +20,10 @@ stubLoadAd.returns(
 )
 
 const windowMock = new JSDOM(
-  '<!DOCTYPE html><div id="forlayo">Hello world</div>'
+  '<!DOCTYPE html><div id="forlayo">Hello world</div>',
+  {
+    url: 'http://localhost'
+  }
 ).window
 
 const addPosition = () => {

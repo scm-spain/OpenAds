@@ -14,7 +14,10 @@ describe('Add Position use case', function() {
     it('should return a Promise', function() {
       const givenPositionDTO = {
         id: 'ad3',
-        source: 'AppNexus',
+        name: 'TEST',
+        specification: {
+          source: 'AppNexus'
+        },
         placement: 'blabla',
         status: POSITION_NOT_VISIBLE
       }
