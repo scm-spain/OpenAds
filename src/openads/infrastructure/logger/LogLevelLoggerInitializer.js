@@ -1,4 +1,3 @@
-import QS from 'querystring'
 import {Logger} from '@schibstedspain/openads-connector-api'
 import InterfaceChecker from '../service/InterfaceChecker'
 
@@ -29,8 +28,7 @@ export default class LogLevelLoggerInitializer {
   }
   _enableDebugFromQueryString() {
     const queryString = this._domDriver.getQueryString()
-    const parameters = QS.parse(queryString)
-    return parameters[DEBUG_KEY] !== undefined
+    return queryString && queryString.indexOf(DEBUG_KEY) > -1
   }
   _enableConnectorsDebug() {
     Object.values(this._connectors).forEach(connector => {
