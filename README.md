@@ -1,5 +1,6 @@
 # OpenAds
 
+![npm](https://img.shields.io/npm/v/@schibstedspain/openads)
 [![Build status](https://travis-ci.org/scm-spain/OpenAds.svg?branch=master)](https://travis-ci.org/scm-spain/OpenAds) [![codecov](https://codecov.io/gh/scm-spain/OpenAds/branch/master/graph/badge.svg)](https://codecov.io/gh/scm-spain/OpenAds)
 
 :rocket: Powerful advertising abstraction library to deliver ads in a web environment providing you a common domain for different sources.
