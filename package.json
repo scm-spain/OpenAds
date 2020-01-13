@@ -8,10 +8,10 @@
     "prepublishOnly": "npm run cleanDistFolder && npm run build",
     "phoenix": "rm -Rf node_modules && rm -Rf package-lock.json && npm install",
     "build": "npm run cleanDistFolder && babel src --ignore test --out-dir dist ",
-    "test": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/test/**/*.js\"",
-    "test:integration": "mocha --recursive --require babel-polyfill --compilers js:babel-register \"src/itest/openads/**/*.js\"",
-    "coverage": "istanbul cover --report html _mocha -- ./src/*test --recursive --compilers js:babel-register",
-    "coverage:ci": "istanbul cover _mocha -- ./src/*test --recursive --compilers js:babel-register && codecov",
+    "test": "mocha --recursive --require @babel/register \"src/test/**/*.js\"",
+    "test:integration": "mocha --recursive --require @babel/register \"src/itest/openads/**/*.js\"",
+    "coverage": "nyc --reporter=html --exclude=\"src/test\" npm run test",
+    "coverage:ci": "nyc --reporter=cobertura --exclude=\"src/test\" npm run test && codecov",
     "performance": "babel-node src/itest/performance",
     "watch": "onchange 'src/**/*.js' -- npm run build",
     "lint": "sui-lint js",
@@ -31,20 +31,22 @@
   "author": "One Punch Team",
   "license": "ISC",
   "devDependencies": {
-    "@s-ui/lint": "~2.19.0",
+    "@babel/cli": "^7.8.0",
+    "@babel/core": "^7.8.0",
+    "@babel/node": "^7.8.0",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.0",
+    "@babel/register": "^7.8.0",
+    "@babel/runtime": "^7.8.0",
+    "@s-ui/lint": "^3.14.0",
     "@s-ui/perf": "~1.4.0",
-    "babel-cli": "~6.24.0",
-    "babel-loader": "~7.1.5",
-    "babel-polyfill": "~6.23.0",
-    "babel-preset-sui": "~1.9.0",
-    "babel-register": "~6.24.0",
-    "chai": "~4.2.0",
+    "babel-loader": "^8.0.6",
+    "babel-preset-sui": "^2.14.0",
+    "chai": "^4.2.0",
     "codecov": "~3.1.0",
-    "istanbul": "~1.1.0-alpha.1",
     "jsdom": "~11.12.0",
-    "mocha": "~5.2.0",
-    "onchange": "~3.3.0",
-    "sinon": "~2.3.4",
+    "mocha": "^7.0.0",
+    "nyc": "^15.0.0",
+    "sinon": "^8.0.4",
     "versiona": "^4.2.1"
   },
   "pre-commit": [
@@ -54,6 +56,9 @@
   "babel": {
     "presets": [
       "sui"
+    ],
+    "plugins": [
+      "@babel/plugin-transform-modules-commonjs"
     ]
   },
   "eslintConfig": {
@@ -62,7 +67,11 @@
     ]
   },
   "dependencies": {
-    "@schibstedspain/openads-connector-api": "^2.0.0",
-    "loglevel": "^1.6.1"
+    "@schibstedspain/openads-connector-api": "^2.0.1",
+    "loglevel": "^1.6.6"
+  },
+  "prettier": "./node_modules/@s-ui/lint/.prettierrc.js",
+  "stylelint": {
+    "extends": "./node_modules/@s-ui/lint/stylelint.config.js"
   }
 }

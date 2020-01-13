@@ -8,6 +8,7 @@ export default class LogLevelLoggerInitializer {
     this._logLevel = logLevel
     this._connectors = connectors
   }
+
   logger() {
     const logger = this._logLevel.getLogger(this._loggerName)
     if (this._isDebugMode()) {
@@ -18,18 +19,22 @@ export default class LogLevelLoggerInitializer {
     }
     return logger
   }
+
   _isDebugMode() {
     return (
       this._enableDebugFromLocalStorage() || this._enableDebugFromQueryString()
     )
   }
+
   _enableDebugFromLocalStorage() {
     return this._domDriver.getLocalStorageValue({key: DEBUG_KEY}) === 'true'
   }
+
   _enableDebugFromQueryString() {
     const queryString = this._domDriver.getQueryString()
     return queryString && queryString.indexOf(DEBUG_KEY) > -1
   }
+
   _enableConnectorsDebug() {
     Object.values(this._connectors).forEach(connector => {
       if (

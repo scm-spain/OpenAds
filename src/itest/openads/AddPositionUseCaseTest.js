@@ -46,28 +46,25 @@ describe('Add Position use case', function() {
                 'aa-sch-page_type': 'list',
                 'es-sch-adformat': 'x65'
               },
-              sizes: [[300, 250], [320, 250]]
+              sizes: [
+                [300, 250],
+                [320, 250]
+              ]
             }
           }
         })
         .then(position => {
           expect(
             position.ad.status,
-            `The ad status is equal to ${
-              position.ad.status
-            }, instead it should be equal to 'AD_AVAILABLE'`
+            `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`
           ).to.be.equals(AD_AVAILABLE)
           expect(
             position.ad.data.adType,
-            `The ad adType is equal to ${
-              position.ad.data.adType
-            }, instead it should be equal to 'banner'`
+            `The ad adType is equal to ${position.ad.data.adType}, instead it should be equal to 'banner'`
           ).to.be.equals('banner')
           expect(
             position.status,
-            `The position status is equal to ${
-              position.status
-            }, instead it should be equal to 'POSITION_NOT_VISIBLE'`
+            `The position status is equal to ${position.status}, instead it should be equal to 'POSITION_NOT_VISIBLE'`
           ).to.be.equals(POSITION_NOT_VISIBLE)
           done()
         })
@@ -115,7 +112,10 @@ describe('Add Position use case', function() {
                 'aa-sch-page_type': 'list',
                 'es-sch-adformat': 'x65'
               },
-              sizes: [[300, 250], [320, 250]]
+              sizes: [
+                [300, 250],
+                [320, 250]
+              ]
             }
           }
         })
@@ -125,21 +125,15 @@ describe('Add Position use case', function() {
         .catch(error => {
           expect(
             error.name,
-            `AddPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdNotAvailableError', but we have received a ${
-              error.name
-            }`
+            `AddPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdNotAvailableError', but we have received a ${error.name}`
           ).to.be.equals('PositionAdNotAvailableError')
           expect(
             error.position.id,
-            `AddPosition return a rejected Promise, in this case, we expect that the position id was: 'ad1', but we have received a position id ${
-              error.position.id
-            }`
+            `AddPosition return a rejected Promise, in this case, we expect that the position id was: 'ad1', but we have received a position id ${error.position.id}`
           ).to.be.equals('ad1')
           expect(
             error.position.ad.status,
-            `The ad status is equal to ${
-              error.position.ad.status
-            }, instead it should be equal to 'AD_NO_BID'`
+            `The ad status is equal to ${error.position.ad.status}, instead it should be equal to 'AD_NO_BID'`
           ).to.be.equals(AD_NO_BID)
           expect(error.position.ad.data).to.deep.equal(appnexusResponse)
           done()
@@ -185,7 +179,10 @@ describe('Add Position use case', function() {
                 'aa-sch-page_type': 'list',
                 'es-sch-adformat': 'x65'
               },
-              sizes: [[300, 250], [320, 250]]
+              sizes: [
+                [300, 250],
+                [320, 250]
+              ]
             }
           }
         })

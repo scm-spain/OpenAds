@@ -10,6 +10,7 @@ export default class PositionRepository {
   saveOrUpdate({position}) {
     throw new Error('PositionRepository#save must be implemented')
   }
+
   /**
    * Given a position id will search it on persistence layer
    * @param {Promise<Position>} id
@@ -17,6 +18,7 @@ export default class PositionRepository {
   find({id}) {
     throw new Error('PositionRepository#find must be implemented')
   }
+
   /**
    * Checks for the existence of a Position by id
    * @param id

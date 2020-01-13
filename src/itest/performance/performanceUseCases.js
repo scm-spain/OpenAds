@@ -57,7 +57,10 @@ const addPosition = () => {
             'aa-sch-page_type': 'list',
             'es-sch-adformat': 'x65'
           },
-          sizes: [[300, 250], [320, 250]]
+          sizes: [
+            [300, 250],
+            [320, 250]
+          ]
         }
       }
     })
@@ -141,7 +144,10 @@ const addPositionAndDisplay = () => {
             'aa-sch-page_type': 'list',
             'es-sch-adformat': 'x65'
           },
-          sizes: [[300, 250], [320, 250]]
+          sizes: [
+            [300, 250],
+            [320, 250]
+          ]
         }
       }
     })
@@ -182,7 +188,10 @@ const addPositionAndDisplayAndRefresh = () => {
             'aa-sch-page_type': 'list',
             'es-sch-adformat': 'x65'
           },
-          sizes: [[300, 250], [320, 250]]
+          sizes: [
+            [300, 250],
+            [320, 250]
+          ]
         }
       }
     })

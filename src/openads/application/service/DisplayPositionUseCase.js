@@ -34,11 +34,10 @@ export default class DisplayPositionUseCase {
       .then(foundPosition =>
         this._adConnectorManager
           .getConnector({source: foundPosition.specification.source})
-          .then(
-            connector =>
-              foundPosition.status === POSITION_NOT_VISIBLE
-                ? connector.display({id: foundPosition.id})
-                : connector.refresh({id: foundPosition.id})
+          .then(connector =>
+            foundPosition.status === POSITION_NOT_VISIBLE
+              ? connector.display({id: foundPosition.id})
+              : connector.refresh({id: foundPosition.id})
           )
           .then(() => foundPosition)
       )
@@ -60,11 +59,10 @@ export default class DisplayPositionUseCase {
   _filterPositionAdAvailable(position) {
     return Promise.resolve(position.ad && position.ad.status)
       .then(status => AD_AVAILABLE === status)
-      .then(
-        available =>
-          available
-            ? position
-            : Promise.reject(new PositionAdNotAvailableError({position}))
+      .then(available =>
+        available
+          ? position
+          : Promise.reject(new PositionAdNotAvailableError({position}))
       )
   }
 
@@ -73,11 +71,10 @@ export default class DisplayPositionUseCase {
       position.ad && position.ad.data && position.ad.data.adType
     )
       .then(adType => adType === NATIVE)
-      .then(
-        isNative =>
-          isNative
-            ? Promise.reject(new PositionAdIsNativeError({position}))
-            : position
+      .then(isNative =>
+        isNative
+          ? Promise.reject(new PositionAdIsNativeError({position}))
+          : position
       )
   }
 }

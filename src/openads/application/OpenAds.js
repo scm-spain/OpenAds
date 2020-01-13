@@ -6,6 +6,7 @@ export default class OpenAds {
   constructor({container}) {
     this._container = container
   }
+
   /**
    * Create a new Position on the page
    * @param {string} id - the Ad unique identifier
@@ -30,6 +31,7 @@ export default class OpenAds {
       .getInstance({key: 'RefreshPositionUseCase'})
       .refreshPosition({id, specification})
   }
+
   /**
    * Displays a position in the page
    * @param {string} position id

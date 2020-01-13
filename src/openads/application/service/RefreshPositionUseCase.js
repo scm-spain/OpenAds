@@ -13,6 +13,7 @@ export default class RefreshPositionUseCase {
     this._positionRepository = positionRepository
     this._adConnectorManager = adConnectorManager
   }
+
   /**
    * Update a Position with given changes and refresh his Ad
    * @param {string} id
@@ -38,6 +39,7 @@ export default class RefreshPositionUseCase {
     }
     return optionalPositionWithId.position
   }
+
   _setAdToPosition(position) {
     return Promise.resolve()
       .then(() =>

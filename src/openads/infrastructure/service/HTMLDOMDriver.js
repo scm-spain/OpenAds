@@ -19,7 +19,7 @@ export default class HTMLDOMDriver extends DOMDriver {
   }
 
   writeElementById({id, value}) {
-    let domElement = this._dom.getElementById(id)
+    const domElement = this._dom.getElementById(id)
     if (domElement === null) throw new Error(`Element with ID ${id} not found!`)
     domElement.innerHTML = value
     return domElement
