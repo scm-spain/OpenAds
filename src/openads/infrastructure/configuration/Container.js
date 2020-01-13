@@ -104,6 +104,7 @@ export default class Container {
       adConnectorManager: this.getInstance({key: 'AdConnectorManager'})
     })
   }
+
   _buildEagerSingletonInstances() {
     const errorObserver = this.getInstance({key: 'ErrorObserverFactory'})
     const debugObserver = this.getInstance({key: 'DebugObserverFactory'})

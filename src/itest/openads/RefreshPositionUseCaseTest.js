@@ -34,9 +34,7 @@ describe('Refresh Position use case', function() {
         .catch(error => {
           expect(
             error.name,
-            `RefreshPosition return a rejected Promise, in this case, we expect an error with name: 'PositionNotFoundException', but we have received a ${
-              error.name
-            }`
+            `RefreshPosition return a rejected Promise, in this case, we expect an error with name: 'PositionNotFoundException', but we have received a ${error.name}`
           ).to.be.equals('PositionNotFoundException')
           done()
         })
@@ -105,7 +103,10 @@ describe('Refresh Position use case', function() {
                 'aa-sch-page_type': 'list',
                 'es-sch-adformat': 'x65'
               },
-              sizes: [[300, 250], [320, 250]]
+              sizes: [
+                [300, 250],
+                [320, 250]
+              ]
             }
           }
         })
@@ -122,9 +123,7 @@ describe('Refresh Position use case', function() {
           ).to.deep.equals(newSpecification)
           expect(
             position.ad.status,
-            `The ad status is equal to ${
-              position.ad.status
-            }, instead it should be equal to 'AD_AVAILABLE'`
+            `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`
           ).to.be.equals(AD_AVAILABLE)
           done()
         })
@@ -176,7 +175,10 @@ describe('Refresh Position use case', function() {
               'aa-sch-page_type': 'list',
               'es-sch-adformat': 'x65'
             },
-            sizes: [[300, 250], [320, 250]]
+            sizes: [
+              [300, 250],
+              [320, 250]
+            ]
           }
         }
       }
@@ -191,9 +193,7 @@ describe('Refresh Position use case', function() {
           ).to.deep.equals(newPosition.specification)
           expect(
             position.ad.status,
-            `The ad status is equal to ${
-              position.ad.status
-            }, instead it should be equal to 'AD_AVAILABLE'`
+            `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`
           ).to.be.equals(AD_AVAILABLE)
           done()
         })
@@ -288,7 +288,10 @@ describe('Refresh Position use case', function() {
               'aa-sch-page_type': 'list',
               'es-sch-adformat': 'x65'
             },
-            sizes: [[300, 250], [320, 250]]
+            sizes: [
+              [300, 250],
+              [320, 250]
+            ]
           }
         }
       }
@@ -298,33 +301,23 @@ describe('Refresh Position use case', function() {
         .then(position => {
           expect(
             position.ad.status,
-            `The position ad status is equal to ${
-              position.ad.status
-            }, instead it should be equal to 'AD_AVAILABLE'`
+            `The position ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`
           ).to.be.equals(AD_AVAILABLE)
           expect(
             position.ad.data.adType,
-            `The position ad adType is equal to ${
-              position.ad.data.adType
-            }, instead it should be equal to ${loadAdData.data.adType}`
+            `The position ad adType is equal to ${position.ad.data.adType}, instead it should be equal to ${loadAdData.data.adType}`
           ).to.be.equals(loadAdData.data.adType)
           expect(
             position.ad.data.creativeId,
-            `The position ad creativeId is equal to ${
-              position.ad.data.creativeId
-            }, instead it should be equal to ${loadAdData.data.creativeId}`
+            `The position ad creativeId is equal to ${position.ad.data.creativeId}, instead it should be equal to ${loadAdData.data.creativeId}`
           ).to.be.equals(loadAdData.data.creativeId)
           expect(
             position.ad.data.banner.width,
-            `The position ad width is equal to ${
-              position.ad.data.width
-            }, instead it should be equal to ${loadAdData.data.width}`
+            `The position ad width is equal to ${position.ad.data.width}, instead it should be equal to ${loadAdData.data.width}`
           ).to.be.equals(loadAdData.data.banner.width)
           expect(
             position.ad.data.banner.height,
-            `The position ad height is equal to ${
-              position.ad.data.height
-            }, instead it should be equal to ${loadAdData.data.height}`
+            `The position ad height is equal to ${position.ad.data.height}, instead it should be equal to ${loadAdData.data.height}`
           ).to.be.equals(loadAdData.data.banner.height)
           return position
         })
@@ -332,41 +325,23 @@ describe('Refresh Position use case', function() {
         .then(position => {
           expect(
             position.ad.status,
-            `The ad status is equal to ${
-              position.ad.status
-            }, instead it should be equal to 'AD_AVAILABLE'`
+            `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`
           ).to.be.equals(AD_AVAILABLE)
           expect(
             position.ad.data.adType,
-            `The refreshed position ad adType should be ${
-              refreshData.data.adType
-            }, instead of it is ${
-              position.ad.data.adType
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad adType should be ${refreshData.data.adType}, instead of it is ${position.ad.data.adType}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(refreshData.data.adType)
           expect(
             position.ad.data.creativeId,
-            `The refreshed position ad creativeId should be ${
-              refreshData.data.creativeId
-            }, instead of it is ${
-              position.ad.data.creativeId
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad creativeId should be ${refreshData.data.creativeId}, instead of it is ${position.ad.data.creativeId}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(refreshData.data.creativeId)
           expect(
             position.ad.data.banner.width,
-            `The refreshed position ad width should be ${
-              refreshData.data.banner.width
-            }, instead of it is ${
-              position.ad.data.banner.width
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad width should be ${refreshData.data.banner.width}, instead of it is ${position.ad.data.banner.width}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(refreshData.data.banner.width)
           expect(
             position.ad.data.banner.height,
-            `The refreshed position ad height should be ${
-              refreshData.data.banner.height
-            }, instead of it is ${
-              position.ad.data.banner.height
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad height should be ${refreshData.data.banner.height}, instead of it is ${position.ad.data.banner.height}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(refreshData.data.banner.height)
           done()
         })
@@ -447,7 +422,10 @@ describe('Refresh Position use case', function() {
               'aa-sch-page_type': 'list',
               'es-sch-adformat': 'x65'
             },
-            sizes: [[300, 250], [320, 250]]
+            sizes: [
+              [300, 250],
+              [320, 250]
+            ]
           }
         }
       }
@@ -464,41 +442,23 @@ describe('Refresh Position use case', function() {
         .then(position => {
           expect(
             position.ad.status,
-            `The ad status is equal to ${
-              position.ad.status
-            }, instead it should be equal to 'AD_AVAILABLE'`
+            `The ad status is equal to ${position.ad.status}, instead it should be equal to 'AD_AVAILABLE'`
           ).to.be.equals(AD_AVAILABLE)
           expect(
             position.ad.data.adType,
-            `The refreshed position ad adType should be ${
-              position.ad.data.adType
-            }, instead of it is ${
-              position.ad.data.adType
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad adType should be ${position.ad.data.adType}, instead of it is ${position.ad.data.adType}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(loadAdData.data.adType)
           expect(
             position.ad.data.creativeId,
-            `The refreshed position ad creativeId should be ${
-              position.ad.data.creativeId
-            }, instead of it is ${
-              position.ad.data.creativeId
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad creativeId should be ${position.ad.data.creativeId}, instead of it is ${position.ad.data.creativeId}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(loadAdData.data.creativeId)
           expect(
             position.ad.data.banner.width,
-            `The refreshed position ad width should be ${
-              position.ad.data.banner.width
-            }, instead of it is ${
-              position.ad.data.banner.width
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad width should be ${position.ad.data.banner.width}, instead of it is ${position.ad.data.banner.width}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(loadAdData.data.banner.width)
           expect(
             position.ad.data.banner.height,
-            `The refreshed position ad height should be ${
-              position.ad.data.banner.height
-            }, instead of it is ${
-              position.ad.data.banner.height
-            }. Maybe you need to check the refreshPosition use case`
+            `The refreshed position ad height should be ${position.ad.data.banner.height}, instead of it is ${position.ad.data.banner.height}. Maybe you need to check the refreshPosition use case`
           ).to.be.equals(loadAdData.data.banner.height)
           return position
         })
@@ -512,9 +472,7 @@ describe('Refresh Position use case', function() {
         .catch(error => {
           expect(
             error.name,
-            `RefreshPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdNotAvailableError', but we have received a ${
-              error.name
-            }`
+            `RefreshPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdNotAvailableError', but we have received a ${error.name}`
           ).to.be.equals('PositionAdNotAvailableError')
           done()
         })

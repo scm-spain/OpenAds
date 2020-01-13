@@ -147,7 +147,7 @@ describe('DOM Driver HTML simple implementation', function() {
     const givenDocumentMock = {
       createElement: () => null
     }
-    let createElementSpy = sinon.spy(givenDocumentMock, 'createElement')
+    const createElementSpy = sinon.spy(givenDocumentMock, 'createElement')
 
     const htmlDOMDriver = new HTMLDOMDriver({dom: givenDocumentMock})
     htmlDOMDriver.createElement({tagName: 'whatever'})

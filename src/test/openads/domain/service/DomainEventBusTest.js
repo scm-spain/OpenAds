@@ -44,9 +44,9 @@ describe('DomainEventBus test', () => {
     })
   })
   describe('Given a registered DomainEventBus', () => {
-    let observerSpy = sinon.spy()
+    const observerSpy = sinon.spy()
     beforeEach(function() {
-      observerSpy.reset()
+      observerSpy.resetHistory()
     })
     it('Should execute observer callback using the raised payload', done => {
       const givenEventName = 'givenEventName'

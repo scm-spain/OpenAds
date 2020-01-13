@@ -46,7 +46,7 @@ describe('Position', () => {
         expect(payload.segmentation).to.be.equal('godmode=true')
       }
     })
-    let givenPosition = new Position({
+    const givenPosition = new Position({
       id: 'top1',
       name: 'forlayo',
       specification: {
@@ -68,7 +68,7 @@ describe('Position', () => {
         native: {}
       }
     }
-    let updatedPosition = givenPosition.update({
+    const updatedPosition = givenPosition.update({
       specification: newSpecification
     })
     expect(updatedPosition.specification, 'Tricks for DOOM!!').to.deep.equal(
@@ -96,12 +96,12 @@ describe('Position', () => {
         observerSpy()
       }
     })
-    let givenPosition = new Position({
+    const givenPosition = new Position({
       id: 'top1',
       name: 'forlayo',
       specification: givenSpecification
     })
-    let updatedPosition = givenPosition.update({})
+    const updatedPosition = givenPosition.update({})
     expect(
       updatedPosition.specification,
       'specification should not change'

@@ -15,6 +15,7 @@ export default class AddPositionUseCase {
     this._positionFactory = positionFactory
     this._adConnectorManager = adConnectorManager
   }
+
   /**
    * Create a new Position on the page
    * @param {string} id - position unique identifier
