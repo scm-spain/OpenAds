@@ -6,3 +6,4 @@ coverage
 .github
 resources
 versiona.js
+.nyc_output
