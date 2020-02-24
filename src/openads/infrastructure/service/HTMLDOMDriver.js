@@ -34,6 +34,10 @@ export default class HTMLDOMDriver extends DOMDriver {
   }
 
   getLocalStorageValue({key}) {
-    return this._dom.defaultView.localStorage.getItem(key)
+    try {
+      return this._dom.defaultView.localStorage.getItem(key)
+    } catch (error) {
+      return ''
+    }
   }
 }
