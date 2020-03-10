@@ -1,6 +1,6 @@
 {
   "name": "@adv-ui/openads",
-  "version": "4.2.4",
+  "version": "5.0.0",
   "description": "OpenAds: Advertising library",
   "main": "dist/",
   "scripts": {
