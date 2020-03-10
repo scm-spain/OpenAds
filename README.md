@@ -1,6 +1,6 @@
 # OpenAds
 
-![npm](https://img.shields.io/npm/v/@schibstedspain/openads)
+![npm](https://img.shields.io/npm/v/@adv-ui/openads)
 [![Build status](https://travis-ci.org/scm-spain/OpenAds.svg?branch=master)](https://travis-ci.org/scm-spain/OpenAds) [![codecov](https://codecov.io/gh/scm-spain/OpenAds/branch/master/graph/badge.svg)](https://codecov.io/gh/scm-spain/OpenAds)
 
 :rocket: Powerful advertising abstraction library to deliver ads in a web environment providing you a common domain for different sources.
@@ -18,10 +18,10 @@ are you using to show ads you just only need to know a simple use cases and init
 
 
 # Installation
-OpenAds is available as the ```@schibstedspain/OpenAds``` package on [npm](https://www.npmjs.com/)
+OpenAds is available as the ```@adv-ui/OpenAds``` package on [npm](https://www.npmjs.com/)
 To install the stable version:
 ```
-npm install --save @schibstedspain/openads
+npm install --save @adv-ui/openads
 ```
 
 # Usage
@@ -36,8 +36,8 @@ which has to receive the **connectors** you want to use:
 ## OpenAds initialization
 
 ```ecmascript 6
-import OpenAds from '@schibstedspain/openads'
-import AppNexusConnector from '@schibstedspain/openads-appnexus'
+import OpenAds from '@adv-ui/openads'
+import AppNexusConnector from '@adv-ui/openads-appnexus'
 
 // connectors initalization - sample with AppNexusConnector
 const appNexusConnector = WhateverConnector.init({config: {

@@ -1,4 +1,4 @@
-import {Logger} from '@schibstedspain/openads-connector-api'
+import {Logger} from '@adv-ui/openads-connector-api'
 import InterfaceChecker from '../service/InterfaceChecker'
 
 export default class LogLevelLoggerInitializer {
