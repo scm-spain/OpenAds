@@ -71,10 +71,10 @@ export default class AddPositionUseCase {
 
   _filterPositionAdIsAvailable(position) {
     if (position.ad.status !== AD_AVAILABLE) {
-      if (position.ad.data && position.ad.data.errMessage) {
-        throw new PositionAdError({position})
-      } else {
+      if (position.ad.data && position.ad.data.nobid) {
         throw new PositionAdNotAvailableError({position})
+      } else {
+        throw new PositionAdError({position})
       }
     }
     return position
