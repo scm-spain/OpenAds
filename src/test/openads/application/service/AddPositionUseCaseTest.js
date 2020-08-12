@@ -183,13 +183,13 @@ describe('Add Position use case', function() {
           done(new Error('Should fail with position not available error'))
         })
         .catch(error => {
-          expect(error.name).to.equal('PositionAdNotAvailableError')
+          expect(error.name).to.equal('PositionAdError')
           expect(error.position.ad.status).to.equal(AD_ERROR)
           done()
         })
     })
     it('should return the position with an unresolved Ad with AD_NO_BID status ad server returns a adNoBid response', function(done) {
-      const givenAd = {data: 'ad no bid', status: AD_NO_BID}
+      const givenAd = {data: {nobid: true}, status: AD_NO_BID}
       const givenPositionRequest = {
         id: 'ad-1',
         name: 'TOP',

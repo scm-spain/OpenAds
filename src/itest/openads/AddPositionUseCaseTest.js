@@ -126,7 +126,7 @@ describe('Add Position use case', function() {
           expect(
             error.name,
             `AddPosition return a rejected Promise, in this case, we expect an error with name: 'PositionAdNotAvailableError', but we have received a ${error.name}`
-          ).to.be.equals('PositionAdNotAvailableError')
+          ).to.be.equals('PositionAdError')
           expect(
             error.position.id,
             `AddPosition return a rejected Promise, in this case, we expect that the position id was: 'ad1', but we have received a position id ${error.position.id}`
