@@ -2,12 +2,13 @@ export default class PositionAdError extends Error {
   constructor({position = {}} = {}) {
     super()
     this.name = 'PositionAdError'
-    let msg = position.ad && position.ad.data && position.ad.data.errMessage
-    if (!msg && typeof position.ad.data === 'string') {
-      msg = position.ad.data
-    }
-    this.message = `Error loading Ad ${position.id}: ${msg ||
-      'unexpected error'}.`
+    const errorMessage =
+      position.ad &&
+      position.ad.data &&
+      (typeof position.ad.data === 'string'
+        ? position.ad.data
+        : position.ad.data.errMessage || 'unexpected error')
+    this.message = `Error loading Ad ${position.id}: ${errorMessage}.`
     this.stack = new Error().stack
     this.position = position
   }
